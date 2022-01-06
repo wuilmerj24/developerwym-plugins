@@ -7,11 +7,12 @@ let contendioActual: any;
 export let getVersionMarket = async (url: string): Promise<ResponseVersion> => {
     return new Promise((rs, rj) => {
         // Application.ios.window.addSub
-
-        // if (!url.match(/.+id([0-9]+)\??/)) {
-        //     rj({ error: true, errorText: "Url ios es incorrecta" });
-        // }
-        xhr.open('GET', url);
+        const idApp = url.match(/.+id([0-9]+)\??/);
+        console.log("ID: ",idApp[1]);
+        if (!idApp) {
+            rj({ error: true, errorText: "Url ios es incorrecta id" });
+        }
+        xhr.open('GET', "https://itunes.apple.com/lookup?id="+idApp[1]);
         xhr.onreadystatechange = () => {
             if (xhr.readyState == 4 && xhr.status === 200) {
                 console.log(xhr.readyState, xhr.status);
@@ -21,7 +22,7 @@ export let getVersionMarket = async (url: string): Promise<ResponseVersion> => {
                 }
                 rs({ versionName: data.results[0].version, error: false });
             } else if (xhr.readyState == 4 && xhr.status !== 200) {
-                rj({ error: true, errorText: 'Url android es incorrecta' });
+                rj({ error: true, errorText: 'Url ios es incorrecta' });
             }
         };
         xhr.setRequestHeader('cache-control', 'no-cache');
@@ -67,6 +68,11 @@ export let checkUpdate = async (opciones: OpcionesUpdate): Promise<any> => {
 };
 
 function createView(opciones: OpcionesUpdate) {
+    const idApp = opciones.urlIos.match(/.+id([0-9]+)\??/);
+    console.log("ID: ",idApp[1]);
+    if (!idApp) {
+        return ;
+    }
     const view: Page = getCurrentPage();
     contendioActual = view.content;
     const stack: StackLayout = new StackLayout();
@@ -141,8 +147,8 @@ function createView(opciones: OpcionesUpdate) {
     btnActualizar.width = (Screen.mainScreen.widthPixels * 15) / 100;
     btnActualizar.on('tap', (args) => {
         console.log('Actualizar');
-        if (UIApplication.sharedApplication.canOpenURL(NSURL.URLWithString('itms-apps://itunes.apple.com/app/1527840996'))) {
-            UIApplication.sharedApplication.openURL(NSURL.URLWithString('itms-apps://itunes.apple.com/app/1527840996'));
+        if (UIApplication.sharedApplication.canOpenURL(NSURL.URLWithString('itms-apps://itunes.apple.com/app/'+idApp[1]))) {
+            UIApplication.sharedApplication.openURL(NSURL.URLWithString('itms-apps://itunes.apple.com/app/'+idApp[1]));
         }
     });
 
@@ -164,8 +170,8 @@ function createView(opciones: OpcionesUpdate) {
     btnActualizarb.horizontalAlignment = 'left';
     btnActualizarb.width = Screen.mainScreen.widthPixels;
     btnActualizarb.on('tap', (args) => {
-        if (UIApplication.sharedApplication.canOpenURL(NSURL.URLWithString('itms-apps://itunes.apple.com/app/1527840996'))) {
-            UIApplication.sharedApplication.openURL(NSURL.URLWithString('itms-apps://itunes.apple.com/app/1527840996'));
+        if (UIApplication.sharedApplication.canOpenURL(NSURL.URLWithString('itms-apps://itunes.apple.com/app/'+idApp[1]))) {
+            UIApplication.sharedApplication.openURL(NSURL.URLWithString('itms-apps://itunes.apple.com/app/'+idApp[1]));
         }
     });
 
