@@ -19,7 +19,7 @@ export let getVersionMarket = async (url: string): Promise<ResponseVersion> => {
                 if (!data) {
                     rj({ error: true, errorText: 'No se pudo obtener la version de la app en el market' });
                 }
-                rs({ version: data.results[0].version, error: false });
+                rs({ versionName: data.results[0].version, error: false });
             } else if (xhr.readyState == 4 && xhr.status !== 200) {
                 rj({ error: true, errorText: 'Url android es incorrecta' });
             }
@@ -33,9 +33,9 @@ export let getVersionApp = async (): Promise<ResponseVersion> => {
     return new Promise((rs, rj) => {
         try {
             let infoDictionary = NSBundle.mainBundle.infoDictionary;
-            // let localVersion = infoDictionary.objectForKey("CFBundleVersion")
-            let localVersion = infoDictionary.objectForKey('CFBundleShortVersionString');
-            rs({ version: localVersion, error: false });
+            let versionCode = infoDictionary.objectForKey("CFBundleVersion")
+            let versionName = infoDictionary.objectForKey('CFBundleShortVersionString');
+            rs({ versionName: versionName, versionCode: versionCode, error: false });
         } catch (error) {
             rj({ error: true, errorText: error });
         }
@@ -51,8 +51,8 @@ export let checkUpdate = async (opciones: OpcionesUpdate): Promise<any> => {
             return res;
         });
         if (!versionLocal.error && !versionNube.error) {
-            let vLocalArr: Array<any> = versionLocal.version.split('.');
-            let vNubeArr: Array<any> = versionNube.version.split('.');
+            let vLocalArr: Array<any> = versionLocal.versionName.split('.');
+            let vNubeArr: Array<any> = versionNube.versionName.split('.');
             let vLocal: number = parseInt(`${vLocalArr[0]}${vLocalArr[1]}${vLocalArr[2]}`);
             let vNube: number = parseInt(`${vNubeArr[0]}${vNubeArr[1]}${vNubeArr[2]}`);
             if (vLocal < vNube) {
@@ -114,8 +114,8 @@ function createView(opciones: OpcionesUpdate) {
             return res;
         });
         if (!versionLocal.error && !versionNube.error) {
-            let vLocalArr: Array<any> = versionLocal.version.split('.');
-            let vNubeArr: Array<any> = versionNube.version.split('.');
+            let vLocalArr: Array<any> = versionLocal.versionName.split('.');
+            let vNubeArr: Array<any> = versionNube.versionName.split('.');
             let vLocal: number = parseInt(`${vLocalArr[0]}${vLocalArr[1]}${vLocalArr[2]}`);
             let vNube: number = parseInt(`${vNubeArr[0]}${vNubeArr[1]}${vNubeArr[2]}`);
             if (vLocal >= vNube) {
@@ -129,7 +129,7 @@ function createView(opciones: OpcionesUpdate) {
                 }).then(() => { });
             }
         }
-        console.log(versionLocal.version, versionNube.version);
+        console.log(versionLocal.versionName, versionNube.versionName);
     });
 
     //Boton actualizar
