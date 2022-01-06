@@ -1,3 +1,5 @@
+<a href="https://www.buymeacoffee.com/mariac15" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-yellow.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+
 - [@developerwym/navigator](packages/navigator/README.md)
 - [@developerwym/ns-screen-orientacion](packages/ns-screen-orientacion/README.md)
 - [@developerwym/ns-store-update](packages/ns-store-update/README.md)
