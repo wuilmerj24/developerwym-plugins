@@ -1,30 +1,6 @@
-**=== IMPORTANT**
-
-# :rotating_light: Important - read first!
-
-**Use this template on GitHub:**
-1. Hit the "Use this template" button
-2. Follow GitHub instructions (set repo name, visibility, description) & clone your new repo
-3. Setup workspace: `npm run setup`
-4. Configure your npm scope: `npm run config`
-
-**Use this template outside of GitHub:**
-
-1. Download a zip of this repo
-2. Unzip and name the folder appropriately (perhaps the name of the npm scope you intend to manage here)
-3. Setup workspace: `npm run setup`
-4. Configure your npm scope: `npm run config`
-
----
-
-# @nativescript/\* plugins
-
-```
-npm run setup
-npm start
-```
-
-- @nativescript
+- [@developerwym/navigator](packages/navigator/README.md)
+- [@developerwym/ns-screen-orientacion](packages/ns-screen-orientacion/README.md)
+- [@developerwym/ns-store-update](packages/ns-store-update/README.md)
 
 # How to use?
 

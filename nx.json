@@ -1,31 +1,40 @@
 {
-	"npmScope": "nativescript",
-	"affected": {
-		"defaultBase": "master"
-	},
-	"implicitDependencies": {
-		"workspace.json": "*",
-		"package.json": {
-			"dependencies": "*",
-			"devDependencies": "*"
-		},
-		"tsconfig.base.json": "*",
-		"tslint.json": "*",
-		"nx.json": "*"
-	},
-	"projects": {
-		"demo": {
-			"tags": []
-		},
-		"demo-angular": {
-			"tags": []
-		},
-		"all": {
-			"tags": []
-		}
-	},
-	"workspaceLayout": {
-		"appsDir": "apps",
-		"libsDir": "packages"
-	}
+  "npmScope": "developerwym",
+  "affected": {
+    "defaultBase": "master"
+  },
+  "implicitDependencies": {
+    "workspace.json": "*",
+    "package.json": {
+      "dependencies": "*",
+      "devDependencies": "*"
+    },
+    "tsconfig.base.json": "*",
+    "tslint.json": "*",
+    "nx.json": "*"
+  },
+  "projects": {
+    "demo": {
+      "tags": []
+    },
+    "demo-angular": {
+      "tags": []
+    },
+    "all": {
+      "tags": []
+    },
+    "ns-screen-orientacion": {
+      "tags": []
+    },
+    "ns-store-update": {
+      "tags": []
+    },
+    "navigator": {
+      "tags": []
+    }
+  },
+  "workspaceLayout": {
+    "appsDir": "apps",
+    "libsDir": "packages"
+  }
 }

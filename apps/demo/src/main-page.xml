@@ -6,6 +6,9 @@
     <ScrollView class="h-full">
       <StackLayout>
         <Button text="add a package first" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+<Button text="ns-screen-orientacion" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+<Button text="ns-store-update" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+<Button text="navigator" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
       </StackLayout>
     </ScrollView>
   </StackLayout>

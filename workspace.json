@@ -78,14 +78,18 @@
       "projectType": "application",
       "targets": {
         "build": {
+          "executor": "@nrwl/workspace:run-commands",
           "outputs": [
             "dist/packages"
           ],
           "options": {
-            "commands": [],
+            "commands": [
+              "nx run ns-screen-orientacion:build.all",
+              "nx run ns-store-update:build.all",
+              "nx run navigator:build.all"
+            ],
             "parallel": false
-          },
-          "executor": "@nrwl/workspace:run-commands"
+          }
         },
         "focus": {
           "outputs": [
@@ -101,6 +105,141 @@
         }
       },
       "sourceRoot": ""
+    },
+    "ns-screen-orientacion": {
+      "root": "packages/ns-screen-orientacion",
+      "projectType": "library",
+      "sourceRoot": "packages/ns-screen-orientacion",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/packages/ns-screen-orientacion",
+            "tsConfig": "packages/ns-screen-orientacion/tsconfig.json",
+            "packageJson": "packages/ns-screen-orientacion/package.json",
+            "main": "packages/ns-screen-orientacion/index.d.ts",
+            "assets": [
+              "packages/ns-screen-orientacion/*.md",
+              "packages/ns-screen-orientacion/index.d.ts",
+              "LICENSE",
+              {
+                "glob": "**/*",
+                "input": "packages/ns-screen-orientacion/platforms/",
+                "output": "./platforms/"
+              }
+            ]
+          }
+        },
+        "build.all": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "nx run ns-screen-orientacion:build",
+              "node tools/scripts/build-finish.ts ns-screen-orientacion"
+            ],
+            "parallel": false
+          }
+        },
+        "focus": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "nx g @nativescript/plugin-tools:focus-packages ns-screen-orientacion"
+            ],
+            "parallel": false
+          }
+        }
+      }
+    },
+    "ns-store-update": {
+      "root": "packages/ns-store-update",
+      "projectType": "library",
+      "sourceRoot": "packages/ns-store-update",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/packages/ns-store-update",
+            "tsConfig": "packages/ns-store-update/tsconfig.json",
+            "packageJson": "packages/ns-store-update/package.json",
+            "main": "packages/ns-store-update/index.d.ts",
+            "assets": [
+              "packages/ns-store-update/*.md",
+              "packages/ns-store-update/index.d.ts",
+              "LICENSE",
+              {
+                "glob": "**/*",
+                "input": "packages/ns-store-update/platforms/",
+                "output": "./platforms/"
+              }
+            ]
+          }
+        },
+        "build.all": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "nx run ns-store-update:build",
+              "node tools/scripts/build-finish.ts ns-store-update"
+            ],
+            "parallel": false
+          }
+        },
+        "focus": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "nx g @nativescript/plugin-tools:focus-packages ns-store-update"
+            ],
+            "parallel": false
+          }
+        }
+      }
+    },
+    "navigator": {
+      "root": "packages/navigator",
+      "projectType": "library",
+      "sourceRoot": "packages/navigator",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/packages/navigator",
+            "tsConfig": "packages/navigator/tsconfig.json",
+            "packageJson": "packages/navigator/package.json",
+            "main": "packages/navigator/index.d.ts",
+            "assets": [
+              "packages/navigator/*.md",
+              "packages/navigator/index.d.ts",
+              "LICENSE",
+              {
+                "glob": "**/*",
+                "input": "packages/navigator/platforms/",
+                "output": "./platforms/"
+              }
+            ]
+          }
+        },
+        "build.all": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "nx run navigator:build",
+              "node tools/scripts/build-finish.ts navigator"
+            ],
+            "parallel": false
+          }
+        },
+        "focus": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "nx g @nativescript/plugin-tools:focus-packages navigator"
+            ],
+            "parallel": false
+          }
+        }
+      }
     }
   },
   "cli": {

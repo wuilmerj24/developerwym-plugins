@@ -4,7 +4,10 @@
   "license": "SEE LICENSE IN <your-license-filename>",
   "repository": "<fill-your-repository-here>",
   "dependencies": {
-    "@nativescript/core": "file:../../node_modules/@nativescript/core"
+    "@nativescript/core": "file:../../node_modules/@nativescript/core",
+    "@developerwym/ns-screen-orientacion": "file:../../packages/ns-screen-orientacion",
+    "@developerwym/ns-store-update": "file:../../packages/ns-store-update",
+    "@developerwym/navigator": "file:../../packages/navigator"
   },
   "devDependencies": {
     "@nativescript/android": "~8.1.1",

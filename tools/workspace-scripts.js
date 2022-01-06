@@ -57,12 +57,33 @@ module.exports = {
 			},
 		},
 		'⚙️': {
-			script: `npx cowsay "@nativescript/* packages will keep your ⚙️ cranking"`,
-			description: '_____________  @nativescript/*  _____________',
+			script: `npx cowsay "@developerwym/* packages will keep your ⚙️ cranking"`,
+			description: '_____________  @developerwym/*  _____________',
 		},
 		// packages
 		// build output is always in dist/packages
-		'@nativescript': {
+		'@developerwym': {
+			// @developerwym/ns-screen-orientacion
+			'ns-screen-orientacion': {
+				build: {
+					script: 'nx run ns-screen-orientacion:build.all',
+					description: '@developerwym/ns-screen-orientacion: Build',
+				},
+			},
+			// @developerwym/ns-store-update
+			'ns-store-update': {
+				build: {
+					script: 'nx run ns-store-update:build.all',
+					description: '@developerwym/ns-store-update: Build',
+				},
+			},
+			// @developerwym/navigator
+			'navigator': {
+				build: {
+					script: 'nx run navigator:build.all',
+					description: '@developerwym/navigator: Build',
+				},
+			},
 			'build-all': {
 				script: 'nx run all:build',
 				description: 'Build all packages',
@@ -73,6 +94,18 @@ module.exports = {
 			description: '_____________  Focus (VS Code supported)  _____________',
 		},
 		focus: {
+			'ns-screen-orientacion': {
+				script: 'nx run ns-screen-orientacion:focus',
+				description: 'Focus on @developerwym/ns-screen-orientacion',
+			},
+			'ns-store-update': {
+				script: 'nx run ns-store-update:focus',
+				description: 'Focus on @developerwym/ns-store-update',
+			},
+			'navigator': {
+				script: 'nx run navigator:focus',
+				description: 'Focus on @developerwym/navigator',
+			},
 			reset: {
 				script: 'nx run all:focus',
 				description: 'Reset Focus',

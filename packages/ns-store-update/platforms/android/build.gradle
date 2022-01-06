@@ -1,0 +1,15 @@
+android {  
+  compileSdkVersion 29
+  defaultConfig {  
+    minSdkVersion 21
+    targetSdkVersion 29
+    generatedDensities = []
+  }  
+  aaptOptions {  
+    additionalParameters "--no-version-vectors"  
+  }  
+} 
+
+dependencies{
+  
+}
