@@ -23,7 +23,7 @@ ns plugin add @developerwym/ns-store-update
 | mensaje | | Mensaje para mostran en la pantalla para forzar la actualizacion de la aplicación |
 | forceUpdate | false | Si se debe forzar o no la aplicación. |
 | urlAndroid | | Url de Google play. |
-| urlIos | | Url de Appstore. |
+| urlIos | | id de la aplicación. |
 | pais | VE | Pais disponible de la aplicación. |
 | showScreen | false | Mostrar la pantalla de la actualizacion de la aplicación. |
 
