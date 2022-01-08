@@ -4,10 +4,12 @@ import {AppsSoportadas,OpcionesBaidumap,OpcionesGoogleMaps,OpcionesWaze,Response
 export class DemoSharedNavigator extends DemoSharedBase {
 
   testIt() {
+
+    // alert(checkAppInstalada(AppsSoportadas.WAZE));
     // openGoogleMaps({
     //   daddr:"Maracay aragua venezuela",
     //   modoTransporte:TransporteGoogleMaps.DRIVING,
-    //   tipoMapa:"TURN_BY_TURN",
+    //   tipoMapa:"MAPS",
     //   saddr:"Villa de cura aragua venezuela",
     //   avoid:"fth"
     // }).then((res)=>{
@@ -26,8 +28,8 @@ export class DemoSharedNavigator extends DemoSharedBase {
     // })
 
     openWaze({
-      destino:"Maracay villa de cura aragua venezuela",
-      navigate:"no"
+      destino:"tia el recreo quito pichincha ecuador",
+      navigate:"yes"
     }).then((res) => {
       console.log(res);
     }).catch((err) => {
