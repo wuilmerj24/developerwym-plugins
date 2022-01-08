@@ -6,6 +6,7 @@
     <array>
       <string>comgooglemaps</string>
       <string>waze</string>
+      <string>baidumap</string>
     </array>
   </dict>
 </plist>

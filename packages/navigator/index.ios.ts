@@ -1,10 +1,10 @@
 import { Utils } from "@nativescript/core";
-import { OpcionesGoogleMaps,OpcionesWaze,Response } from ".";
+import { OpcionesBaidumap, OpcionesGoogleMaps,OpcionesWaze,Response } from ".";
 
 export const AppsSoportadas = Object.freeze({
     GOOGLE_MAPS: 'comgooglemaps://',
     WAZE: 'waze://',
-    BAIDUMAP: 'com.baidu.BaiduMap',
+    BAIDUMAP: 'baidumap://',
 });
 
 export const TransporteGoogleMaps = Object.freeze({
@@ -91,3 +91,41 @@ export let openWaze = (opciones: OpcionesWaze): Promise<Response> =>{
         }
     })
 }
+
+export let openBaidumap = (opciones: OpcionesBaidumap): Promise<Response> => {
+    return new Promise<Response>((rs, rj) => {
+        try {
+            if (!checkAppInstalada(AppsSoportadas.BAIDUMAP)) {
+                rj({ error: true, errorText: 'App no instalada B' });
+            }
+
+            let url: string = 'baidumap://map/direction?destination=';
+
+            if (opciones.destino) {
+                url +=encodeURI(opciones.destino);
+            }
+
+            if (opciones.origen) {
+                url += `&origin=${encodeURI(opciones.origen)}`;
+            }
+
+            if (opciones.modo) {
+                let modo: string;
+                if (opciones.modo == 'bicycling') {
+                    modo = 'riding';
+                } else {
+                    modo = opciones.modo;
+                }
+                url += `&mode=${modo}`;
+            }
+
+            url += '&coord_type=wgs84';
+            console.log(url);
+            UIApplication.sharedApplication.openURL(NSURL.URLWithString(url));
+            // UIApplication.sharedApplication.openURL(NSURL.URLWithString("baidumap://map/direction?origin=34.264642646862,108.95108518068&destination=40.007623,116.360582&coord_type=bd09ll&mode=driving"));
+            rs({error:false});
+        } catch (error) {
+            rs({ error: true, errorText: error });
+        }
+    });
+};

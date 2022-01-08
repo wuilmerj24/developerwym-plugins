@@ -6,7 +6,9 @@
     <StackLayout class="p-20">
         <ScrollView class="h-full">
           <StackLayout>
-            <Button text="Test navigator" tap="{{ testIt }}" class="btn btn-primary"/>
+            <Button text="Open GMaps" tap="{{ openG }}" class="btn btn-primary"/>
+            <Button text="Open Waze" tap="{{ openW }}" class="btn btn-primary"/>
+            <Button text="Open Badium" tap="{{ openB }}" class="btn btn-primary"/>
 
           </StackLayout>
         </ScrollView>
