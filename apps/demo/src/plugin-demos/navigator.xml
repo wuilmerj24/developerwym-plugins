@@ -9,6 +9,7 @@
             <Button text="Open GMaps" tap="{{ openG }}" class="btn btn-primary"/>
             <Button text="Open Waze" tap="{{ openW }}" class="btn btn-primary"/>
             <Button text="Open Badium" tap="{{ openB }}" class="btn btn-primary"/>
+            <Button text="Open Apple" tap="{{ openA }}" class="btn btn-primary"/>
 
           </StackLayout>
         </ScrollView>

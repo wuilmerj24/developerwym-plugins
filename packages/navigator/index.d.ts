@@ -4,6 +4,7 @@ export const AppsSoportadas: {
     GOOGLE_MAPS: string;
     WAZE: string;
     BAIDUMAP: string;
+    APPLE_MAPS:string;
 };
 
 export interface Response {
@@ -42,7 +43,15 @@ export interface OpcionesBaidumap {
     modo: 'driving' | 'walking' | 'bicycling' | 'transit';
 }
 
+export interface OpcionesAppleMaps {
+    tipo:"s" | "k" | "h" | "r",
+    saddr?:string | Array<string>,
+    daddr:string | Array<string>,
+    dirflg:"d" | "w" | "r"
+}
+
 export function checkAppInstalada(packageName): boolean;
 export function openGoogleMaps(opciones: OpcionesGoogleMaps): Promise<Response>;
 export function openWaze(opciones: OpcionesWaze): Promise<Response>;
 export function openBaidumap(opciones: OpcionesBaidumap): Promise<Response>;
+export function openAppleMaps(opciones: OpcionesAppleMaps): Promise<Response>;

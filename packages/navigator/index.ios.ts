@@ -1,10 +1,11 @@
 import { Utils } from "@nativescript/core";
-import { OpcionesBaidumap, OpcionesGoogleMaps,OpcionesWaze,Response } from ".";
+import { OpcionesAppleMaps, OpcionesBaidumap, OpcionesGoogleMaps,OpcionesWaze,Response } from ".";
 
 export const AppsSoportadas = Object.freeze({
     GOOGLE_MAPS: 'comgooglemaps://',
     WAZE: 'waze://',
     BAIDUMAP: 'baidumap://',
+    APPLE_MAPS:"http://maps.apple.com",
 });
 
 export const TransporteGoogleMaps = Object.freeze({
@@ -129,3 +130,49 @@ export let openBaidumap = (opciones: OpcionesBaidumap): Promise<Response> => {
         }
     });
 };
+
+export let openAppleMaps =(opciones:OpcionesAppleMaps):Promise<Response>=>{
+    return new Promise<Response>((rs,rj)=>{
+        try {
+            if (!checkAppInstalada(AppsSoportadas.APPLE_MAPS)) {
+                rj({ error: true, errorText: 'App no instalada Apple' });
+            }
+
+            let url: string = 'http://maps.apple.com/?daddr=';
+            if(!opciones.daddr){
+                rj({ error: true, errorText: 'daddr undefined' });
+            }
+
+            if (opciones.daddr) {
+                if(typeof(opciones.daddr)=="string"){
+                    url+=encodeURI(opciones.daddr);
+                }else if(typeof(opciones.daddr)=="object"){
+                    url+=opciones.daddr[0]+","+opciones.daddr[1];
+                }
+            }
+
+            if(opciones.saddr){
+                if(typeof(opciones.saddr)=="string"){
+                    url+="&saddr="+encodeURI(opciones.saddr);
+                }else if(typeof(opciones.saddr)=="object"){
+                    url+="&saddr="+opciones.saddr[0]+","+opciones.saddr[1];
+                }
+            }
+
+            if(opciones.tipo){
+                url+="&t="+opciones.tipo;
+            }
+
+            if(opciones.dirflg){
+                url+="&dirflg="+opciones.dirflg
+            }
+
+
+            console.log(url);
+            UIApplication.sharedApplication.openURL(NSURL.URLWithString(url));
+
+        } catch (error) {
+            
+        }
+    })
+}
