@@ -10,6 +10,9 @@ export class HomeComponent {
 		name: 'navigator'
 	},
 	{
+		name: 'ns-ar'
+	},
+	{
 		name: 'ns-screen-orientacion'
 	},
 	{

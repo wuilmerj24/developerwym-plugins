@@ -7,7 +7,8 @@
     "@nativescript/core": "file:../../node_modules/@nativescript/core",
     "@developerwym/ns-screen-orientacion": "file:../../packages/ns-screen-orientacion",
     "@developerwym/ns-store-update": "file:../../packages/ns-store-update",
-    "@developerwym/navigator": "file:../../packages/navigator"
+    "@developerwym/navigator": "file:../../packages/navigator",
+    "@developerwym/ns-ar": "file:../../packages/ns-ar"
   },
   "devDependencies": {
     "@nativescript/android": "~8.1.1",

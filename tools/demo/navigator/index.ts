@@ -6,7 +6,7 @@ export class DemoSharedNavigator extends DemoSharedBase {
 
   openG() {
 
-    // alert(checkAppInstalada(AppsSoportadas.WAZE));
+    alert(checkAppInstalada(AppsSoportadas.GOOGLE_MAPS));
     openGoogleMaps({
       daddr:"Maracay aragua venezuela",
       modoTransporte:TransporteGoogleMaps.DRIVING,
@@ -15,6 +15,8 @@ export class DemoSharedNavigator extends DemoSharedBase {
       avoid:"fth"
     }).then((res)=>{
       console.log(res)
+    }).catch((err)=>{
+      
     })    
   }
 

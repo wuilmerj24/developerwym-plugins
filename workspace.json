@@ -86,7 +86,8 @@
             "commands": [
               "nx run ns-screen-orientacion:build.all",
               "nx run ns-store-update:build.all",
-              "nx run navigator:build.all"
+              "nx run navigator:build.all",
+              "nx run ns-ar:build.all"
             ],
             "parallel": false
           }
@@ -235,6 +236,51 @@
           "options": {
             "commands": [
               "nx g @nativescript/plugin-tools:focus-packages navigator"
+            ],
+            "parallel": false
+          }
+        }
+      }
+    },
+    "ns-ar": {
+      "root": "packages/ns-ar",
+      "projectType": "library",
+      "sourceRoot": "packages/ns-ar",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/packages/ns-ar",
+            "tsConfig": "packages/ns-ar/tsconfig.json",
+            "packageJson": "packages/ns-ar/package.json",
+            "main": "packages/ns-ar/index.d.ts",
+            "assets": [
+              "packages/ns-ar/*.md",
+              "packages/ns-ar/index.d.ts",
+              "LICENSE",
+              {
+                "glob": "**/*",
+                "input": "packages/ns-ar/platforms/",
+                "output": "./platforms/"
+              }
+            ]
+          }
+        },
+        "build.all": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "nx run ns-ar:build",
+              "node tools/scripts/build-finish.ts ns-ar"
+            ],
+            "parallel": false
+          }
+        },
+        "focus": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "nx g @nativescript/plugin-tools:focus-packages ns-ar"
             ],
             "parallel": false
           }

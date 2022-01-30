@@ -84,6 +84,20 @@ module.exports = {
 					description: '@developerwym/navigator: Build',
 				},
 			},
+			// @developerwym/ns-ar
+			'ns-ar': {
+				build: {
+					script: 'nx run ns-ar:build.all',
+					description: '@developerwym/ns-ar: Build',
+				},
+			},
+			// @developerwym/ns-ar
+			'ns-ar': {
+				build: {
+					script: 'nx run ns-ar:build.all',
+					description: '@developerwym/ns-ar: Build',
+				},
+			},
 			'build-all': {
 				script: 'nx run all:build',
 				description: 'Build all packages',
@@ -105,6 +119,14 @@ module.exports = {
 			'navigator': {
 				script: 'nx run navigator:focus',
 				description: 'Focus on @developerwym/navigator',
+			},
+			'ns-ar': {
+				script: 'nx run ns-ar:focus',
+				description: 'Focus on @developerwym/ns-ar',
+			},
+			'ns-ar': {
+				script: 'nx run ns-ar:focus',
+				description: 'Focus on @developerwym/ns-ar',
 			},
 			reset: {
 				script: 'nx run all:focus',

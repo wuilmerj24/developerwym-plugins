@@ -1,4 +1,3 @@
-import { OpcionesCBPGM } from './common';
 
 export const AppsSoportadas: {
     GOOGLE_MAPS: string;
@@ -27,7 +26,6 @@ export interface OpcionesGoogleMaps {
     tipoMapa: 'TURN_BY_TURN' | 'MAPS';
     // avoid?: "t" | "h" | "f";
     avoid?: string;
-    streetViewOp?: string | Array<string>;
 }
 
 // WAZE
