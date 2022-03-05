@@ -10,6 +10,7 @@
 <Button text="ns-store-update" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
 <Button text="navigator" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
 <Button text="ns-ar" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+<Button text="ns-country-code" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
 
       </StackLayout>
     </ScrollView>

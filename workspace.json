@@ -87,7 +87,8 @@
               "nx run ns-screen-orientacion:build.all",
               "nx run ns-store-update:build.all",
               "nx run navigator:build.all",
-              "nx run ns-ar:build.all"
+              "nx run ns-ar:build.all",
+              "nx run ns-country-code:build.all"
             ],
             "parallel": false
           }
@@ -281,6 +282,51 @@
           "options": {
             "commands": [
               "nx g @nativescript/plugin-tools:focus-packages ns-ar"
+            ],
+            "parallel": false
+          }
+        }
+      }
+    },
+    "ns-country-code": {
+      "root": "packages/ns-country-code",
+      "projectType": "library",
+      "sourceRoot": "packages/ns-country-code",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/packages/ns-country-code",
+            "tsConfig": "packages/ns-country-code/tsconfig.json",
+            "packageJson": "packages/ns-country-code/package.json",
+            "main": "packages/ns-country-code/index.d.ts",
+            "assets": [
+              "packages/ns-country-code/*.md",
+              "packages/ns-country-code/index.d.ts",
+              "LICENSE",
+              {
+                "glob": "**/*",
+                "input": "packages/ns-country-code/platforms/",
+                "output": "./platforms/"
+              }
+            ]
+          }
+        },
+        "build.all": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "nx run ns-country-code:build",
+              "node tools/scripts/build-finish.ts ns-country-code"
+            ],
+            "parallel": false
+          }
+        },
+        "focus": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "nx g @nativescript/plugin-tools:focus-packages ns-country-code"
             ],
             "parallel": false
           }

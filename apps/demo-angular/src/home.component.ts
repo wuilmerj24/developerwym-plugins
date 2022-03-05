@@ -13,6 +13,9 @@ export class HomeComponent {
 		name: 'ns-ar'
 	},
 	{
+		name: 'ns-country-code'
+	},
+	{
 		name: 'ns-screen-orientacion'
 	},
 	{

@@ -98,6 +98,13 @@ module.exports = {
 					description: '@developerwym/ns-ar: Build',
 				},
 			},
+			// @developerwym/ns-country-code
+			'ns-country-code': {
+				build: {
+					script: 'nx run ns-country-code:build.all',
+					description: '@developerwym/ns-country-code: Build',
+				},
+			},
 			'build-all': {
 				script: 'nx run all:build',
 				description: 'Build all packages',
@@ -127,6 +134,10 @@ module.exports = {
 			'ns-ar': {
 				script: 'nx run ns-ar:focus',
 				description: 'Focus on @developerwym/ns-ar',
+			},
+			'ns-country-code': {
+				script: 'nx run ns-country-code:focus',
+				description: 'Focus on @developerwym/ns-country-code',
 			},
 			reset: {
 				script: 'nx run all:focus',

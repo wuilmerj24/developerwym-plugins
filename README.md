@@ -1,5 +1,6 @@
 - [@developerwym/navigator](packages/navigator/README.md)
 - [@developerwym/ns-ar](packages/ns-ar/README.md)
+- [@developerwym/ns-country-code](packages/ns-country-code/README.md)
 - [@developerwym/ns-screen-orientacion](packages/ns-screen-orientacion/README.md)
 - [@developerwym/ns-store-update](packages/ns-store-update/README.md)
 

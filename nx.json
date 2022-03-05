@@ -34,6 +34,9 @@
     },
     "ns-ar": {
       "tags": []
+    },
+    "ns-country-code": {
+      "tags": []
     }
   },
   "workspaceLayout": {
