@@ -1,5 +1,3 @@
-import { NsCountryCodeCommon } from './common';
 
-export declare class NsCountryCode extends NsCountryCodeCommon {
-    
-}
+export function  getCurrentPais(addPlus:true):Promise<any>;
+export function  showList():Promise<any>;
