@@ -543,15 +543,15 @@ export class AR extends ARBase {
 
     // TODO see sceneform example
     static isSupported(): boolean {
-        // return true;
+        return true;
         // can't use this before the ARCore lib is downloaded 🤔
         
-        const availability = com.google.ar.core.ArCoreApk.getInstance().checkAvailability(Utils.ad.getApplicationContext());
-        if (availability.isTransient()) {
-          console.log(">>> transient availability");
-          // see https://developers.google.com/ar/develop/java/enable-arcore
-        }
-        return availability.isSupported();
+        // const availability = com.google.ar.core.ArCoreApk.getInstance().checkAvailability(Utils.ad.getApplicationContext());
+        // if (availability.isTransient()) {
+        //   console.log(">>> transient availability");
+        //   // see https://developers.google.com/ar/develop/java/enable-arcore
+        // }
+        //return availability.isSupported();
     }
 
 
