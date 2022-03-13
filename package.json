@@ -43,5 +43,8 @@
     "**/*.{js,ts,scss,json,html}": [
       "npx prettier --write"
     ]
+  },
+  "dependencies": {
+    "@master.technology/permissions": "^2.0.1"
   }
 }
