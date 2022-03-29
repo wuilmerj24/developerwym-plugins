@@ -5,8 +5,14 @@ ns plugin add @developerwym/ns-country-code
 ```
 
 ## Usage
+## API
 
-// TODO
+## Metodos
+
+| Método  | Descripción  |
+| ------------- | ------------- |
+| getCurrentPais(addPlus:boolean) | Retorna un Promise<any> `pais,codigo,numCell` |
+| listaCodigos | Retorna un array con los paises `nombre,name,nom,iso2,iso3,codigo,bandera` |
 
 ## License
 
