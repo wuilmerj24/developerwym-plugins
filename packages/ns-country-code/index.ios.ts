@@ -1,5 +1,4 @@
-import {Codigos} from "./common";
-import {Builder, Button, CoreTypes, Frame, getCurrentPage, GridLayout, Page, ShowModalOptions, StackLayout, View} from "@nativescript/core";
+import {Codigos, CodigosI} from "./common";
 
 export function  getCurrentPais(addPlus:boolean):Promise<any>{
     return new Promise(async(rs,rj)=>{
@@ -12,15 +11,4 @@ export function  getCurrentPais(addPlus:boolean):Promise<any>{
         }
     });
 }
-
-export function showList():Promise<any>{
-    return new Promise((rs,rj)=>{
-        try {
-            let page:Page=getCurrentPage();
-            
-            rs(true)
-        } catch (error) {
-            rj(error)
-        }
-    });
-}
+export let listaCodigos: Array<CodigosI> = Codigos;
