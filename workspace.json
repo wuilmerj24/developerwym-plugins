@@ -88,7 +88,8 @@
               "nx run ns-store-update:build.all",
               "nx run navigator:build.all",
               "nx run ns-ar:build.all",
-              "nx run ns-country-code:build.all"
+              "nx run ns-country-code:build.all",
+              "nx run ns-signalr:build.all"
             ],
             "parallel": false
           }
@@ -327,6 +328,51 @@
           "options": {
             "commands": [
               "nx g @nativescript/plugin-tools:focus-packages ns-country-code"
+            ],
+            "parallel": false
+          }
+        }
+      }
+    },
+    "ns-signalr": {
+      "root": "packages/ns-signalr",
+      "projectType": "library",
+      "sourceRoot": "packages/ns-signalr",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/packages/ns-signalr",
+            "tsConfig": "packages/ns-signalr/tsconfig.json",
+            "packageJson": "packages/ns-signalr/package.json",
+            "main": "packages/ns-signalr/index.d.ts",
+            "assets": [
+              "packages/ns-signalr/*.md",
+              "packages/ns-signalr/index.d.ts",
+              "LICENSE",
+              {
+                "glob": "**/*",
+                "input": "packages/ns-signalr/platforms/",
+                "output": "./platforms/"
+              }
+            ]
+          }
+        },
+        "build.all": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "nx run ns-signalr:build",
+              "node tools/scripts/build-finish.ts ns-signalr"
+            ],
+            "parallel": false
+          }
+        },
+        "focus": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "nx g @nativescript/plugin-tools:focus-packages ns-signalr"
             ],
             "parallel": false
           }

@@ -19,6 +19,9 @@ export class HomeComponent {
 		name: 'ns-screen-orientacion'
 	},
 	{
+		name: 'ns-signalr'
+	},
+	{
 		name: 'ns-store-update'
 	}
 ];

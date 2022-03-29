@@ -37,6 +37,9 @@
     },
     "ns-country-code": {
       "tags": []
+    },
+    "ns-signalr": {
+      "tags": []
     }
   },
   "workspaceLayout": {

@@ -105,6 +105,13 @@ module.exports = {
 					description: '@developerwym/ns-country-code: Build',
 				},
 			},
+			// @developerwym/ns-signalr
+			'ns-signalr': {
+				build: {
+					script: 'nx run ns-signalr:build.all',
+					description: '@developerwym/ns-signalr: Build',
+				},
+			},
 			'build-all': {
 				script: 'nx run all:build',
 				description: 'Build all packages',
@@ -138,6 +145,10 @@ module.exports = {
 			'ns-country-code': {
 				script: 'nx run ns-country-code:focus',
 				description: 'Focus on @developerwym/ns-country-code',
+			},
+			'ns-signalr': {
+				script: 'nx run ns-signalr:focus',
+				description: 'Focus on @developerwym/ns-signalr',
 			},
 			reset: {
 				script: 'nx run all:focus',

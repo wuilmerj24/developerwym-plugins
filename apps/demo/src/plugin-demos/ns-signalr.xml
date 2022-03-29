@@ -1,0 +1,20 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo" class="page">
+    <Page.actionBar>
+        <ActionBar title="ns-signalr" icon="" class="action-bar">
+        </ActionBar>
+    </Page.actionBar>
+    <StackLayout class="p-20">
+        <ScrollView class="h-full">
+          <StackLayout>
+            <Button text="Test ns-signalr" tap="{{ testIt }}" class="btn btn-primary"/>
+            <Button text="desconectar" tap="{{ desconectar }}" class="btn btn-primary"/>
+            <Button text="Estado" tap="{{ estado }}" class="btn btn-primary"/>
+            <Button text="IDcon" tap="{{ getIdCon }}" class="btn btn-primary"/>
+            <Button text="Instancia" tap="{{ getIns }}" class="btn btn-primary"/>
+            <Button text="setEvento" tap="{{ setEvento}}" class="btn btn-primary"/>
+            <Button text="sendEvento" tap="{{ sendEvento}}" class="btn btn-primary"/>
+            <Button text="invokeEvento" tap="{{ invokeEvento}}" class="btn btn-primary"/>
+          </StackLayout>
+        </ScrollView>
+    </StackLayout>
+</Page>
