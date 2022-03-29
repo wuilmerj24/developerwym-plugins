@@ -4,21 +4,26 @@ const permissions = require("@master.technology/permissions");
 
 
 export function getCurrentPais(addPlus: boolean): Promise<any> {
-    return new Promise(async (rs, rj) => {
-        try {
-            permissions.requestPermission([android.Manifest.permission.READ_PHONE_STATE,android.Manifest.permission.READ_SMS]).then(() => {
-                let context:android.content.Context=Application.android.context;
+    return new Promise((rs, rj) => {
+        let cod:Array<CodigosI>=Codigos;
+        return permissions.requestPermission([android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.READ_SMS, android.Manifest.permission.READ_PHONE_NUMBERS],"se necesitan los permisos").then((res) => {
+            try {
+                let context: android.content.Context = Application.android.context;
                 let manager: android.telephony.TelephonyManager = context.getSystemService(android.content.Context.TELEPHONY_SERVICE);
-                let locale:string = manager.getNetworkCountryIso();
-                let countryCode: any = Codigos.filter(item => item.nombre === locale.toUpperCase());
-                console.log("Telf:", manager.getLine1Number().substring(1))
-                rs({ pais: countryCode[0].fullNameS, codigo: addPlus ? `+${countryCode[0].codigo}` : countryCode[0].codigo, numCell: addPlus ? manager.getLine1Number() : manager.getLine1Number().substring(1)});
-            }).catch(() => {
-                rj({ error: "Permisos son requeridos." });
-            });
-        } catch (error) {
-            rj({ error: error });
-        }
+                let locale: string = manager.getNetworkCountryIso();
+                let countryCode: Array<CodigosI> = cod.filter(item => item.iso2.toUpperCase() === locale.toUpperCase());
+                if (countryCode.length>0){
+                    rs({ pais: countryCode[0].nombre, codigo: addPlus ? `+${countryCode[0].codigo}` : countryCode[0].codigo, numCell: addPlus ? manager.getLine1Number() : manager.getLine1Number().substring(1) });
+                }else{
+                    rj({error:"Pais no encontrado"})
+                }
+            } catch (error) {
+                console.log(error)
+                rj({ error: error });
+            }
+        }).catch(() => {
+            rj({ error: "Permisos son requeridos." });
+        });
     });
 }
 
