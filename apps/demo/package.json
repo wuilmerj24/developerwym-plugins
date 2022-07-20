@@ -10,7 +10,8 @@
     "@developerwym/navigator": "file:../../packages/navigator",
     "@developerwym/ns-ar": "file:../../packages/ns-ar",
     "@developerwym/ns-country-code": "file:../../packages/ns-country-code",
-    "@developerwym/ns-signalr": "file:../../packages/ns-signalr"
+    "@developerwym/ns-signalr": "file:../../packages/ns-signalr",
+    "@developerwym/ns-timer-ranger-picker": "file:../../packages/ns-timer-ranger-picker"
   },
   "devDependencies": {
     "@nativescript/android": "~8.1.1",

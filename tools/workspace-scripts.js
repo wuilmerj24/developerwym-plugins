@@ -112,6 +112,13 @@ module.exports = {
 					description: '@developerwym/ns-signalr: Build',
 				},
 			},
+			// @developerwym/ns-timer-ranger-picker
+			'ns-timer-ranger-picker': {
+				build: {
+					script: 'nx run ns-timer-ranger-picker:build.all',
+					description: '@developerwym/ns-timer-ranger-picker: Build',
+				},
+			},
 			'build-all': {
 				script: 'nx run all:build',
 				description: 'Build all packages',
@@ -149,6 +156,10 @@ module.exports = {
 			'ns-signalr': {
 				script: 'nx run ns-signalr:focus',
 				description: 'Focus on @developerwym/ns-signalr',
+			},
+			'ns-timer-ranger-picker': {
+				script: 'nx run ns-timer-ranger-picker:focus',
+				description: 'Focus on @developerwym/ns-timer-ranger-picker',
 			},
 			reset: {
 				script: 'nx run all:focus',

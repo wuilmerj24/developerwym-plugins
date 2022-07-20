@@ -79,6 +79,7 @@ export class NsSignalr extends NsSignalrCommon {
                         console.log("completado, ", that.conexion.getConnectionState())
                         Utils.clearInterval(intervalo); 
                         // this.type = new SignalRTipos().convertir();
+                        
                         rs(that.conexion);
                     }
                 });
@@ -151,5 +152,14 @@ export class NsSignalr extends NsSignalrCommon {
         } catch (error) {
             throw Error(`Se ha generado un error:${error}`);
         }
+    }
+
+    onClose(callback: (...payload: any[]) => void): void {
+        this.conexion.onClosed(new com.microsoft.signalr.OnClosedCallback({
+            invoke:async function(param0) {
+                console.log("se ejecuto el evento: ",param0)
+                callback(param0);
+            },
+        }))
     }
 }

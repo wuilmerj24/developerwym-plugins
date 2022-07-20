@@ -40,6 +40,9 @@
     },
     "ns-signalr": {
       "tags": []
+    },
+    "ns-timer-ranger-picker": {
+      "tags": []
     }
   },
   "workspaceLayout": {

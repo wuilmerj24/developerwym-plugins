@@ -14,6 +14,7 @@
             <Button text="setEvento" tap="{{ setEvento}}" class="btn btn-primary"/>
             <Button text="sendEvento" tap="{{ sendEvento}}" class="btn btn-primary"/>
             <Button text="invokeEvento" tap="{{ invokeEvento}}" class="btn btn-primary"/>
+            <Button text="OnCose" tap="{{ onClose}}" class="btn btn-primary"/>
           </StackLayout>
         </ScrollView>
     </StackLayout>

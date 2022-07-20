@@ -89,7 +89,8 @@
               "nx run navigator:build.all",
               "nx run ns-ar:build.all",
               "nx run ns-country-code:build.all",
-              "nx run ns-signalr:build.all"
+              "nx run ns-signalr:build.all",
+              "nx run ns-timer-ranger-picker:build.all"
             ],
             "parallel": false
           }
@@ -373,6 +374,51 @@
           "options": {
             "commands": [
               "nx g @nativescript/plugin-tools:focus-packages ns-signalr"
+            ],
+            "parallel": false
+          }
+        }
+      }
+    },
+    "ns-timer-ranger-picker": {
+      "root": "packages/ns-timer-ranger-picker",
+      "projectType": "library",
+      "sourceRoot": "packages/ns-timer-ranger-picker",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/packages/ns-timer-ranger-picker",
+            "tsConfig": "packages/ns-timer-ranger-picker/tsconfig.json",
+            "packageJson": "packages/ns-timer-ranger-picker/package.json",
+            "main": "packages/ns-timer-ranger-picker/index.d.ts",
+            "assets": [
+              "packages/ns-timer-ranger-picker/*.md",
+              "packages/ns-timer-ranger-picker/index.d.ts",
+              "LICENSE",
+              {
+                "glob": "**/*",
+                "input": "packages/ns-timer-ranger-picker/platforms/",
+                "output": "./platforms/"
+              }
+            ]
+          }
+        },
+        "build.all": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "nx run ns-timer-ranger-picker:build",
+              "node tools/scripts/build-finish.ts ns-timer-ranger-picker"
+            ],
+            "parallel": false
+          }
+        },
+        "focus": {
+          "executor": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              "nx g @nativescript/plugin-tools:focus-packages ns-timer-ranger-picker"
             ],
             "parallel": false
           }

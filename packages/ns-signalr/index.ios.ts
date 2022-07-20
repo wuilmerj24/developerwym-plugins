@@ -57,4 +57,8 @@ export class NsSignalr extends NsSignalrCommon {
 
     invoke(evento: string, ...payload: any[]): void {
     }
+
+    onClose(): void {
+        
+    }
 }

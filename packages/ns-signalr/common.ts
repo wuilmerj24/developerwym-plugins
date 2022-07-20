@@ -22,4 +22,5 @@ export abstract class NsSignalrCommon  {
     abstract on(evento: string, callback: (...payload:any[]) => void):void;
     abstract send(evento: string, payload: any[]):void;
     abstract invoke(evento: string,payload: any[]):void;
+    abstract onClose(callback: (...payload:any[]) => void):void;
 }

@@ -1,11 +1,10 @@
-<a href="https://www.buymeacoffee.com/mariac15" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
-
 - [@developerwym/navigator](packages/navigator/README.md)
 - [@developerwym/ns-ar](packages/ns-ar/README.md)
 - [@developerwym/ns-country-code](packages/ns-country-code/README.md)
 - [@developerwym/ns-screen-orientacion](packages/ns-screen-orientacion/README.md)
 - [@developerwym/ns-signalr](packages/ns-signalr/README.md)
 - [@developerwym/ns-store-update](packages/ns-store-update/README.md)
+- [@developerwym/ns-timer-ranger-picker](packages/ns-timer-ranger-picker/README.md)
 
 # How to use?
 

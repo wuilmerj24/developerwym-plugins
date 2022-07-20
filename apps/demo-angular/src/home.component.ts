@@ -23,6 +23,9 @@ export class HomeComponent {
 	},
 	{
 		name: 'ns-store-update'
+	},
+	{
+		name: 'ns-timer-ranger-picker'
 	}
 ];
 }

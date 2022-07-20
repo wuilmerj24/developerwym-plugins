@@ -8,12 +8,13 @@ export class DemoSharedNsSignalr extends DemoSharedBase {
   testIt() {
     
     this.s.conectar({
-      url: "http://192.168.100.5:3000/chatHub",
-      headers: [{ key: "Content-type", value: "application/json" }, { key: "Content-type", value: "application/json" }],
-      shouldSkipNegotiate: true,
+      // url: "http://192.168.100.5:3000/chatHub",
+      url: "https://eaconnectionmobileuat.azurewebsites.net/ServicesHub",
+      headers: [{ key: "Content-type", value: "application/json" }, { key: "Authorization", value: "019c0c14-8bdb-4c58-aa9f-3d6e08b3b319" }],
+      shouldSkipNegotiate: false,
       withHandshakeResponseTimeout:0,
       withTransport:"WEBSOCKETS",
-      withAccessTokenProvider:"sad",
+      // withAccessTokenProvider:"sad",
     }).then((res)=>{
       console.log("conectar ",res);
     }).catch((er)=>{
@@ -58,6 +59,13 @@ export class DemoSharedNsSignalr extends DemoSharedBase {
   invokeEvento(){
     console.log("send el evento")
     this.s.invoke("SendMessage",["1","1"]);
+  }
+
+  onClose(){
+
+    this.s.onClose((data)=>{
+      console.log("Se desconecto",data);
+    })
   }
   
 }
