@@ -1,5 +1,5 @@
 {
-  "npmScope": "nativescript",
+  "npmScope": "arepa",
   "affected": {
     "defaultBase": "master"
   },
