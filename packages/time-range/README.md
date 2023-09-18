@@ -1,5 +1,10 @@
-# @arepa/time-range
+# Nativescript TimeRange
+<a href="https://www.npmjs.com/package/@nstudio/nativescript-camera-plus">
+        <img src="https://img.shields.io/npm/dt/@nstudio/nativescript-camera-plus.svg?label=npm%20downloads" alt="npm">
+</a>
+## @arepa/time-range
 
+## Instalation
 ```javascript
 npm install @arepa/time-range
 ```
@@ -27,8 +32,6 @@ npm install @arepa/time-range
 | thumbIconStartRes | string | null | Set the start thumb icon. | ✓ | ✓ |
 | thumbIconEndRes | string | null | Set the end thumb icon. | ✓ | ✓ |
 | clockFace | string | APPLE | There a two different clock faces (appearance of the inner clock) you can use, both mimicking the Clock apps: APPLE and SAMSUNG | ✓ | ✓ |
-
-❌
 
 
 
