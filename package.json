@@ -14,7 +14,7 @@
     "remove-package": "nx g @nativescript/plugin-tools:remove-package",
     "add-demo": "nx g @nativescript/plugin-tools:add-demo"
   },
-  "private": true,
+  "private": false,
   "devDependencies": {
     "@angular/animations": "^15.0.0",
     "@angular/common": "^15.0.0",
