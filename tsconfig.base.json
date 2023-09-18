@@ -21,7 +21,9 @@
     ],
     "paths": {
       "@demo/shared": ["tools/demo/index.ts"],
-      "@arepa/*": ["packages/*"]
+      "@arepa/*": ["packages/*"],
+      "@arepa/time-range": ["packages/time-range/index.d.ts"],
+      "@arepa/time-range/angular": ["packages/time-range/angular/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

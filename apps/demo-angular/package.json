@@ -1,7 +1,8 @@
 {
   "main": "./src/main.ts",
   "dependencies": {
-    "@nativescript/core": "file:../../node_modules/@nativescript/core"
+    "@nativescript/core": "file:../../node_modules/@nativescript/core",
+    "@arepa/time-range": "file:../../dist/packages/time-range"
   },
   "devDependencies": {
     "@nativescript/android": "~8.4.0",

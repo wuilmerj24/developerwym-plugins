@@ -5,7 +5,7 @@ npm run setup
 npm start
 ```
 
-- @arepa
+- [@arepa/time-range](packages/time-range/README.md)
 
 # How to use?
 

@@ -61,6 +61,13 @@ module.exports = {
     // packages
     // build output is always in dist/packages
     '@arepa': {
+      // @arepa/time-range
+      'time-range': {
+        build: {
+          script: 'nx run time-range:build.all',
+          description: '@arepa/time-range: Build',
+        },
+      },
       'build-all': {
         script: 'nx run-many --target=build.all --all',
         description: 'Build all packages',
@@ -71,6 +78,10 @@ module.exports = {
       description: '_____________  Focus (VS Code supported)  _____________',
     },
     focus: {
+      'time-range': {
+        script: 'nx run time-range:focus',
+        description: 'Focus on @arepa/time-range',
+      },
       reset: {
         script: 'nx g @arepa/plugin-tools:focus-packages',
         description: 'Reset Focus',
