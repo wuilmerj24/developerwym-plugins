@@ -1,8 +1,8 @@
 # Nativescript TimeRange
 
-<!-- <a href="https://www.npmjs.com/package">
+<a href="https://www.npmjs.com/package/@arepa/time-range">
     <img src="https://img.shields.io/npm/dt/@nstudio/nativescript-camera-plus.svg?label=npm%20downloads" alt="npm">
-</a> -->
+</a>
 
 ## @arepa/time-range
 
