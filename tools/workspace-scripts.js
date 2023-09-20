@@ -68,6 +68,13 @@ module.exports = {
           description: '@arepa/time-range: Build',
         },
       },
+      // @arepa/launch-navigator
+      'launch-navigator': {
+        build: {
+          script: 'nx run launch-navigator:build.all',
+          description: '@arepa/launch-navigator: Build',
+        },
+      },
       'build-all': {
         script: 'nx run-many --target=build.all --all',
         description: 'Build all packages',
@@ -81,6 +88,10 @@ module.exports = {
       'time-range': {
         script: 'nx run time-range:focus',
         description: 'Focus on @arepa/time-range',
+      },
+      'launch-navigator': {
+        script: 'nx run launch-navigator:focus',
+        description: 'Focus on @arepa/launch-navigator',
       },
       reset: {
         script: 'nx g @arepa/plugin-tools:focus-packages',

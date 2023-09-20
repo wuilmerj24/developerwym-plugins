@@ -1,23 +1,6 @@
-<h1 align="center">
-  <br>
-  Developerwym
-  <br>
-</h1>
-
-<h4 align="center">Plugins para <a href="nativescript.org/" target="_blank">Nativescript</a>.</h4>
-
-#### Contribuye
-<a href="https://www.buymeacoffee.com/mariac15" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee" style="height: 41px !important;width: 174px !important;box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 3px 2px 0px rgba(190, 190, 190, 0.5) !important;" ></a>
-
-# @arepa/\* plugins
-
-```
-npm run setup
-npm start
-```
-
+- [@arepa/launch-navigator](packages/launch-navigator/README.md)
 - [@arepa/time-range](packages/time-range/README.md)
-<!-- 
+
 # How to use?
 
 This workspace manages the suite of plugins listed above. 

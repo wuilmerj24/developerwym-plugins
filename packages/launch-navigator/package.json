@@ -1,13 +1,13 @@
 {
-  "name": "@arepa/time-range",
-  "version": "1.0.10",
+  "name": "@arepa/launch-navigator",
+  "version": "1.0.0-alpha.1",
   "description": "Add a plugin description",
   "main": "index",
   "typings": "index.d.ts",
   "nativescript": {
     "platforms": {
-      "ios": "7.0.0",
-      "android": "7.0.0"
+      "ios": "6.0.0",
+      "android": "6.0.0"
     }
   },
   "repository": {
