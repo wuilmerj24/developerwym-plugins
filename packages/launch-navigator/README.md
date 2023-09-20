@@ -1,3 +1,9 @@
+# launch-navigator
+
+<a href="https://www.npmjs.com/package/@arepa/time-range">
+    <img src="https://img.shields.io/npm/dt/@arepa/time-range.svg?label=npm%20downloads" alt="npm">
+</a>
+
 # @arepa/launch-navigator
 
 ```javascript
