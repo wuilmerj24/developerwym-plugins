@@ -1,6 +1,6 @@
 {
   "name": "@arepa/launch-navigator",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0",
   "description": "Add a plugin description",
   "main": "index",
   "typings": "index.d.ts",
