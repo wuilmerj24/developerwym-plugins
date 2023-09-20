@@ -21,6 +21,11 @@ npm install @arepa/time-range
     </StackLayout>
 </Page>
 ```
+```javascript
+onDrag(ev) {
+    console.log('onDrag ', ev.data);
+  }
+```
 
 #### Nativescript Angular 
 ```typescript
@@ -36,6 +41,11 @@ import { NativeScriptTimeRangeModule } from '@arepa/time-range/angular';
 
 ```html
 <TimeRange (drag)="onDrag($event)"></TimeRange>
+```
+```typescript
+onDrag(ev) {
+    console.log('onDrag ', ev.data);
+  }
 ```
 
 ### Properties
@@ -61,9 +71,3 @@ import { NativeScriptTimeRangeModule } from '@arepa/time-range/angular';
 | thumbIconStartRes | string | null | Set the start thumb icon. | ✓ | ✓ |
 | thumbIconEndRes | string | null | Set the end thumb icon. | ✓ | ✓ |
 | clockFace | string | APPLE | There a two different clock faces (appearance of the inner clock) you can use, both mimicking the Clock apps: APPLE and SAMSUNG | ✓ | ✓ |
-
-
-
-## License
-
-Apache License Version 2.0
