@@ -6,8 +6,6 @@
     <StackLayout class="p-20">
       <tr:TimeRange width="100%" height="100%"
       
-        width="100%" 
-        height="100%" 
         startTime="10:00" 
         endTime="1:00" 
         sliderColor="red" 
@@ -15,7 +13,7 @@
         clockTickColor="green" 
         
         maxDurationMinutes="1"
-        sliderRangeColor="#f4f4f4"
+        sliderRangeColor="black"
 
         thumbColor="#CCCCCC"
         

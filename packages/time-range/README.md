@@ -10,8 +10,35 @@
 ```javascript
 npm install @arepa/time-range
 ```
+### Usage
+#### Plain NativeScript
+<p>IMPORTANT: Make sure you include xmlns:tr="@arepa/time-range" on the Page element</p>
 
-## Properties
+```xml
+<Page xmlns:tr="@arepa/time-range">
+    <StackLayout class="p-20">
+      <tr:TimeRange width="100%" height="100%" drag="onDrag"/>
+    </StackLayout>
+</Page>
+```
+
+#### Nativescript Angular 
+```typescript
+import { NativeScriptTimeRangeModule } from '@arepa/time-range/angular';
+
+//addd NativeScriptTimeRangeModule to angular NgModule>imports
+@NgModule({
+    imports: [
+        NativeScriptTimeRangeModule,
+    ],
+})
+```
+
+```html
+<TimeRange (drag)="onDrag($event)"></TimeRange>
+```
+
+### Properties
 | Property | Type | Default value | Description | iOS | Android |
 | -------- | ---- | ------------- | ----------- | --- | ------- |
 | startTime | string | 00:00 | The time format is Hh:Mm, for example, 12:00. startTime defines the start time, it is not required.| ✓ | ✓ |
