@@ -4,9 +4,11 @@
   "license": "SEE LICENSE IN <your-license-filename>",
   "repository": "<fill-your-repository-here>",
   "dependencies": {
+    "@arepa/country-code": "file:../../packages/country-code",
+    "@arepa/launch-navigator": "file:../../packages/launch-navigator",
     "@arepa/time-range": "file:../../packages/time-range",
-    "@nativescript/core": "file:../../node_modules/@nativescript/core",
-    "@arepa/launch-navigator": "file:../../packages/launch-navigator"
+    "@nativescript-community/perms": "^2.3.0",
+    "@nativescript/core": "file:../../node_modules/@nativescript/core"
   },
   "devDependencies": {
     "@nativescript/android": "~8.4.0",

@@ -3,7 +3,8 @@
   "dependencies": {
     "@nativescript/core": "file:../../node_modules/@nativescript/core",
     "@arepa/time-range": "file:../../dist/packages/time-range",
-    "@arepa/launch-navigator": "file:../../dist/packages/launch-navigator"
+    "@arepa/launch-navigator": "file:../../dist/packages/launch-navigator",
+    "@arepa/country-code": "file:../../dist/packages/country-code"
   },
   "devDependencies": {
     "@nativescript/android": "~8.4.0",

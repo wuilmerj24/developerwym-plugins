@@ -1,3 +1,4 @@
+- [@arepa/country-code](packages/country-code/README.md)
 - [@arepa/launch-navigator](packages/launch-navigator/README.md)
 - [@arepa/time-range](packages/time-range/README.md)
 

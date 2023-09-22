@@ -1,0 +1,10 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo" class="page">
+    <Page.actionBar>
+        <ActionBar title="country-code" icon="" class="action-bar">
+        </ActionBar>
+    </Page.actionBar>
+    <StackLayout class="p-20">
+      <Button text="Test country-code" tap="getPais" class="btn btn-primary"/>
+      <Button text="showLis" tap="showLis" class="btn btn-primary" />
+    </StackLayout>
+</Page>

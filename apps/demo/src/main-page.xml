@@ -8,6 +8,8 @@
         <Button text="add a package first" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
 <Button text="time-range" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
 <Button text="launch-navigator" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+<Button text="country-code" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+
       </StackLayout>
     </ScrollView>
   </StackLayout>

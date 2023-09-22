@@ -75,6 +75,20 @@ module.exports = {
           description: '@arepa/launch-navigator: Build',
         },
       },
+      // @arepa/country-code
+      'country-code': {
+        build: {
+          script: 'nx run country-code:build.all',
+          description: '@arepa/country-code: Build',
+        },
+      },
+      // @arepa/country-code
+      'country-code': {
+        build: {
+          script: 'nx run country-code:build.all',
+          description: '@arepa/country-code: Build',
+        },
+      },
       'build-all': {
         script: 'nx run-many --target=build.all --all',
         description: 'Build all packages',
@@ -92,6 +106,14 @@ module.exports = {
       'launch-navigator': {
         script: 'nx run launch-navigator:focus',
         description: 'Focus on @arepa/launch-navigator',
+      },
+      'country-code': {
+        script: 'nx run country-code:focus',
+        description: 'Focus on @arepa/country-code',
+      },
+      'country-code': {
+        script: 'nx run country-code:focus',
+        description: 'Focus on @arepa/country-code',
       },
       reset: {
         script: 'nx g @arepa/plugin-tools:focus-packages',
