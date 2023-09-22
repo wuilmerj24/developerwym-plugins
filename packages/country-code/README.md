@@ -1,21 +1,22 @@
-# NativeScript Plugin para cambiar la orientación de la pantalla.
-# @developerwym/ns-country-code
+# NativeScript country-code.
+<a href="https://www.npmjs.com/package/@arepa/country-code">
+    <img src="https://img.shields.io/npm/dt/@arepa/country-code.svg?label=npm%20downloads" alt="npm">
+</a>
+
+# @arepa/ns-country-code
 
 
 ```javascript
-ns plugin add @developerwym/ns-country-code
+ns plugin add @arepa/country-code
 ```
 
 ## Usage
 ## API
-## Metodos
+## Methods
 
-| Método | Descripción |
+| Method | Description |
 | ------ | ----------- |
-| getCurrentPais(addPlus:boolean) |  	Retorna un Promise pais,codigo,numCell (numCell solo android) |
-| listaCodigos | Retorna un array con los paises nombre,name,nom,iso2,iso3,codigo,bandera |
+| getCurrentPais(addPlus:boolean) |  	Returns a Promise country, code, numCell (numCell only for Android). |
+| listaCodigos | Returns an array with the countries' name, name, nom, iso2, iso3, code, flag. |
+| showListPaises | Open a modal with a search box and a list of countries. Returns the selected item. |
 
-
-## License
-
-Apache License Version 2.0
