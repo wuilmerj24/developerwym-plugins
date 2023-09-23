@@ -2283,6 +2283,7 @@ export class Lista extends GridLayout {
     grid.addColumn(new ItemSpec(1, GridUnitType.STAR));
     grid.borderBottomWidth = 0.3;
     grid.borderBottomColor = new Color('black');
+    grid.height = 60;
     const btn: Button = new Button();
     btn.text = 'X';
     btn.fontSize = 20;
