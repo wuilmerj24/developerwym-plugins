@@ -2300,7 +2300,6 @@ export class Lista extends GridLayout {
     txt.col = 1;
     txt.width = Screen.mainScreen.widthDIPs;
     txt.hint = 'Search';
-    txt.backgroundColor = new Color('#FFFFFF');
     txt.borderRadius = 10;
     txt.borderBottomColor = new Color('transparent');
     txt.addEventListener('textChange', (args: EventData) => {
