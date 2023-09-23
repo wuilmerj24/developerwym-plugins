@@ -2291,6 +2291,7 @@ export class Lista extends GridLayout {
     btn.col = 0;
     btn.style.fontWeight = 'bold';
     btn.width = 'auto';
+    btn.height = 'auto';
     btn.on('tap', (args: EventData) => {
       this.closeModal(this.item_selecc);
     });
