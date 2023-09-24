@@ -2248,6 +2248,7 @@ export let Codigos: Array<CodigosI> = [
 export class Lista extends GridLayout {
   private list: ListView;
   private item_selecc: any;
+  private isDarkmode = false;
   constructor() {
     super();
   }
@@ -2262,11 +2263,17 @@ export class Lista extends GridLayout {
     if (this.android) {
       const uiModeManager = Application.android.context.getSystemService(android.content.Context.UI_MODE_SERVICE);
       if (uiModeManager != null && uiModeManager.getNightMode() == android.content.res.Configuration.UI_MODE_NIGHT_YES) {
-        console.log('El modo oscuro está activado');
+        this.isDarkmode = true;
       } else {
-        console.log('El modo oscuro no está activado');
+        this.isDarkmode = false;
       }
     } else if (this.ios) {
+      const uITraitCollection = UITraitCollection.currentTraitCollection;
+      if (uITraitCollection.userInterfaceStyle == UIUserInterfaceStyle.Dark) {
+        this.isDarkmode = true;
+      } else {
+        this.isDarkmode = false;
+      }
     }
   }
 
@@ -2283,7 +2290,7 @@ export class Lista extends GridLayout {
     grid.addColumn(new ItemSpec(1, GridUnitType.STAR));
     grid.borderBottomWidth = 0.3;
     grid.borderBottomColor = new Color('black');
-    grid.height = 60;
+    grid.height = 50;
     const btn: Button = new Button();
     btn.text = 'X';
     btn.fontSize = 20;
@@ -2293,6 +2300,8 @@ export class Lista extends GridLayout {
     btn.style.fontWeight = 'bold';
     btn.width = 'auto';
     btn.height = 'auto';
+    btn.horizontalAlignment = 'right';
+    btn.verticalAlignment = 'middle';
     btn.on('tap', (args: EventData) => {
       this.closeModal(this.item_selecc);
     });
@@ -2301,9 +2310,15 @@ export class Lista extends GridLayout {
     const txt: TextView = new TextView();
     txt.col = 1;
     txt.width = Screen.mainScreen.widthDIPs;
+    txt.verticalAlignment = 'middle';
+    txt.horizontalAlignment = 'left';
     txt.hint = 'Search';
+    if (this.ios) {
+      txt.color = new Color('black');
+    }
     txt.borderRadius = 10;
     txt.borderBottomColor = new Color('transparent');
+    txt.backgroundColor = new Color('#ffffff');
     txt.addEventListener('textChange', (args: EventData) => {
       const textView: TextView = args.object as TextView;
       const nombreABuscar: string = textView.text;
