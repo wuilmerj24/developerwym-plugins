@@ -25,7 +25,9 @@
       "@arepa/time-range": ["packages/time-range/index.d.ts"],
       "@arepa/time-range/angular": ["packages/time-range/angular/index.ts"],
       "@arepa/launch-navigator": ["packages/launch-navigator/index.d.ts"],
-      "@arepa/country-code": ["packages/country-code/index.d.ts"]
+      "@arepa/country-code": ["packages/country-code/index.d.ts"],
+      "@arepa/keyboard": ["packages/keyboard/index.d.ts"],
+      "@arepa/screen-orientation": ["packages/screen-orientation/index.d.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

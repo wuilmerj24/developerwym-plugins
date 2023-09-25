@@ -13,6 +13,9 @@ export class HomeComponent {
       name: 'launch-navigator',
     },
     {
+      name: 'screen-orientation',
+    },
+    {
       name: 'time-range',
     },
   ];

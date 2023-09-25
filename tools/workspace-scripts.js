@@ -89,6 +89,20 @@ module.exports = {
           description: '@arepa/country-code: Build',
         },
       },
+      // @arepa/keyboard
+      keyboard: {
+        build: {
+          script: 'nx run keyboard:build.all',
+          description: '@arepa/keyboard: Build',
+        },
+      },
+      // @arepa/screen-orientation
+      'screen-orientation': {
+        build: {
+          script: 'nx run screen-orientation:build.all',
+          description: '@arepa/screen-orientation: Build',
+        },
+      },
       'build-all': {
         script: 'nx run-many --target=build.all --all',
         description: 'Build all packages',
@@ -114,6 +128,14 @@ module.exports = {
       'country-code': {
         script: 'nx run country-code:focus',
         description: 'Focus on @arepa/country-code',
+      },
+      keyboard: {
+        script: 'nx run keyboard:focus',
+        description: 'Focus on @arepa/keyboard',
+      },
+      'screen-orientation': {
+        script: 'nx run screen-orientation:focus',
+        description: 'Focus on @arepa/screen-orientation',
       },
       reset: {
         script: 'nx g @arepa/plugin-tools:focus-packages',

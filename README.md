@@ -1,5 +1,6 @@
 - [@arepa/country-code](packages/country-code/README.md)
 - [@arepa/launch-navigator](packages/launch-navigator/README.md)
+- [@arepa/screen-orientation](packages/screen-orientation/README.md)
 - [@arepa/time-range](packages/time-range/README.md)
 
 # How to use?
@@ -52,7 +53,7 @@ npm run publish-packages
 - You will then be prompted for the version to use. Leaving blank will auto bump the patch version (it also handles prerelease types like alpha, beta, rc, etc. - It even auto tags the corresponding prelease type on npm).
 - You will then be given a brief sanity check 🧠😊
 
-<h3 align="center">Made with ❤️</h3> -->
+<h3 align="center">Made with ❤️</h3>  -->
 
 
 Do you need custom plugins for your NativeScript project? We're here to help! 😊
