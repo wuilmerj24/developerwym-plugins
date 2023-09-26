@@ -30,23 +30,33 @@ export let getOrientacion = () => {
 };
 
 function nombreOrientacion(orientacion: number): string {
-  if (orientacion === android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
-    return 'ANY';
-  } else if (orientacion === android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-    return 'PORTRAIT';
-  } else if (orientacion === android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT) {
-    return 'PORTRAIT_REVERSE';
-  } else if (orientacion === android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT) {
-    return 'PORTRAIT_SENSOR';
-  } else if (orientacion === android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-    return 'LANDSCAPE';
-  } else if (orientacion === android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) {
-    return 'LANDSCAPE_REVERSE';
-  } else if (orientacion === android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE) {
-    return 'LANDSCAPE_SENSOR';
-  } else if (orientacion === android.content.pm.ActivityInfo.SCREEN_ORIENTATION_USER) {
-    return 'USER_ORIENTACION';
-  } else if (orientacion === android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED) {
-    return 'UNSPECIFIED';
+  switch (orientacion) {
+    case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED:
+      return 'ANY';
+      break;
+    case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
+      return 'PORTRAIT';
+      break;
+    case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT:
+      return 'PORTRAIT_REVERSE';
+      break;
+    case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_SENSOR_PORTRAIT:
+      return 'PORTRAIT_SENSOR';
+      break;
+    case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
+      return 'LANDSCAPE';
+      break;
+    case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
+      return 'LANDSCAPE_REVERSE';
+      break;
+    case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
+      return 'LANDSCAPE_SENSOR';
+      break;
+    case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_USER:
+      return 'USER_ORIENTACION';
+      break;
+    case android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED:
+      return 'UNSPECIFIED';
+      break;
   }
 }

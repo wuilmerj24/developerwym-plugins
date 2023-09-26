@@ -1,12 +1,12 @@
 {
   "NativescriptExtend.fileAssociations": [
     {
-      "systemId": "/Users/mary/proyectos/developerwym-plugins/schema/tns.xsd",
+      "systemId": "/home/wuilmerj24/Proyectos/developerwym-plugins/schema/tns.xsd",
       "pattern": "**/**/*.xml"
     },
     {
       "systemId": "http://www.w3.org/2001/XMLSchema.xsd",
-      "pattern": "/Users/mary/proyectos/developerwym-plugins/schema/tns.xsd"
+      "pattern": "/home/wuilmerj24/Proyectos/developerwym-plugins/schema/tns.xsd"
     }
   ],
   "files.exclude": {
