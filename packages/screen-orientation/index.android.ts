@@ -1,4 +1,4 @@
-import { Application } from '@nativescript/core';
+import { Application, Utils } from '@nativescript/core';
 
 export const Orientacion = Object.freeze({
   ANY: android.content.pm.ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED,

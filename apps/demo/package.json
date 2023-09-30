@@ -7,6 +7,7 @@
     "@arepa/country-code": "file:../../packages/country-code",
     "@arepa/launch-navigator": "file:../../packages/launch-navigator",
     "@arepa/screen-orientation": "file:../../packages/screen-orientation",
+    "@arepa/store-update": "file:../../packages/store-update",
     "@arepa/time-range": "file:../../packages/time-range",
     "@nativescript-community/perms": "^2.3.0",
     "@nativescript/core": "file:../../node_modules/@nativescript/core"

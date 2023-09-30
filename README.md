@@ -1,8 +1,10 @@
 - [@arepa/country-code](packages/country-code/README.md)
 - [@arepa/launch-navigator](packages/launch-navigator/README.md)
 - [@arepa/screen-orientation](packages/screen-orientation/README.md)
+- [@arepa/store-update](packages/store-update/README.md)
 - [@arepa/time-range](packages/time-range/README.md)
 
+<!--
 # How to use?
 
 This workspace manages the suite of plugins listed above. 

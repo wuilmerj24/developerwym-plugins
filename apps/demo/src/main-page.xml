@@ -10,6 +10,8 @@
 <Button text="launch-navigator" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
 <Button text="country-code" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
 <Button text="screen-orientation" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+<Button text="store-update" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+
 
 
       </StackLayout>

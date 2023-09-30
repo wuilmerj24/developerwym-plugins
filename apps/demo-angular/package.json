@@ -5,7 +5,8 @@
     "@arepa/time-range": "file:../../dist/packages/time-range",
     "@arepa/launch-navigator": "file:../../dist/packages/launch-navigator",
     "@arepa/country-code": "file:../../dist/packages/country-code",
-    "@arepa/screen-orientation": "file:../../dist/packages/screen-orientation"
+    "@arepa/screen-orientation": "file:../../dist/packages/screen-orientation",
+    "@arepa/store-update": "file:../../dist/packages/store-update"
   },
   "devDependencies": {
     "@nativescript/android": "~8.4.0",

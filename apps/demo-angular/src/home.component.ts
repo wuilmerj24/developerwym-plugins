@@ -16,6 +16,9 @@ export class HomeComponent {
       name: 'screen-orientation',
     },
     {
+      name: 'store-update',
+    },
+    {
       name: 'time-range',
     },
   ];

@@ -1,4 +1,4 @@
-import { Application, Device } from '@nativescript/core';
+import { Application, Color, Device } from '@nativescript/core';
 import { DemoSharedBase } from '../utils';
 import { Orientacion, getOrientacion, setOrientacion } from '@arepa/screen-orientation';
 

@@ -3,7 +3,7 @@
     <img src="https://img.shields.io/npm/dt/@arepa/country-code.svg?label=npm%20downloads" alt="npm">
 </a>
 
-# @arepa/ns-country-code
+# @arepa/country-code
 
 
 ```javascript

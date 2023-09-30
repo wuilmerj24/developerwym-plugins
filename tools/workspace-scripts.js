@@ -103,6 +103,20 @@ module.exports = {
           description: '@arepa/screen-orientation: Build',
         },
       },
+      // @arepa/statusbar
+      statusbar: {
+        build: {
+          script: 'nx run statusbar:build.all',
+          description: '@arepa/statusbar: Build',
+        },
+      },
+      // @arepa/store-update
+      'store-update': {
+        build: {
+          script: 'nx run store-update:build.all',
+          description: '@arepa/store-update: Build',
+        },
+      },
       'build-all': {
         script: 'nx run-many --target=build.all --all',
         description: 'Build all packages',
@@ -136,6 +150,14 @@ module.exports = {
       'screen-orientation': {
         script: 'nx run screen-orientation:focus',
         description: 'Focus on @arepa/screen-orientation',
+      },
+      statusbar: {
+        script: 'nx run statusbar:focus',
+        description: 'Focus on @arepa/statusbar',
+      },
+      'store-update': {
+        script: 'nx run store-update:focus',
+        description: 'Focus on @arepa/store-update',
       },
       reset: {
         script: 'nx g @arepa/plugin-tools:focus-packages',
