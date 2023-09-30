@@ -10,7 +10,8 @@
     "@arepa/store-update": "file:../../packages/store-update",
     "@arepa/time-range": "file:../../packages/time-range",
     "@nativescript-community/perms": "^2.3.0",
-    "@nativescript/core": "file:../../node_modules/@nativescript/core"
+    "@nativescript/core": "file:../../node_modules/@nativescript/core",
+    "@arepa/gallery-view": "file:../../packages/gallery-view"
   },
   "devDependencies": {
     "@nativescript/android": "~8.4.0",

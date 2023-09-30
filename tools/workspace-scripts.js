@@ -117,6 +117,13 @@ module.exports = {
           description: '@arepa/store-update: Build',
         },
       },
+      // @arepa/gallery-view
+      'gallery-view': {
+        build: {
+          script: 'nx run gallery-view:build.all',
+          description: '@arepa/gallery-view: Build',
+        },
+      },
       'build-all': {
         script: 'nx run-many --target=build.all --all',
         description: 'Build all packages',
@@ -158,6 +165,10 @@ module.exports = {
       'store-update': {
         script: 'nx run store-update:focus',
         description: 'Focus on @arepa/store-update',
+      },
+      'gallery-view': {
+        script: 'nx run gallery-view:focus',
+        description: 'Focus on @arepa/gallery-view',
       },
       reset: {
         script: 'nx g @arepa/plugin-tools:focus-packages',

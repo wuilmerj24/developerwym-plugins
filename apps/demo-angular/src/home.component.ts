@@ -10,6 +10,9 @@ export class HomeComponent {
       name: 'country-code',
     },
     {
+      name: 'gallery-view',
+    },
+    {
       name: 'launch-navigator',
     },
     {

@@ -29,7 +29,8 @@
       "@arepa/keyboard": ["packages/keyboard/index.d.ts"],
       "@arepa/screen-orientation": ["packages/screen-orientation/index.d.ts"],
       "@arepa/statusbar": ["packages/statusbar/index.d.ts"],
-      "@arepa/store-update": ["packages/store-update/index.d.ts"]
+      "@arepa/store-update": ["packages/store-update/index.d.ts"],
+      "@arepa/gallery-view": ["packages/gallery-view/index.d.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
