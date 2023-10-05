@@ -4,6 +4,23 @@
         </ActionBar>
     </Page.actionBar>
     <StackLayout>
-      <gal:GalleryView width="100%" height="100%" />
+      <gal:GalleryView 
+      width="100%" 
+      height="100%" 
+      debug="true" 
+      language="russian" 
+      typeFile="IMAGES" 
+      bgColorHeader="red"
+      bgColorFooter="blue"
+      bgColorSpinner="blue"
+      bgColorSpinnerList="green"
+      bgColorArrow="cyan"
+      textColor="blue"
+      btnColor="black"
+      maxSelect="1"
+      edit="true"
+      show="true"
+      orientacion="vertical"
+    />
     </StackLayout>
 </Page>

@@ -5,6 +5,7 @@ import {} from '@arepa/gallery-view';
 export function navigatingTo(args: EventData) {
   const page = <Page>args.object;
   page.bindingContext = new DemoModel();
+  page.actionBarHidden = true;
 }
 
 export class DemoModel extends DemoSharedGalleryView {}
