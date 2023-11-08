@@ -1,42 +1,23 @@
-import { EventData } from '@nativescript/core';
-import { GalleryViewCommon } from './common';
+import { EventData, Observable } from '@nativescript/core';
+import { GalleryView } from '.';
 
-export enum GalleryViewEvents {
-  ErrorEvent = 'errorEvent',
-  OnScrolledEvent = 'onScrolledEvent',
-  OnScrollStateChangedEvent = 'onScrollStateChangedEvent',
-  OnClickEvent = 'OnClickEvent',
-  OnLongClick = 'onLongClick',
-}
-
-export interface ErrorEvent extends EventData {
-  eventName: GalleryViewEvents.ErrorEvent;
-  data?: Error;
-  message?: string;
+export enum EGalleryViewEvents {
+  OnScrolledEvent = 'scroll',
+  OnClickEvent = 'click',
 }
 
 export interface OnScrolledEvent extends EventData {
-  eventName: GalleryViewEvents.OnScrolledEvent;
-  data: any;
-}
-
-export interface OnScrollStateChangedEvent extends EventData {
-  eventName: GalleryViewEvents.OnScrollStateChangedEvent;
-  data: any;
+  eventName: EGalleryViewEvents.OnScrolledEvent;
+  data?: any;
 }
 
 export interface OnClickEvent extends EventData {
-  eventName: GalleryViewEvents.OnClickEvent;
-  data: [];
+  eventName: EGalleryViewEvents.OnClickEvent;
+  data?: any;
 }
 
-export interface OnLongClick extends EventData {
-  eventName: GalleryViewEvents.OnLongClick;
-  data: [];
-}
-
-export interface MediaSelectorLoadedEvent extends EventData {
+export interface GalleryViewLoadedEvent extends EventData {
   eventName: 'loaded';
   data: any;
-  object: GalleryViewCommon;
+  object: Observable & GalleryView;
 }

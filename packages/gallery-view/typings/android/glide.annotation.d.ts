@@ -133,5 +133,3 @@ declare module com {
     }
   }
 }
-
-//Generics information:

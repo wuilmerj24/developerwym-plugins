@@ -1,9 +1,9 @@
 import { Color } from '@nativescript/core';
-import { SpinnerData } from '../class/spinner.data.class';
+import { MediaStoreData } from '../interfaces/mediastore.interface';
 
 @NativeClass()
 export class SpinnerAdapter extends android.widget.BaseAdapter {
-  constructor(private files: Array<SpinnerData>, private context: android.content.Context, private textColor: string, private bgColorSpinnerList: string, private bgColorSpinner: string) {
+  constructor(private files: Array<MediaStoreData>, private context: android.content.Context, private textColor: string, private bgColorSpinnerList: string) {
     super();
   }
 
@@ -34,7 +34,7 @@ export class SpinnerAdapter extends android.widget.BaseAdapter {
     txt.setTextColor(new Color(this.textColor).android);
     linearL.addView(image);
     linearL.addView(txt);
-    linearL.setBackgroundColor(new Color(this.bgColorSpinner).android);
+    linearL.setBackgroundColor(new Color(this.bgColorSpinnerList).android);
     return linearL;
   }
 
@@ -46,7 +46,19 @@ export class SpinnerAdapter extends android.widget.BaseAdapter {
     linearL.setOrientation(android.widget.LinearLayout.HORIZONTAL);
     linearL.setGravity(android.view.Gravity.CENTER_VERTICAL);
     image.setLayoutParams(new android.view.ViewGroup.LayoutParams(120, 120));
-    com.bumptech.glide.Glide.with(this.context).load(this.files[position].icon).centerCrop().into(image);
+    com.bumptech.glide.Glide.with(this.context)
+      .load(this.files[position].icon)
+      .centerCrop()
+      .override(120, 120)
+      .fallback(new android.graphics.drawable.ColorDrawable(android.graphics.Color.BLUE))
+      .placeholder(new android.graphics.drawable.ColorDrawable(android.graphics.Color.GRAY))
+      .error(new android.graphics.drawable.ColorDrawable(android.graphics.Color.RED))
+      .priority(com.bumptech.glide.Priority.HIGH)
+      .diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.ALL)
+      //.diskCacheStrategy(com.bumptech.glide.load.engine.DiskCacheStrategy.NONE)
+      .onlyRetrieveFromCache(false)
+      .skipMemoryCache(false)
+      .into(image);
 
     txt.setText(java.lang.String.valueOf(` ${this.files[position].albunName} (${this.files[position].files.length + 1})`));
     txt.setTextSize(19);

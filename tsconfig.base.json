@@ -30,7 +30,9 @@
       "@arepa/screen-orientation": ["packages/screen-orientation/index.d.ts"],
       "@arepa/statusbar": ["packages/statusbar/index.d.ts"],
       "@arepa/store-update": ["packages/store-update/index.d.ts"],
-      "@arepa/gallery-view": ["packages/gallery-view/index.d.ts"]
+      "@arepa/gallery-view": ["packages/gallery-view/index.d.ts"],
+      "@arepa/media-picker": ["packages/media-picker/index.d.ts"],
+      "@arepa/signal-r": ["packages/signal-r/index.d.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

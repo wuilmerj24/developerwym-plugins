@@ -1,26 +1,26 @@
-<Page xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:gal="@arepa/gallery-view" navigatingTo="navigatingTo" class="page">
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:gv="@arepa/gallery-view" navigatingTo="navigatingTo" class="page">
     <Page.actionBar>
         <ActionBar title="gallery-view" icon="" class="action-bar">
         </ActionBar>
     </Page.actionBar>
-    <StackLayout>
-      <gal:GalleryView 
-      width="100%" 
-      height="100%" 
-      debug="true" 
-      language="russian" 
-      typeFile="IMAGES" 
-      bgColorHeader="red"
-      bgColorFooter="blue"
-      bgColorSpinner="blue"
-      bgColorSpinnerList="green"
-      bgColorArrow="cyan"
-      textColor="blue"
-      btnColor="black"
-      maxSelect="1"
-      edit="true"
-      show="true"
-      orientacion="vertical"
-    />
+    <StackLayout >
+      <gv:GalleryView 
+        width="100%" 
+        height="100%" 
+        debug="true" 
+        language="es"
+        showHeader="true"
+        headerBgColor="red"
+        arrowIconColor="green"
+        selectMax="10"
+        showFooter="true"
+        footerBgColor="red"
+        edit="true"
+        preview="true"
+        textColor="blue"
+        orientation="vertical"
+        scroll="onScroll"
+        click="Onclick"
+      />
     </StackLayout>
 </Page>

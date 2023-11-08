@@ -49,6 +49,7 @@ declare module com {
         public static get(param0: globalAndroid.content.Context): com.bumptech.glide.Glide;
         /** @deprecated */
         public static with(param0: globalAndroid.app.Activity): com.bumptech.glide.RequestManager;
+        public static isInitialized(): boolean;
         public getContext(): globalAndroid.content.Context;
         public onLowMemory(): void;
         public static getPhotoCacheDir(param0: globalAndroid.content.Context, param1: string): java.io.File;
@@ -96,12 +97,13 @@ declare module com {
         public setDiskCache(param0: com.bumptech.glide.load.engine.cache.DiskCache.Factory): com.bumptech.glide.GlideBuilder;
         /** @deprecated */
         public setResizeExecutor(param0: com.bumptech.glide.load.engine.executor.GlideExecutor): com.bumptech.glide.GlideBuilder;
+        /** @deprecated */
+        public setDisableHardwareBitmapsOnO(param0: boolean): com.bumptech.glide.GlideBuilder;
         public setBitmapPool(param0: com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool): com.bumptech.glide.GlideBuilder;
         public setMemorySizeCalculator(param0: com.bumptech.glide.load.engine.cache.MemorySizeCalculator): com.bumptech.glide.GlideBuilder;
         public setDefaultRequestOptions(param0: com.bumptech.glide.request.RequestOptions): com.bumptech.glide.GlideBuilder;
         public setMemorySizeCalculator(param0: com.bumptech.glide.load.engine.cache.MemorySizeCalculator.Builder): com.bumptech.glide.GlideBuilder;
         public setLogRequestOrigins(param0: boolean): com.bumptech.glide.GlideBuilder;
-        public useLifecycleInsteadOfInjectingFragments(param0: boolean): com.bumptech.glide.GlideBuilder;
         public setSourceExecutor(param0: com.bumptech.glide.load.engine.executor.GlideExecutor): com.bumptech.glide.GlideBuilder;
         public setMemoryCache(param0: com.bumptech.glide.load.engine.cache.MemoryCache): com.bumptech.glide.GlideBuilder;
       }
@@ -109,22 +111,12 @@ declare module com {
         export class EnableImageDecoderForBitmaps extends com.bumptech.glide.GlideExperiments.Experiment {
           public static class: java.lang.Class<com.bumptech.glide.GlideBuilder.EnableImageDecoderForBitmaps>;
         }
-        export class EnableLazyGlideRegistry extends com.bumptech.glide.GlideExperiments.Experiment {
-          public static class: java.lang.Class<com.bumptech.glide.GlideBuilder.EnableLazyGlideRegistry>;
-        }
         export class LogRequestOrigins extends com.bumptech.glide.GlideExperiments.Experiment {
           public static class: java.lang.Class<com.bumptech.glide.GlideBuilder.LogRequestOrigins>;
           public constructor();
         }
         export class ManualOverrideHardwareBitmapMaxFdCount extends com.bumptech.glide.GlideExperiments.Experiment {
           public static class: java.lang.Class<com.bumptech.glide.GlideBuilder.ManualOverrideHardwareBitmapMaxFdCount>;
-        }
-        export class UseLifecycleInsteadOfInjectingFragments extends com.bumptech.glide.GlideExperiments.Experiment {
-          public static class: java.lang.Class<com.bumptech.glide.GlideBuilder.UseLifecycleInsteadOfInjectingFragments>;
-          public constructor();
-        }
-        export class WaitForFramesAfterTrimMemory extends com.bumptech.glide.GlideExperiments.Experiment {
-          public static class: java.lang.Class<com.bumptech.glide.GlideBuilder.WaitForFramesAfterTrimMemory>;
         }
       }
     }
@@ -460,6 +452,7 @@ declare module com {
         public resumeRequestsRecursive(): void;
         /** @deprecated */
         public load(param0: java.net.URL): com.bumptech.glide.RequestBuilder<globalAndroid.graphics.drawable.Drawable>;
+        public clearOnStop(): com.bumptech.glide.RequestManager;
         public onLowMemory(): void;
         public load(param0: java.io.File): com.bumptech.glide.RequestBuilder<globalAndroid.graphics.drawable.Drawable>;
         public toString(): string;
@@ -645,6 +638,7 @@ declare module com {
             public static WEBP: com.bumptech.glide.load.ImageHeaderParser.ImageType;
             public static ANIMATED_WEBP: com.bumptech.glide.load.ImageHeaderParser.ImageType;
             public static AVIF: com.bumptech.glide.load.ImageHeaderParser.ImageType;
+            public static ANIMATED_AVIF: com.bumptech.glide.load.ImageHeaderParser.ImageType;
             public static UNKNOWN: com.bumptech.glide.load.ImageHeaderParser.ImageType;
             public static values(): androidNative.Array<com.bumptech.glide.load.ImageHeaderParser.ImageType>;
             public hasAlpha(): boolean;
@@ -779,6 +773,7 @@ declare module com {
           public get(param0: com.bumptech.glide.load.Option<any>): any;
           public putAll(param0: com.bumptech.glide.load.Options): void;
           public constructor();
+          public remove(param0: com.bumptech.glide.load.Option<any>): com.bumptech.glide.load.Options;
           public hashCode(): number;
           public updateDiskCacheKey(param0: java.security.MessageDigest): void;
         }
@@ -1294,6 +1289,7 @@ declare module com {
               public static isMediaStoreVideoUri(param0: globalAndroid.net.Uri): boolean;
               public static isMediaStoreUri(param0: globalAndroid.net.Uri): boolean;
               public static isThumbnailSize(param0: number, param1: number): boolean;
+              public static isAndroidPickerUri(param0: globalAndroid.net.Uri): boolean;
               public static isMediaStoreImageUri(param0: globalAndroid.net.Uri): boolean;
             }
           }
@@ -2914,6 +2910,8 @@ declare module com {
                 public setName(param0: string): com.bumptech.glide.load.engine.executor.GlideExecutor.Builder;
                 public setThreadTimeoutMillis(param0: number): com.bumptech.glide.load.engine.executor.GlideExecutor.Builder;
                 public build(): com.bumptech.glide.load.engine.executor.GlideExecutor;
+                /** @deprecated */
+                public setThreadFactory(param0: java.util.concurrent.ThreadFactory): com.bumptech.glide.load.engine.executor.GlideExecutor.Builder;
                 public setThreadCount(param0: number): com.bumptech.glide.load.engine.executor.GlideExecutor.Builder;
                 public setUncaughtThrowableStrategy(param0: com.bumptech.glide.load.engine.executor.GlideExecutor.UncaughtThrowableStrategy): com.bumptech.glide.load.engine.executor.GlideExecutor.Builder;
               }
@@ -3250,6 +3248,84 @@ declare module com {
               public build(param0: com.bumptech.glide.load.model.MultiModelLoaderFactory): com.bumptech.glide.load.model.ModelLoader<any, any>;
               public build(param0: com.bumptech.glide.load.model.MultiModelLoaderFactory): com.bumptech.glide.load.model.ModelLoader<any, java.io.InputStream>;
               public teardown(): void;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+declare module com {
+  export module bumptech {
+    export module glide {
+      export module load {
+        export module model {
+          export class DirectResourceLoader<DataT> extends com.bumptech.glide.load.model.ModelLoader<java.lang.Integer, any> {
+            public static class: java.lang.Class<com.bumptech.glide.load.model.DirectResourceLoader<any>>;
+            public buildLoadData(param0: java.lang.Integer, param1: number, param2: number, param3: com.bumptech.glide.load.Options): com.bumptech.glide.load.model.ModelLoader.LoadData<any>;
+            public handles(param0: any): boolean;
+            public static assetFileDescriptorFactory(param0: globalAndroid.content.Context): com.bumptech.glide.load.model.ModelLoaderFactory<java.lang.Integer, globalAndroid.content.res.AssetFileDescriptor>;
+            public static inputStreamFactory(param0: globalAndroid.content.Context): com.bumptech.glide.load.model.ModelLoaderFactory<java.lang.Integer, java.io.InputStream>;
+            public static drawableFactory(param0: globalAndroid.content.Context): com.bumptech.glide.load.model.ModelLoaderFactory<java.lang.Integer, globalAndroid.graphics.drawable.Drawable>;
+            public handles(param0: java.lang.Integer): boolean;
+            public buildLoadData(param0: any, param1: number, param2: number, param3: com.bumptech.glide.load.Options): com.bumptech.glide.load.model.ModelLoader.LoadData<any>;
+          }
+          export module DirectResourceLoader {
+            export class AssetFileDescriptorFactory extends java.lang.Object {
+              public static class: java.lang.Class<com.bumptech.glide.load.model.DirectResourceLoader.AssetFileDescriptorFactory>;
+              public open(param0: globalAndroid.content.res.Resources.Theme, param1: globalAndroid.content.res.Resources, param2: number): globalAndroid.content.res.AssetFileDescriptor;
+              public build(param0: com.bumptech.glide.load.model.MultiModelLoaderFactory): com.bumptech.glide.load.model.ModelLoader<any, any>;
+              public getDataClass(): java.lang.Class<globalAndroid.content.res.AssetFileDescriptor>;
+              public build(param0: com.bumptech.glide.load.model.MultiModelLoaderFactory): com.bumptech.glide.load.model.ModelLoader<java.lang.Integer, globalAndroid.content.res.AssetFileDescriptor>;
+              public close(param0: globalAndroid.content.res.AssetFileDescriptor): void;
+              public open(param0: globalAndroid.content.res.Resources.Theme, param1: globalAndroid.content.res.Resources, param2: number): any;
+              public teardown(): void;
+              public getDataClass(): java.lang.Class<any>;
+              public close(param0: any): void;
+            }
+            export class DrawableFactory extends java.lang.Object {
+              public static class: java.lang.Class<com.bumptech.glide.load.model.DirectResourceLoader.DrawableFactory>;
+              public getDataClass(): java.lang.Class<globalAndroid.graphics.drawable.Drawable>;
+              public open(param0: globalAndroid.content.res.Resources.Theme, param1: globalAndroid.content.res.Resources, param2: number): globalAndroid.graphics.drawable.Drawable;
+              public build(param0: com.bumptech.glide.load.model.MultiModelLoaderFactory): com.bumptech.glide.load.model.ModelLoader<any, any>;
+              public open(param0: globalAndroid.content.res.Resources.Theme, param1: globalAndroid.content.res.Resources, param2: number): any;
+              public teardown(): void;
+              public close(param0: globalAndroid.graphics.drawable.Drawable): void;
+              public build(param0: com.bumptech.glide.load.model.MultiModelLoaderFactory): com.bumptech.glide.load.model.ModelLoader<java.lang.Integer, globalAndroid.graphics.drawable.Drawable>;
+              public getDataClass(): java.lang.Class<any>;
+              public close(param0: any): void;
+            }
+            export class InputStreamFactory extends java.lang.Object {
+              public static class: java.lang.Class<com.bumptech.glide.load.model.DirectResourceLoader.InputStreamFactory>;
+              public build(param0: com.bumptech.glide.load.model.MultiModelLoaderFactory): com.bumptech.glide.load.model.ModelLoader<any, any>;
+              public open(param0: globalAndroid.content.res.Resources.Theme, param1: globalAndroid.content.res.Resources, param2: number): any;
+              public build(param0: com.bumptech.glide.load.model.MultiModelLoaderFactory): com.bumptech.glide.load.model.ModelLoader<java.lang.Integer, java.io.InputStream>;
+              public teardown(): void;
+              public getDataClass(): java.lang.Class<any>;
+              public close(param0: java.io.InputStream): void;
+              public close(param0: any): void;
+              public open(param0: globalAndroid.content.res.Resources.Theme, param1: globalAndroid.content.res.Resources, param2: number): java.io.InputStream;
+              public getDataClass(): java.lang.Class<java.io.InputStream>;
+            }
+            export class ResourceDataFetcher<DataT> extends com.bumptech.glide.load.data.DataFetcher<any> {
+              public static class: java.lang.Class<com.bumptech.glide.load.model.DirectResourceLoader.ResourceDataFetcher<any>>;
+              public cancel(): void;
+              public cleanup(): void;
+              public getDataSource(): com.bumptech.glide.load.DataSource;
+              public loadData(param0: com.bumptech.glide.Priority, param1: com.bumptech.glide.load.data.DataFetcher.DataCallback<any>): void;
+              public getDataClass(): java.lang.Class<any>;
+            }
+            export class ResourceOpener<DataT> extends java.lang.Object {
+              public static class: java.lang.Class<com.bumptech.glide.load.model.DirectResourceLoader.ResourceOpener<any>>;
+              /**
+               * Constructs a new instance of the com.bumptech.glide.load.model.DirectResourceLoader$ResourceOpener interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
+               */
+              public constructor(implementation: { open(param0: globalAndroid.content.res.Resources.Theme, param1: globalAndroid.content.res.Resources, param2: number): DataT; close(param0: DataT): void; getDataClass(): java.lang.Class<DataT> });
+              public constructor();
+              public open(param0: globalAndroid.content.res.Resources.Theme, param1: globalAndroid.content.res.Resources, param2: number): DataT;
+              public close(param0: DataT): void;
+              public getDataClass(): java.lang.Class<DataT>;
             }
           }
         }
@@ -3702,6 +3778,40 @@ declare module com {
               public constructor(param0: globalAndroid.content.res.Resources);
               public teardown(): void;
               public build(param0: com.bumptech.glide.load.model.MultiModelLoaderFactory): com.bumptech.glide.load.model.ModelLoader<java.lang.Integer, globalAndroid.net.Uri>;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+declare module com {
+  export module bumptech {
+    export module glide {
+      export module load {
+        export module model {
+          export class ResourceUriLoader<DataT> extends com.bumptech.glide.load.model.ModelLoader<globalAndroid.net.Uri, any> {
+            public static class: java.lang.Class<com.bumptech.glide.load.model.ResourceUriLoader<any>>;
+            public buildLoadData(param0: globalAndroid.net.Uri, param1: number, param2: number, param3: com.bumptech.glide.load.Options): com.bumptech.glide.load.model.ModelLoader.LoadData<any>;
+            public static newStreamFactory(param0: globalAndroid.content.Context): com.bumptech.glide.load.model.ModelLoaderFactory<globalAndroid.net.Uri, java.io.InputStream>;
+            public handles(param0: any): boolean;
+            public static newAssetFileDescriptorFactory(param0: globalAndroid.content.Context): com.bumptech.glide.load.model.ModelLoaderFactory<globalAndroid.net.Uri, globalAndroid.content.res.AssetFileDescriptor>;
+            public handles(param0: globalAndroid.net.Uri): boolean;
+            public buildLoadData(param0: any, param1: number, param2: number, param3: com.bumptech.glide.load.Options): com.bumptech.glide.load.model.ModelLoader.LoadData<any>;
+          }
+          export module ResourceUriLoader {
+            export class AssetFileDescriptorFactory extends com.bumptech.glide.load.model.ModelLoaderFactory<globalAndroid.net.Uri, globalAndroid.content.res.AssetFileDescriptor> {
+              public static class: java.lang.Class<com.bumptech.glide.load.model.ResourceUriLoader.AssetFileDescriptorFactory>;
+              public build(param0: com.bumptech.glide.load.model.MultiModelLoaderFactory): com.bumptech.glide.load.model.ModelLoader<globalAndroid.net.Uri, globalAndroid.content.res.AssetFileDescriptor>;
+              public build(param0: com.bumptech.glide.load.model.MultiModelLoaderFactory): com.bumptech.glide.load.model.ModelLoader<any, any>;
+              public teardown(): void;
+            }
+            export class InputStreamFactory extends com.bumptech.glide.load.model.ModelLoaderFactory<globalAndroid.net.Uri, java.io.InputStream> {
+              public static class: java.lang.Class<com.bumptech.glide.load.model.ResourceUriLoader.InputStreamFactory>;
+              public build(param0: com.bumptech.glide.load.model.MultiModelLoaderFactory): com.bumptech.glide.load.model.ModelLoader<any, any>;
+              public build(param0: com.bumptech.glide.load.model.MultiModelLoaderFactory): com.bumptech.glide.load.model.ModelLoader<globalAndroid.net.Uri, java.io.InputStream>;
+              public teardown(): void;
             }
           }
         }
@@ -4779,7 +4889,6 @@ declare module com {
               public static HARDWARE_BITMAPS_SUPPORTED: boolean;
               public static NO_MAX_FD_COUNT: number;
               public isHardwareConfigAllowed(param0: number, param1: number, param2: boolean, param3: boolean): boolean;
-              public areHardwareBitmapsBlocked(): boolean;
               public blockHardwareBitmaps(): void;
               public static getInstance(): com.bumptech.glide.load.resource.bitmap.HardwareConfigState;
               public unblockHardwareBitmaps(): void;
@@ -5175,33 +5284,40 @@ declare module com {
               public handles(param0: any, param1: com.bumptech.glide.load.Options): boolean;
             }
             export module VideoDecoder {
-              export class AssetFileDescriptorInitializer extends com.bumptech.glide.load.resource.bitmap.VideoDecoder.MediaMetadataRetrieverInitializer<globalAndroid.content.res.AssetFileDescriptor> {
+              export class AssetFileDescriptorInitializer extends com.bumptech.glide.load.resource.bitmap.VideoDecoder.MediaInitializer<globalAndroid.content.res.AssetFileDescriptor> {
                 public static class: java.lang.Class<com.bumptech.glide.load.resource.bitmap.VideoDecoder.AssetFileDescriptorInitializer>;
-                public initialize(param0: globalAndroid.media.MediaMetadataRetriever, param1: globalAndroid.content.res.AssetFileDescriptor): void;
-                public initialize(param0: globalAndroid.media.MediaMetadataRetriever, param1: any): void;
+                public initializeRetriever(param0: globalAndroid.media.MediaMetadataRetriever, param1: any): void;
+                public initializeRetriever(param0: globalAndroid.media.MediaMetadataRetriever, param1: globalAndroid.content.res.AssetFileDescriptor): void;
+                public initializeExtractor(param0: globalAndroid.media.MediaExtractor, param1: globalAndroid.content.res.AssetFileDescriptor): void;
+                public initializeExtractor(param0: globalAndroid.media.MediaExtractor, param1: any): void;
               }
-              export class ByteBufferInitializer extends com.bumptech.glide.load.resource.bitmap.VideoDecoder.MediaMetadataRetrieverInitializer<java.nio.ByteBuffer> {
+              export class ByteBufferInitializer extends com.bumptech.glide.load.resource.bitmap.VideoDecoder.MediaInitializer<java.nio.ByteBuffer> {
                 public static class: java.lang.Class<com.bumptech.glide.load.resource.bitmap.VideoDecoder.ByteBufferInitializer>;
-                public initialize(param0: globalAndroid.media.MediaMetadataRetriever, param1: java.nio.ByteBuffer): void;
-                public initialize(param0: globalAndroid.media.MediaMetadataRetriever, param1: any): void;
+                public initializeRetriever(param0: globalAndroid.media.MediaMetadataRetriever, param1: any): void;
+                public initializeRetriever(param0: globalAndroid.media.MediaMetadataRetriever, param1: java.nio.ByteBuffer): void;
+                public initializeExtractor(param0: globalAndroid.media.MediaExtractor, param1: java.nio.ByteBuffer): void;
+                public initializeExtractor(param0: globalAndroid.media.MediaExtractor, param1: any): void;
+              }
+              export class MediaInitializer<T> extends java.lang.Object {
+                public static class: java.lang.Class<com.bumptech.glide.load.resource.bitmap.VideoDecoder.MediaInitializer<any>>;
+                /**
+                 * Constructs a new instance of the com.bumptech.glide.load.resource.bitmap.VideoDecoder$MediaInitializer interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
+                 */
+                public constructor(implementation: { initializeRetriever(param0: globalAndroid.media.MediaMetadataRetriever, param1: T): void; initializeExtractor(param0: globalAndroid.media.MediaExtractor, param1: T): void });
+                public constructor();
+                public initializeRetriever(param0: globalAndroid.media.MediaMetadataRetriever, param1: T): void;
+                public initializeExtractor(param0: globalAndroid.media.MediaExtractor, param1: T): void;
               }
               export class MediaMetadataRetrieverFactory {
                 public static class: java.lang.Class<com.bumptech.glide.load.resource.bitmap.VideoDecoder.MediaMetadataRetrieverFactory>;
                 public build(): globalAndroid.media.MediaMetadataRetriever;
               }
-              export class MediaMetadataRetrieverInitializer<T> extends java.lang.Object {
-                public static class: java.lang.Class<com.bumptech.glide.load.resource.bitmap.VideoDecoder.MediaMetadataRetrieverInitializer<any>>;
-                /**
-                 * Constructs a new instance of the com.bumptech.glide.load.resource.bitmap.VideoDecoder$MediaMetadataRetrieverInitializer interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
-                 */
-                public constructor(implementation: { initialize(param0: globalAndroid.media.MediaMetadataRetriever, param1: T): void });
-                public constructor();
-                public initialize(param0: globalAndroid.media.MediaMetadataRetriever, param1: T): void;
-              }
-              export class ParcelFileDescriptorInitializer extends com.bumptech.glide.load.resource.bitmap.VideoDecoder.MediaMetadataRetrieverInitializer<globalAndroid.os.ParcelFileDescriptor> {
+              export class ParcelFileDescriptorInitializer extends com.bumptech.glide.load.resource.bitmap.VideoDecoder.MediaInitializer<globalAndroid.os.ParcelFileDescriptor> {
                 public static class: java.lang.Class<com.bumptech.glide.load.resource.bitmap.VideoDecoder.ParcelFileDescriptorInitializer>;
-                public initialize(param0: globalAndroid.media.MediaMetadataRetriever, param1: globalAndroid.os.ParcelFileDescriptor): void;
-                public initialize(param0: globalAndroid.media.MediaMetadataRetriever, param1: any): void;
+                public initializeRetriever(param0: globalAndroid.media.MediaMetadataRetriever, param1: any): void;
+                public initializeRetriever(param0: globalAndroid.media.MediaMetadataRetriever, param1: globalAndroid.os.ParcelFileDescriptor): void;
+                public initializeExtractor(param0: globalAndroid.media.MediaExtractor, param1: any): void;
+                public initializeExtractor(param0: globalAndroid.media.MediaExtractor, param1: globalAndroid.os.ParcelFileDescriptor): void;
               }
               export class VideoDecoderException {
                 public static class: java.lang.Class<com.bumptech.glide.load.resource.bitmap.VideoDecoder.VideoDecoderException>;
@@ -5259,6 +5375,49 @@ declare module com {
               public recycle(): void;
               public getResourceClass(): java.lang.Class<any>;
               public constructor(param0: androidNative.Array<number>);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+declare module com {
+  export module bumptech {
+    export module glide {
+      export module load {
+        export module resource {
+          export module drawable {
+            export class AnimatedImageDecoder {
+              public static class: java.lang.Class<com.bumptech.glide.load.resource.drawable.AnimatedImageDecoder>;
+              public static byteBufferDecoder(param0: java.util.List<com.bumptech.glide.load.ImageHeaderParser>, param1: com.bumptech.glide.load.engine.bitmap_recycle.ArrayPool): com.bumptech.glide.load.ResourceDecoder<java.nio.ByteBuffer, globalAndroid.graphics.drawable.Drawable>;
+              public static streamDecoder(param0: java.util.List<com.bumptech.glide.load.ImageHeaderParser>, param1: com.bumptech.glide.load.engine.bitmap_recycle.ArrayPool): com.bumptech.glide.load.ResourceDecoder<java.io.InputStream, globalAndroid.graphics.drawable.Drawable>;
+            }
+            export module AnimatedImageDecoder {
+              export class AnimatedImageDrawableResource extends com.bumptech.glide.load.engine.Resource<globalAndroid.graphics.drawable.Drawable> {
+                public static class: java.lang.Class<com.bumptech.glide.load.resource.drawable.AnimatedImageDecoder.AnimatedImageDrawableResource>;
+                public getResourceClass(): java.lang.Class<any>;
+                public get(): any;
+                public get(): globalAndroid.graphics.drawable.AnimatedImageDrawable;
+                public recycle(): void;
+                public getResourceClass(): java.lang.Class<globalAndroid.graphics.drawable.Drawable>;
+                public getSize(): number;
+              }
+              export class ByteBufferAnimatedImageDecoder extends com.bumptech.glide.load.ResourceDecoder<java.nio.ByteBuffer, globalAndroid.graphics.drawable.Drawable> {
+                public static class: java.lang.Class<com.bumptech.glide.load.resource.drawable.AnimatedImageDecoder.ByteBufferAnimatedImageDecoder>;
+                public handles(param0: java.nio.ByteBuffer, param1: com.bumptech.glide.load.Options): boolean;
+                public decode(param0: any, param1: number, param2: number, param3: com.bumptech.glide.load.Options): com.bumptech.glide.load.engine.Resource<any>;
+                public decode(param0: java.nio.ByteBuffer, param1: number, param2: number, param3: com.bumptech.glide.load.Options): com.bumptech.glide.load.engine.Resource<globalAndroid.graphics.drawable.Drawable>;
+                public handles(param0: any, param1: com.bumptech.glide.load.Options): boolean;
+              }
+              export class StreamAnimatedImageDecoder extends com.bumptech.glide.load.ResourceDecoder<java.io.InputStream, globalAndroid.graphics.drawable.Drawable> {
+                public static class: java.lang.Class<com.bumptech.glide.load.resource.drawable.AnimatedImageDecoder.StreamAnimatedImageDecoder>;
+                public decode(param0: any, param1: number, param2: number, param3: com.bumptech.glide.load.Options): com.bumptech.glide.load.engine.Resource<any>;
+                public handles(param0: java.io.InputStream, param1: com.bumptech.glide.load.Options): boolean;
+                public decode(param0: java.io.InputStream, param1: number, param2: number, param3: com.bumptech.glide.load.Options): com.bumptech.glide.load.engine.Resource<globalAndroid.graphics.drawable.Drawable>;
+                public handles(param0: any, param1: com.bumptech.glide.load.Options): boolean;
+              }
             }
           }
         }
@@ -5925,20 +6084,6 @@ declare module com {
   export module bumptech {
     export module glide {
       export module manager {
-        export class ActivityFragmentLifecycle extends com.bumptech.glide.manager.Lifecycle {
-          public static class: java.lang.Class<com.bumptech.glide.manager.ActivityFragmentLifecycle>;
-          public addListener(param0: com.bumptech.glide.manager.LifecycleListener): void;
-          public removeListener(param0: com.bumptech.glide.manager.LifecycleListener): void;
-        }
-      }
-    }
-  }
-}
-
-declare module com {
-  export module bumptech {
-    export module glide {
-      export module manager {
         export class ApplicationLifecycle extends com.bumptech.glide.manager.Lifecycle {
           public static class: java.lang.Class<com.bumptech.glide.manager.ApplicationLifecycle>;
           public addListener(param0: com.bumptech.glide.manager.LifecycleListener): void;
@@ -6047,22 +6192,6 @@ declare module com {
         export class EmptyRequestManagerTreeNode extends com.bumptech.glide.manager.RequestManagerTreeNode {
           public static class: java.lang.Class<com.bumptech.glide.manager.EmptyRequestManagerTreeNode>;
           public getDescendants(): java.util.Set<com.bumptech.glide.RequestManager>;
-        }
-      }
-    }
-  }
-}
-
-declare module com {
-  export module bumptech {
-    export module glide {
-      export module manager {
-        export class FirstFrameAndAfterTrimMemoryWaiter extends com.bumptech.glide.manager.FrameWaiter {
-          public static class: java.lang.Class<com.bumptech.glide.manager.FirstFrameAndAfterTrimMemoryWaiter>;
-          public onTrimMemory(param0: number): void;
-          public onConfigurationChanged(param0: globalAndroid.content.res.Configuration): void;
-          public registerSelf(param0: globalAndroid.app.Activity): void;
-          public onLowMemory(): void;
         }
       }
     }
@@ -6195,23 +6324,13 @@ declare module com {
       export module manager {
         export class RequestManagerFragment {
           public static class: java.lang.Class<com.bumptech.glide.manager.RequestManagerFragment>;
-          public setRequestManager(param0: com.bumptech.glide.RequestManager): void;
-          public onStart(): void;
-          public toString(): string;
-          public getRequestManager(): com.bumptech.glide.RequestManager;
-          public constructor();
-          public onDetach(): void;
-          public onStop(): void;
-          public onDestroy(): void;
+          /** @deprecated */
           public getRequestManagerTreeNode(): com.bumptech.glide.manager.RequestManagerTreeNode;
-          public onAttach(param0: globalAndroid.app.Activity): void;
-        }
-        export module RequestManagerFragment {
-          export class FragmentRequestManagerTreeNode extends com.bumptech.glide.manager.RequestManagerTreeNode {
-            public static class: java.lang.Class<com.bumptech.glide.manager.RequestManagerFragment.FragmentRequestManagerTreeNode>;
-            public getDescendants(): java.util.Set<com.bumptech.glide.RequestManager>;
-            public toString(): string;
-          }
+          /** @deprecated */
+          public setRequestManager(param0: com.bumptech.glide.RequestManager): void;
+          public constructor();
+          /** @deprecated */
+          public getRequestManager(): com.bumptech.glide.RequestManager;
         }
       }
     }
@@ -6224,16 +6343,17 @@ declare module com {
       export module manager {
         export class RequestManagerRetriever {
           public static class: java.lang.Class<com.bumptech.glide.manager.RequestManagerRetriever>;
+          public constructor(param0: com.bumptech.glide.manager.RequestManagerRetriever.RequestManagerFactory);
+          /** @deprecated */
+          public handleMessage(param0: globalAndroid.os.Message): boolean;
           public get(param0: globalAndroid.view.View): com.bumptech.glide.RequestManager;
           /** @deprecated */
           public get(param0: globalAndroid.app.Fragment): com.bumptech.glide.RequestManager;
-          public constructor(param0: com.bumptech.glide.manager.RequestManagerRetriever.RequestManagerFactory, param1: com.bumptech.glide.GlideExperiments);
           public get(param0: globalAndroid.content.Context): com.bumptech.glide.RequestManager;
           /** @deprecated */
           public get(param0: globalAndroid.app.Activity): com.bumptech.glide.RequestManager;
           public get(param0: androidx.fragment.app.FragmentActivity): com.bumptech.glide.RequestManager;
           public get(param0: androidx.fragment.app.Fragment): com.bumptech.glide.RequestManager;
-          public handleMessage(param0: globalAndroid.os.Message): boolean;
         }
         export module RequestManagerRetriever {
           export class RequestManagerFactory {
@@ -6331,24 +6451,13 @@ declare module com {
       export module manager {
         export class SupportRequestManagerFragment {
           public static class: java.lang.Class<com.bumptech.glide.manager.SupportRequestManagerFragment>;
-          public constructor(param0: com.bumptech.glide.manager.ActivityFragmentLifecycle);
-          public setRequestManager(param0: com.bumptech.glide.RequestManager): void;
-          public onStart(): void;
-          public toString(): string;
-          public getRequestManager(): com.bumptech.glide.RequestManager;
-          public onAttach(param0: globalAndroid.content.Context): void;
-          public constructor();
-          public onDetach(): void;
-          public onStop(): void;
-          public onDestroy(): void;
+          /** @deprecated */
           public getRequestManagerTreeNode(): com.bumptech.glide.manager.RequestManagerTreeNode;
-        }
-        export module SupportRequestManagerFragment {
-          export class SupportFragmentRequestManagerTreeNode extends com.bumptech.glide.manager.RequestManagerTreeNode {
-            public static class: java.lang.Class<com.bumptech.glide.manager.SupportRequestManagerFragment.SupportFragmentRequestManagerTreeNode>;
-            public getDescendants(): java.util.Set<com.bumptech.glide.RequestManager>;
-            public toString(): string;
-          }
+          /** @deprecated */
+          public setRequestManager(param0: com.bumptech.glide.RequestManager): void;
+          public constructor();
+          /** @deprecated */
+          public getRequestManager(): com.bumptech.glide.RequestManager;
         }
       }
     }
@@ -6608,6 +6717,7 @@ declare module com {
           public downsample(param0: com.bumptech.glide.load.resource.bitmap.DownsampleStrategy): any;
           public skipMemoryCache(param0: boolean): any;
           public optionalCircleCrop(): any;
+          public isEquivalentTo(param0: com.bumptech.glide.request.BaseRequestOptions<any>): boolean;
           public isPrioritySet(): boolean;
           public onlyRetrieveFromCache(param0: boolean): any;
           public timeout(param0: number): any;
@@ -8175,6 +8285,7 @@ declare module com {
           public static checkNotEmpty(param0: java.util.Collection<any>): java.util.Collection<any>;
           public static checkNotEmpty(param0: string): string;
           public static checkArgument(param0: boolean, param1: string): void;
+          public static checkArgument(param0: boolean): void;
           public static checkNotNull(param0: any): any;
           public static checkNotNull(param0: any, param1: string): any;
         }
@@ -8206,6 +8317,7 @@ declare module com {
       export module util {
         export class Util {
           public static class: java.lang.Class<com.bumptech.glide.util.Util>;
+          public static bothBaseRequestOptionsNullEquivalentOrEquals(param0: com.bumptech.glide.request.BaseRequestOptions<any>, param1: com.bumptech.glide.request.BaseRequestOptions<any>): boolean;
           public static hashCode(param0: boolean, param1: number): number;
           public static assertMainThread(): void;
           public static isValidDimension(param0: number): boolean;
@@ -8277,6 +8389,7 @@ declare module com {
             public static threadSafe(param0: number, param1: com.bumptech.glide.util.pool.FactoryPools.Factory<any>): androidx.core.util.Pools.Pool;
             public static simple(param0: number, param1: com.bumptech.glide.util.pool.FactoryPools.Factory<any>): androidx.core.util.Pools.Pool;
             public static threadSafeList(param0: number): androidx.core.util.Pools.Pool;
+            public static threadSafe(param0: number, param1: com.bumptech.glide.util.pool.FactoryPools.Factory<any>, param2: com.bumptech.glide.util.pool.FactoryPools.Resetter<any>): androidx.core.util.Pools.Pool;
           }
           export module FactoryPools {
             export class Factory<T> extends java.lang.Object {
@@ -8414,6 +8527,9 @@ declare module com {
 //com.bumptech.glide.load.model.DataUrlLoader.DataDecoder:1
 //com.bumptech.glide.load.model.DataUrlLoader.DataUriFetcher:1
 //com.bumptech.glide.load.model.DataUrlLoader.StreamFactory:1
+//com.bumptech.glide.load.model.DirectResourceLoader:1
+//com.bumptech.glide.load.model.DirectResourceLoader.ResourceDataFetcher:1
+//com.bumptech.glide.load.model.DirectResourceLoader.ResourceOpener:1
 //com.bumptech.glide.load.model.FileLoader:1
 //com.bumptech.glide.load.model.FileLoader.Factory:1
 //com.bumptech.glide.load.model.FileLoader.FileFetcher:1
@@ -8428,6 +8544,7 @@ declare module com {
 //com.bumptech.glide.load.model.MultiModelLoader.MultiFetcher:1
 //com.bumptech.glide.load.model.MultiModelLoaderFactory.Entry:2
 //com.bumptech.glide.load.model.ResourceLoader:1
+//com.bumptech.glide.load.model.ResourceUriLoader:1
 //com.bumptech.glide.load.model.StringLoader:1
 //com.bumptech.glide.load.model.UnitModelLoader:1
 //com.bumptech.glide.load.model.UnitModelLoader.Factory:1
@@ -8443,7 +8560,7 @@ declare module com {
 //com.bumptech.glide.load.resource.UnitTransformation:1
 //com.bumptech.glide.load.resource.bitmap.BitmapDrawableDecoder:1
 //com.bumptech.glide.load.resource.bitmap.VideoDecoder:1
-//com.bumptech.glide.load.resource.bitmap.VideoDecoder.MediaMetadataRetrieverInitializer:1
+//com.bumptech.glide.load.resource.bitmap.VideoDecoder.MediaInitializer:1
 //com.bumptech.glide.load.resource.drawable.DrawableResource:1
 //com.bumptech.glide.load.resource.transcode.ResourceTranscoder:2
 //com.bumptech.glide.load.resource.transcode.TranscoderRegistry.Entry:2

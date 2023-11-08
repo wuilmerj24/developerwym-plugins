@@ -1,381 +1,391 @@
-import { AndroidActivityRequestPermissionsEventData, AndroidApplication, Application, Button, Color, EventData, Frame, GridLayout, GridUnitType, Image, ItemSpec, Label, Screen, StackLayout, Utils, getCurrentPage } from '@nativescript/core';
+import { AndroidActivityRequestPermissionsEventData, AndroidApplication, Application, Color, Screen, ShowModalOptions, Utils, View, getCurrentPage } from '@nativescript/core';
 import { CLog, GalleryViewCommon, GetSetProperty } from './common';
-import { ELenguajesSoportados } from './enums/lenguaje.enums';
-import { Traductor } from './class/lenguaje.class';
-import { check as checkPermission, request as requestPermission, checkMultiple, ObjectPermissions, ObjectPermissionsRest } from '@nativescript-community/perms';
-import { SpinnerData, SpinnerDataFiles } from './class/spinner.data.class';
-import { MediaStoreHelper } from './class/mediastorehelper.class';
-import { ETypeFiles } from './enums/type_files.enums';
-import { SpinnerAdapter } from './adaptadores/spinner.adapter';
-import { EOrientacionLayout } from './enums/orientacion.enum';
+import { ELenguajesSoportados } from './enums/language.enum';
+import { Traductor } from './class/language';
+import { MediaStoreData } from './interfaces/mediastore.interface';
+import { MediaStoreHelper } from './class/mediastore.android.class';
+import { SpinnerAdapter } from './adapters/spineradapters';
+import { OrientationView } from './enums/orientation.enum';
+import { DividerItemDecoration, RecyclerAdapterMyPluginDeveloper } from './adapters/recycleradapter';
+import { ModalViewPresentarImagen } from './class/modal.android';
+import { UCropImageAndroid } from './class/cropimage.android';
 
 declare var developerwym;
 
 export class GalleryView extends GalleryViewCommon {
-  private _nativeView: android.widget.RelativeLayout;
-  recyclerView: androidx.recyclerview.widget.RecyclerView;
-  private READ_CODE: number = 101;
-  public get nativeView(): android.widget.RelativeLayout {
-    return this._nativeView;
-  }
-  public set nativeView(value: android.widget.RelativeLayout) {
-    this._nativeView = value;
-  }
-  protected currentIdioma: any;
+  private rv: androidx.recyclerview.widget.RecyclerView;
+  private rl: android.widget.RelativeLayout;
+  private spinner: android.widget.Spinner;
+  private dataFiles: Array<MediaStoreData>;
+  private header: android.widget.Toolbar;
+  private footer: android.widget.Toolbar;
+  private txtField: android.widget.TextView;
   @GetSetProperty()
   public language: ELenguajesSoportados;
   @GetSetProperty()
-  public typeFile: ETypeFiles;
+  public showHeader: boolean;
   @GetSetProperty()
-  public bgColorHeader: string;
+  public headerBgColor: string;
   @GetSetProperty()
-  public bgColorFooter: string;
+  public arrowIconColor: string;
   @GetSetProperty()
-  public maxSelect: number;
+  public selectMax: number;
+  @GetSetProperty()
+  public showFooter: boolean;
+  @GetSetProperty()
+  public footerBgColor: string;
   @GetSetProperty()
   public edit: boolean;
   @GetSetProperty()
-  public show: boolean;
-  @GetSetProperty()
-  public bgColorArrow: string;
+  public preview: boolean;
   @GetSetProperty()
   public textColor: string;
   @GetSetProperty()
-  public bgColorSpinner: string;
-  @GetSetProperty()
-  public bgColorSpinnerList: string;
-  @GetSetProperty()
-  public btnColor: string;
-  @GetSetProperty()
-  public orientacion: EOrientacionLayout;
-
-  private header: androidx.appcompat.widget.Toolbar;
-  private footer: androidx.appcompat.widget.Toolbar;
-  private spinner: android.widget.Spinner;
-  private spinnerData: Array<SpinnerData> = new Array();
-  private spinnerDataJava: java.util.ArrayList<java.lang.Object> = new java.util.ArrayList();
-  // private spinnerDataJava: java.util.ArrayList<any> = new java.util.ArrayList();
-  private textVieCont: android.widget.TextView;
-  private _numberSelected: number = 0;
-  private adaptador: SpinnerAdapter;
-  private adaptadorRecyclerView;
+  public orientation: OrientationView;
   constructor() {
     super();
-    // CONFIGURAMOS LOS IDIOMAS
-    this.currentIdioma = new Traductor(this.language);
   }
 
   createNativeView(): Object {
-    this.nativeView = new android.widget.RelativeLayout(this._context);
-    this.nativeView.setLayoutParams(new android.view.ViewGroup.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT));
-    this.solicitarPermisos().then((response) => {
-      const authorizedPermissions: boolean[] = [];
-      for (const key in response) {
-        if (response[key] === 'authorized' || response[key] === 'never_ask_again') {
-          authorizedPermissions.push(true);
-        } else {
-          authorizedPermissions.push(false);
-        }
-      }
-      const todosSonTrue = authorizedPermissions.every((item) => item === true);
+    this.currentIdioma = new Traductor(this.language);
+    this.rl = new android.widget.RelativeLayout(this._context);
+    this.rl.setLayoutParams(new android.widget.RelativeLayout.LayoutParams(android.widget.RelativeLayout.LayoutParams.MATCH_PARENT, android.widget.RelativeLayout.LayoutParams.MATCH_PARENT));
+    if (this.checkPermisos()) {
+      CLog(`tiene permisos`);
+      // Solo dibuja:
+      this.renderUI();
+    } else {
+      const txt: android.widget.TextView = new android.widget.TextView(this._context);
+      txt.setTextSize(24);
+      txt.setGravity(android.view.Gravity.CENTER);
+      txt.setText(java.lang.String.valueOf(this.currentIdioma.obtenerTraduccion('msj_permiso')));
+      const textViewParams: android.widget.RelativeLayout.LayoutParams = new android.widget.RelativeLayout.LayoutParams(android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT, android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT);
+      textViewParams.addRule(android.widget.RelativeLayout.CENTER_IN_PARENT);
 
-      if (todosSonTrue) {
-        this.renderUI();
-      } else {
-        const grid: GridLayout = new GridLayout();
-        grid.width = Screen.mainScreen.widthDIPs;
-        grid.height = Screen.mainScreen.heightDIPs;
-        grid.verticalAlignment = 'middle';
-        grid.horizontalAlignment = 'center';
-        grid.addRow(new ItemSpec(1, GridUnitType.STAR));
-        grid.addRow(new ItemSpec(1, GridUnitType.AUTO));
-
-        const lbl: Label = new Label();
-        lbl.text = this.currentIdioma.obtenerTraduccion('msj_permiso');
-        lbl.fontSize = 18;
-        lbl.style.fontWeight = 'bold';
-        lbl.verticalAlignment = 'middle';
-        lbl.horizontalAlignment = 'center';
-        lbl.textWrap = true;
-        lbl.row = 0;
-        grid.addChild(lbl);
-        Frame.topmost()._addView(grid);
-        this.nativeView.addView(grid.android);
-        CLog('no tiene permisos');
-      }
-    });
-    return this.nativeView;
+      this.rl.addView(txt, textViewParams);
+      this.solicitarPermiso()
+        .then((res) => {
+          this.rl.removeView(txt);
+          this.renderUI();
+        })
+        .catch((err) => {
+          CLog('err permisos: ', err);
+        });
+    }
+    return this.rl;
   }
 
   initNativeView(): void {
     super.initNativeView();
   }
 
-  disposeNativeView(): void {
-    super.disposeNativeView();
+  onLoaded(): void {
+    super.onLoaded();
   }
 
-  private async solicitarPermisos(): Promise<any> {
-    return requestPermission({
-      'android.permission.READ_EXTERNAL_STORAGE': {},
-      'android.permission.WRITE_EXTERNAL_STORAGE': {},
-      'android.permission.READ_MEDIA_IMAGES': {},
-      'android.permission.READ_MEDIA_VIDEO': {},
-      'android.permission.WRITE_SETTINGS': {},
-      'android.permission.MANAGE_EXTERNAL_STORAGE': {},
-      'android.permission.FOREGROUND_SERVICE': {},
-      'android.permission.CAMERA': {},
-      'android.permission.VIBRATE': {},
+  disposeNativeView(): void {
+    super.disposeNativeView();
+    this.rl.removeAllViews();
+    this.rl = null;
+  }
+
+  private checkPermisos(): any {
+    let permisos: Array<any> = new Array();
+    if (android.os.Build.VERSION.SDK_INT >= 33) {
+      permisos = [android.Manifest.permission.READ_MEDIA_AUDIO, android.Manifest.permission.READ_MEDIA_IMAGES, android.Manifest.permission.READ_MEDIA_VIDEO];
+    } else {
+      permisos = [android.Manifest.permission.READ_EXTERNAL_STORAGE];
+    }
+    const granted = android.content.pm.PackageManager.PERMISSION_GRANTED;
+    const permisos_respuesta: Array<any> = new Array();
+    for (let i: number = 0; i < permisos.length; i++) {
+      if (android.os.Build.VERSION.SDK_INT < 23) {
+        permisos_respuesta.push((this._context as android.content.Context).checkPermission(permisos[i], android.os.Process.myPid(), android.os.Process.myUid()) === android.content.pm.PackageManager.PERMISSION_GRANTED ? 'authorized' : 'denied');
+      } else {
+        permisos_respuesta.push((this._context as android.content.Context).checkSelfPermission(permisos[i]));
+      }
+    }
+    if (permisos_respuesta.some((elemento) => elemento === -1)) {
+      return false;
+    } else if (permisos_respuesta.some((elemento) => elemento === 0)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  private solicitarPermiso(): Promise<any> {
+    let permisos: Array<any> = new Array();
+    if (android.os.Build.VERSION.SDK_INT >= 33) {
+      permisos = [android.Manifest.permission.READ_MEDIA_AUDIO, android.Manifest.permission.READ_MEDIA_IMAGES, android.Manifest.permission.READ_MEDIA_VIDEO];
+    } else {
+      permisos = [android.Manifest.permission.READ_EXTERNAL_STORAGE];
+    }
+
+    const activity: android.app.Activity = Application.android.foregroundActivity || Application.android.startActivity;
+    return new Promise<any>((rs, rj) => {
+      try {
+        activity.requestPermissions(permisos, 1001);
+        const onActivityResult = (args: AndroidActivityRequestPermissionsEventData) => {
+          let grantedPermissions: Array<any> = new Array();
+          if (args.requestCode === 1001) {
+            Application.off(AndroidApplication.activityRequestPermissionsEvent, onActivityResult);
+            const results = args.grantResults;
+            for (let j = 0; j < permisos.length; j++) {
+              const permission = permisos[j];
+              if (results.length > j && results[j] === android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                grantedPermissions.push('authorized');
+              } else {
+                if (activity.shouldShowRequestPermissionRationale(permission)) {
+                  grantedPermissions.push('denied');
+                } else {
+                  grantedPermissions.push('never_ask_again');
+                }
+              }
+            }
+
+            if (grantedPermissions.some((elemento) => elemento === 'denied')) {
+              CLog('se mete en denied');
+              rs(false);
+            } else if (grantedPermissions.some((elemento) => elemento === 'authorized') || grantedPermissions.some((elemento) => elemento === 'never_ask_again')) {
+              CLog('se mete en authorized');
+              rs(true);
+            }
+          }
+        };
+        AndroidApplication.on(AndroidApplication.activityRequestPermissionsEvent, onActivityResult);
+      } catch (error) {
+        rj(error);
+      }
     });
   }
 
   private async renderUI() {
-    // CREAR HEADER Y VER LAS OPCIONES
-    const that = this;
-    const handler = new android.os.Handler(android.os.Looper.getMainLooper());
-    this.header = this.headerWidget();
-    this.header.setLayoutParams(new android.view.ViewGroup.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-    this.header.setBackgroundColor(new Color(this.bgColorHeader).android);
-    const layoutParamsHeader: android.widget.RelativeLayout.LayoutParams = new android.widget.RelativeLayout.LayoutParams(android.widget.RelativeLayout.LayoutParams.MATCH_PARENT, android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT);
-    layoutParamsHeader.addRule(android.widget.RelativeLayout.ALIGN_PARENT_TOP);
-    this.nativeView.addView(this.header, layoutParamsHeader);
+    const ref = new WeakRef(this);
+    const self = this;
+    const mediaStore = new MediaStoreHelper(this._context);
+    this.dataFiles = mediaStore.getImagenes();
 
-    // CREAR FOOTER Y LAS CONFIGURACION DEL FOOTER
-    this.footer = this.footerWidget();
-    const layoutParamsFooter: android.widget.RelativeLayout.LayoutParams = new android.widget.RelativeLayout.LayoutParams(android.widget.RelativeLayout.LayoutParams.MATCH_PARENT, android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT);
-    layoutParamsFooter.addRule(android.widget.RelativeLayout.ALIGN_PARENT_BOTTOM);
-    this.footer.setBackgroundColor(new Color(this.bgColorFooter).android);
-    this.nativeView.addView(this.footer, layoutParamsFooter);
+    // Creamo el header
+    if (this.showHeader) {
+      this.header = await this.headerToolbar();
+      const layoutParamsHeader: android.widget.RelativeLayout.LayoutParams = new android.widget.RelativeLayout.LayoutParams(android.widget.RelativeLayout.LayoutParams.MATCH_PARENT, android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT);
+      layoutParamsHeader.addRule(android.widget.RelativeLayout.ALIGN_PARENT_TOP);
+      this.header.setBackgroundColor(new Color(this.headerBgColor).android);
+      this.rl.addView(this.header, layoutParamsHeader);
+    }
 
-    // BODY
-    this.recyclerView = new androidx.recyclerview.widget.RecyclerView(this._context);
-    this.recyclerView.setLayoutParams(new android.view.ViewGroup.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT));
+    // Creamos el footer
+    if (this.showFooter) {
+      this.footer = await this.createFooter();
+      const layoutParamsFooter: android.widget.RelativeLayout.LayoutParams = new android.widget.RelativeLayout.LayoutParams(android.widget.RelativeLayout.LayoutParams.MATCH_PARENT, android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT);
+      layoutParamsFooter.addRule(android.widget.RelativeLayout.ALIGN_PARENT_BOTTOM);
+      this.footer.setBackgroundColor(new Color(this.footerBgColor).android);
+      this.rl.addView(this.footer, layoutParamsFooter);
+    }
+
+    //Creamos body
+    this.rv = await this.createBodyList();
+    const dividerItemDecoration: DividerItemDecoration = new DividerItemDecoration(this._context, 2);
+    this.rv.addItemDecoration(dividerItemDecoration);
+    this.rv.setLayoutParams(new androidx.recyclerview.widget.RecyclerView.LayoutParams(androidx.recyclerview.widget.RecyclerView.LayoutParams.WRAP_CONTENT, androidx.recyclerview.widget.RecyclerView.LayoutParams.WRAP_CONTENT));
     const layoutParamsBody: android.widget.RelativeLayout.LayoutParams = new android.widget.RelativeLayout.LayoutParams(android.widget.RelativeLayout.LayoutParams.MATCH_PARENT, android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT);
     layoutParamsBody.addRule(android.widget.RelativeLayout.BELOW, this.header.getId());
     layoutParamsBody.addRule(android.widget.RelativeLayout.ABOVE, this.footer.getId());
-    try {
-      handler.post(
-        new java.lang.Runnable({
-          run: () => {
-            // Código que quieres ejecutar en el hilo principal
-            // that.spinnerDataJava = Utils.dataSerialize(this.spinnerData.filter(item => item.isSelected === true)[0].files, true);
-            // that.adaptadorRecyclerView = new developerwym.plugins.ns.RecyclerAdapter(that.spinnerDataJava);
-            // that.recyclerView.setAdapter(this.adaptadorRecyclerView);
-            const adaptador: RecyclerAdapterMyPluginDeveloper = new RecyclerAdapterMyPluginDeveloper(this.spinnerData.filter((item) => item.isSelected === true)[0].files);
-            this.recyclerView.setAdapter(adaptador);
-
-            that.recyclerView.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this._context, 5, androidx.recyclerview.widget.RecyclerView.VERTICAL, false));
-            this.recyclerView.addOnItemTouchListener(
-              new developerwym.plugins.ns.RecyclerTouchListener(
-                this._context,
-                this.recyclerView,
-                new developerwym.plugins.ns.RecyclerTouchListener.ClickListener({
-                  onClick: (view: android.view.View, position: number) => {
-                    CLog('hizo click');
-                  },
-                  onLongClick: (view: android.view.View, position: number) => {
-                    CLog(`onLongClick ${view}`);
-                  },
-                })
-              )
+    if (this.orientation == OrientationView.H) {
+      this.rv.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this._context, androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL, false));
+      this.height = (Screen.mainScreen.heightDIPs * 24) / 100;
+    } else if (this.orientation == OrientationView.V) {
+      this.rv.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this._context, 5, androidx.recyclerview.widget.RecyclerView.VERTICAL, false));
+      this.height = Screen.mainScreen.heightDIPs;
+    }
+    this.rv.addOnItemTouchListener(
+      new developerwym.plugins.ns.RecyclerTouchListener(
+        this._context,
+        this.rv,
+        new developerwym.plugins.ns.RecyclerTouchListener.ClickListener({
+          onClick: (view: android.view.View, position: number) => {
+            self.dataFiles[0].files[position].isSelected = !self.dataFiles[0].files[position].isSelected;
+            const current_select: number = self.dataFiles.filter((item) => item.isSelected == true)[0].files.filter((item) => item.isSelected == true).length;
+            if (current_select <= self.selectMax) {
+              const fl_local: android.widget.FrameLayout = view as android.widget.FrameLayout;
+              const radiobtn: android.widget.RadioButton = fl_local.getChildAt(1) as android.widget.RadioButton;
+              if (self.dataFiles[0].files[position].isSelected) {
+                radiobtn.setButtonTintList(android.content.res.ColorStateList.valueOf(new Color('green').android));
+              } else {
+                radiobtn.setButtonTintList(android.content.res.ColorStateList.valueOf(new Color('transparent').android));
+              }
+              radiobtn.setChecked(this.dataFiles[0].files[position].isSelected);
+              self.txtField.setText(`${current_select}/${self.selectMax}`);
+            } else {
+              if (self.debug) {
+                CLog(`Select count max: ${self.selectMax} | current:${current_select}`);
+              }
+              self.dataFiles[0].files[position].isSelected = false;
+            }
+            ref?.get()?.sendEvent(
+              GalleryView.clickEvent,
+              self.dataFiles.filter((item) => item.isSelected == true)[0].files.filter((item) => item.isSelected == true)
             );
           },
+          onLongClick: (view: android.view.View, position: number) => {
+            // ref?.get()?.sendEvent(GalleryView.clickEvent, self.dataFiles.filter(item => item.isSelected == true)[0].files.filter(item => item.isSelected == true));
+          },
         })
-      );
-    } catch (error) {
-      CLog('error', error);
-    }
+      )
+    );
 
-    this.recyclerView.setBackgroundColor(new Color('red').android);
-    this.nativeView.addView(this.recyclerView, layoutParamsBody);
+    this.rv.addOnScrollListener(
+      new developerwym.plugins.ns.CustomRecyclerView(
+        this._context,
+        this.rv,
+        new developerwym.plugins.ns.CustomRecyclerView.ScrollEvento({
+          onScrolled: (recyclerView: androidx.recyclerview.widget.RecyclerView, dx: number, dy: number) => {
+            ref?.get()?.sendEvent(
+              GalleryView.scrollEvent,
+              self.dataFiles.filter((item) => item.isSelected == true)[0].files.filter((item) => item.isSelected == true)
+            );
+          },
+          onScrollStateChanged: (recyclerView: androidx.recyclerview.widget.RecyclerView, state: number) => {
+            //ref?.get()?.sendEvent(GalleryView.scrollEvent, self.dataFiles.filter(item => item.isSelected == true)[0].files.filter(item => item.isSelected == true));
+          },
+        })
+      )
+    );
+
+    this.rl.addView(this.rv, layoutParamsBody);
   }
 
-  private headerWidget(): androidx.appcompat.widget.Toolbar {
-    const self = this;
-    const header: androidx.appcompat.widget.Toolbar = new androidx.appcompat.widget.Toolbar(this._context);
-    // Lista desplegable de los albunes
+  private headerToolbar(): android.widget.Toolbar {
+    const toolbar: android.widget.Toolbar = new android.widget.Toolbar(this._context);
+    toolbar.setLayoutParams(new android.widget.Toolbar.LayoutParams(android.widget.Toolbar.LayoutParams.MATCH_PARENT, android.widget.Toolbar.LayoutParams.WRAP_CONTENT));
+    toolbar.setElevation(20);
+    toolbar.setSoundEffectsEnabled(true);
+    toolbar.setId(android.view.View.generateViewId());
+
     this.spinner = new android.widget.Spinner(this._context);
-    this.spinner.setId(android.view.View.generateViewId());
-    this.spinner.setDropDownVerticalOffset(140);
-    this.spinner.setLayoutParams(new android.view.ViewGroup.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-    this.spinner.setGravity(android.view.Gravity.CENTER_HORIZONTAL);
-    this.spinner.setDropDownWidth(android.view.ViewGroup.LayoutParams.MATCH_PARENT);
-    this.spinner.setNestedScrollingEnabled(true);
-    const mediaStoreHelper: MediaStoreHelper = new MediaStoreHelper(this._context);
-    if ((this.typeFile = ETypeFiles.IMAGES)) {
-      this.spinnerData = mediaStoreHelper.getImages();
-    } else {
-    }
-    this.adaptador = new SpinnerAdapter(this.spinnerData, this._context, this.textColor, this.bgColorSpinnerList, this.bgColorSpinner);
-    this.spinner.setAdapter(this.adaptador);
-    this.adaptador.notifyDataSetChanged();
     const spinnerDrawable: android.graphics.drawable.Drawable = this.spinner.getBackground().getConstantState().newDrawable();
-    spinnerDrawable.setColorFilter(new Color(this.bgColorArrow).android, android.graphics.PorterDuff.Mode.SRC_ATOP);
+    spinnerDrawable.setColorFilter(new Color(this.arrowIconColor).android, android.graphics.PorterDuff.Mode.SRC_ATOP);
+    const adaptador = new SpinnerAdapter(this.dataFiles, this._context, this.textColor, this.headerBgColor);
+    this.spinner.setAdapter(adaptador);
+    adaptador.notifyDataSetChanged();
+
     this.spinner.setBackground(spinnerDrawable);
-
-    // texto para mostrar el numero de item seleccionados
-    this.textVieCont = new android.widget.TextView(this._context);
-    this.textVieCont.setId(android.view.View.generateViewId());
-    this.textVieCont.setText(java.lang.String.valueOf(this.numberSelected));
-    this.textVieCont.setGravity(android.view.Gravity.CENTER_HORIZONTAL);
-    this.textVieCont.setLayoutParams(new android.view.ViewGroup.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-    this.textVieCont.setWidth(100);
-    this.textVieCont.setTextSize(16);
-    this.textVieCont.setTextColor(new Color(this.textColor).android);
-
-    header.setId(android.view.View.generateViewId());
-    const toolbarParams: android.widget.RelativeLayout.LayoutParams = new android.widget.RelativeLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, 180);
-    toolbarParams.addRule(android.widget.RelativeLayout.ALIGN_PARENT_TOP, android.widget.RelativeLayout.TRUE);
-    const leftParams: androidx.appcompat.widget.Toolbar.LayoutParams = new androidx.appcompat.widget.Toolbar.LayoutParams(900, androidx.appcompat.widget.Toolbar.LayoutParams.WRAP_CONTENT, 0.75);
-    const rightParams: androidx.appcompat.widget.Toolbar.LayoutParams = new androidx.appcompat.widget.Toolbar.LayoutParams(100, androidx.appcompat.widget.Toolbar.LayoutParams.WRAP_CONTENT, 0.25);
-    header.addView(this.spinner, leftParams);
-
-    header.addView(this.textVieCont, rightParams);
-
+    this.spinner.setLayoutParams(new android.widget.Spinner.LayoutParams(android.widget.Spinner.LayoutParams.MATCH_PARENT, android.widget.Spinner.LayoutParams.WRAP_CONTENT));
+    this.spinner.setNestedScrollingEnabled(true);
+    this.spinner.setDropDownVerticalOffset(140);
+    this.spinner.setGravity(android.view.Gravity.CENTER_HORIZONTAL);
+    this.spinner.setDropDownWidth(parseInt(Screen.mainScreen.widthPixels.toString()));
+    const self = this;
     this.spinner.setOnItemSelectedListener(
       new android.widget.AdapterView.OnItemSelectedListener({
         onItemSelected(param0: android.widget.AdapterView<any>, param1: android.view.View, position: number, param3: number) {
-          console.log('setOnItemSelectedListener');
-          for (let i: number = 0; i < self.spinnerData.length; i++) {
-            self.spinnerData[i].isSelected = false;
+          for (let i: number = 0; i < self.dataFiles.length; i++) {
+            self.dataFiles[i].isSelected = false;
           }
-          self.spinnerData[position].isSelected = true;
+          self.dataFiles[position].isSelected = !self.dataFiles[position].isSelected;
+          Utils.setTimeout(() => {
+            if (self.rv) {
+              const adaptador: RecyclerAdapterMyPluginDeveloper = new RecyclerAdapterMyPluginDeveloper(self.dataFiles[position].files, OrientationView.V, self.dataFiles[position].albunName);
+              self.rv.setAdapter(adaptador);
+              adaptador.notifyDataSetChanged();
+            }
+          }, 100);
         },
         onNothingSelected(param0: android.widget.AdapterView<any>) {},
       })
     );
-    return header;
-  }
 
-  private get numberSelected(): number {
-    let contador: number = 0;
-    for (let i: number = 0; i < this.spinnerData.length; i++) {
-      if (this.spinnerData[i].isSelected) {
-        for (let j: number = 0; j < this.spinnerData[i].files.length; j++) {
-          if (this.spinnerData[i].files[j].isSelected) {
-            contador++;
-          }
-        }
-      }
-    }
-    this._numberSelected += contador;
-    this.textVieCont.setText(java.lang.String.valueOf(this._numberSelected));
-    return this._numberSelected;
-  }
-
-  private set numberSelected(value: number) {
-    this._numberSelected += value;
-    this.textVieCont.setText(java.lang.String.valueOf(this._numberSelected));
-  }
-
-  private footerWidget(): androidx.appcompat.widget.Toolbar {
-    const self = this;
-    const grid: GridLayout = new GridLayout();
-    grid.addColumn(new ItemSpec(1, GridUnitType.STAR));
-    grid.addColumn(new ItemSpec(1, GridUnitType.STAR));
-    grid.width = Screen.mainScreen.widthDIPs;
-    grid.height = 50;
-
-    const btnEdit: Button = new Button();
-    btnEdit.col = 0;
-    btnEdit.verticalAlignment = 'middle';
-    btnEdit.horizontalAlignment = 'center';
-    btnEdit.text = this.currentIdioma.obtenerTraduccion('btn_editar');
-    btnEdit.on('tap', (args: EventData) => {
-      alert('on tap btnEdit');
-    });
-    btnEdit.androidElevation = -1;
-    btnEdit.backgroundColor = new Color('transparent');
-    btnEdit.color = new Color(this.btnColor);
-
-    const btnPreview: Button = new Button();
-    btnPreview.col = 1;
-    btnPreview.verticalAlignment = 'middle';
-    btnPreview.horizontalAlignment = 'center';
-    btnPreview.on('tap', (args: EventData) => {
-      alert('on tap btnPreview');
-    });
-    btnPreview.androidElevation = -1;
-    btnPreview.backgroundColor = new Color('transparent');
-    btnPreview.text = this.currentIdioma.obtenerTraduccion('btn_presentar');
-    btnPreview.color = new Color(this.btnColor);
-
-    grid.addChild(btnEdit);
-    grid.addChild(btnPreview);
-
-    Frame.topmost()._addView(grid);
-    const toolbar: androidx.appcompat.widget.Toolbar = new androidx.appcompat.widget.Toolbar(this._context);
-    toolbar.setId(android.view.View.generateViewId());
-    const toolbarParams: android.widget.RelativeLayout.LayoutParams = new android.widget.RelativeLayout.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, 180);
-    toolbarParams.addRule(android.widget.RelativeLayout.ALIGN_PARENT_TOP, android.widget.RelativeLayout.TRUE);
-    toolbar.setLayoutParams(toolbarParams);
-    toolbar.addView(grid.android);
+    this.txtField = new android.widget.TextView(this._context);
+    this.txtField.setText(`0/${this.selectMax}`);
+    this.txtField.setLayoutParams(new android.view.ViewGroup.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+    this.txtField.setGravity(android.view.Gravity.CENTER_HORIZONTAL);
+    this.txtField.setWidth(100);
+    this.txtField.setTextSize(16);
+    this.txtField.setTypeface(null, android.graphics.Typeface.BOLD);
+    const leftParams: androidx.appcompat.widget.Toolbar.LayoutParams = new androidx.appcompat.widget.Toolbar.LayoutParams(700, androidx.appcompat.widget.Toolbar.LayoutParams.WRAP_CONTENT, 0.75);
+    const rightParams: androidx.appcompat.widget.Toolbar.LayoutParams = new androidx.appcompat.widget.Toolbar.LayoutParams(300, androidx.appcompat.widget.Toolbar.LayoutParams.WRAP_CONTENT, 0.25);
+    toolbar.addView(this.spinner, leftParams);
+    toolbar.addView(this.txtField, rightParams);
     return toolbar;
   }
-}
 
-@NativeClass()
-export class RecyclerAdapterMyPluginDeveloper extends androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder> {
-  private context: android.content.Context;
-  private idImage: number = android.view.View.generateViewId();
-  constructor(private lista: Array<SpinnerDataFiles>) {
-    super();
-  }
+  private createFooter(): android.widget.Toolbar {
+    const self = this;
+    const toolbar: android.widget.Toolbar = new android.widget.Toolbar(this._context);
+    toolbar.setId(android.view.View.generateViewId());
+    toolbar.setLayoutParams(new android.widget.Toolbar.LayoutParams(android.widget.Toolbar.LayoutParams.MATCH_PARENT, 150));
+    toolbar.setElevation(20);
+    toolbar.setSoundEffectsEnabled(true);
 
-  public getItemCount(): number {
-    if (this.lista != null || this.lista != undefined || this.lista.length == 0) {
-      return this.lista.length;
+    const linearLayout: android.widget.LinearLayout = new android.widget.LinearLayout(this._context);
+    linearLayout.setOrientation(android.widget.LinearLayout.HORIZONTAL);
+    linearLayout.setLayoutParams(new android.widget.LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 150));
+
+    const btnEditar: android.widget.Button = new android.widget.Button(this._context);
+    btnEditar.setText(this.currentIdioma.obtenerTraduccion('btn_editar'));
+    btnEditar.setTextColor(new Color(this.textColor).android);
+    btnEditar.setBackground(null);
+    btnEditar.setOnClickListener(
+      new android.view.View.OnClickListener({
+        onClick(param0) {
+          // new UCropImageAndroid(self.dataFiles.filter(item=>item.isSelected==true),self._context);
+        },
+      })
+    );
+
+    const btnPreview: android.widget.Button = new android.widget.Button(this._context);
+    btnPreview.setText(this.currentIdioma.obtenerTraduccion('btn_presentar'));
+    btnPreview.setBackground(null);
+    btnPreview.setTextColor(new Color(this.textColor).android);
+    btnPreview.setOnClickListener(
+      new android.view.View.OnClickListener({
+        onClick(param0) {
+          if (self.dataFiles[0].files.filter((item) => item.isSelected == true).length > 0) {
+            const options: ShowModalOptions = {
+              closeCallback(...args) {
+                if (args.length > 0) {
+                } else {
+                }
+              },
+              context: {},
+              animated: true,
+              fullscreen: true,
+              stretched: true,
+            };
+            getCurrentPage().showModal(new ModalViewPresentarImagen(self.dataFiles[0].files.filter((item) => item.isSelected == true)), options);
+          }
+        },
+      })
+    );
+
+    const buttonParams: android.widget.LinearLayout.LayoutParams = new android.widget.LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
+    buttonParams.weight = 1;
+
+    btnEditar.setLayoutParams(buttonParams);
+    btnPreview.setLayoutParams(buttonParams);
+
+    if (this.edit) {
+      linearLayout.addView(btnEditar);
     }
-    return 0;
-  }
 
-  public onCreateViewHolder(parent: android.view.ViewGroup, viewType: number): androidx.recyclerview.widget.RecyclerView.ViewHolder {
-    this.context = parent.getContext();
-    let rl: android.widget.RelativeLayout = new android.widget.RelativeLayout(parent.getContext());
-    if (rl == undefined || rl !== null) {
-      rl.setLayoutParams(new android.widget.RelativeLayout.LayoutParams(android.widget.RelativeLayout.LayoutParams.MATCH_PARENT, 220));
-      const img: android.widget.ImageView = new android.widget.ImageView(parent.getContext());
-      img.setId(this.idImage);
-      img.setLayoutParams(new android.view.ViewGroup.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-      rl.setBackgroundColor(new Color('green').android);
-      rl.addView(img);
-      return new ViewHolder(rl, this.idImage);
-    } else {
-      return new ViewHolder(rl, this.idImage);
+    if (this.preview) {
+      linearLayout.addView(btnPreview);
     }
+    linearLayout.setBackgroundColor(android.graphics.Color.TRANSPARENT);
+    toolbar.addView(linearLayout);
+    return toolbar;
   }
 
-  public onBindViewHolder(param0: unknown, param1: unknown, param2?: unknown): void;
-  public onBindViewHolder(param0: androidx.recyclerview.widget.RecyclerView.ViewHolder, param1: number, param2: java.util.List<any>): void;
-  public onBindViewHolder(holder: androidx.recyclerview.widget.RecyclerView.ViewHolder, position: number): void {
+  private createBodyList(): androidx.recyclerview.widget.RecyclerView {
+    const rv: androidx.recyclerview.widget.RecyclerView = new androidx.recyclerview.widget.RecyclerView(this._context);
     try {
-      com.bumptech.glide.Glide.with(holder.itemView.getContext())
-        .load(this.lista[position].file)
-        .centerCrop()
-        .override(400)
-        .placeholder(new android.graphics.drawable.ColorDrawable(android.graphics.Color.BLACK))
-        .error(new android.graphics.drawable.ColorDrawable(android.graphics.Color.RED))
-        .priority(com.bumptech.glide.Priority.IMMEDIATE)
-        .into((holder as any).imageView);
+      rv.setAddStatesFromChildren(true);
+      rv.setHasTransientState(true);
+      rv.setHasFixedSize(true);
     } catch (error) {
-      CLog('error ', error);
+      CLog('Error recyclerView ', error);
     }
-  }
-
-  private getLayout(id: string) {
-    return this.context.getResources().getIdentifier(id, 'layout', this.context.getPackageName());
-  }
-
-  private getId(id: string) {
-    return this.context.getResources().getIdentifier(id, 'id', this.context.getPackageName());
-  }
-}
-
-@NativeClass()
-class ViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
-  public imageView: android.widget.ImageView;
-  constructor(private view: android.view.View, private vid: number) {
-    super(view);
-    this.imageView = view.findViewById(this.vid) as android.widget.ImageView;
+    return rv;
   }
 }

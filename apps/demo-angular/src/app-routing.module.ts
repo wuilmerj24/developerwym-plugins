@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'gallery-view', loadChildren: () => import('./plugin-demos/gallery-view.module').then((m) => m.GalleryViewModule) },
   { path: 'launch-navigator', loadChildren: () => import('./plugin-demos/launch-navigator.module').then((m) => m.LaunchNavigatorModule) },
   { path: 'screen-orientation', loadChildren: () => import('./plugin-demos/screen-orientation.module').then((m) => m.ScreenOrientationModule) },
+  { path: 'signal-r', loadChildren: () => import('./plugin-demos/signal-r.module').then((m) => m.SignalRModule) },
   { path: 'store-update', loadChildren: () => import('./plugin-demos/store-update.module').then((m) => m.StoreUpdateModule) },
   { path: 'time-range', loadChildren: () => import('./plugin-demos/time-range.module').then((m) => m.TimeRangeModule) },
 ];

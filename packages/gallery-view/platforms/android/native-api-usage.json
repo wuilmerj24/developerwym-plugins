@@ -20,6 +20,8 @@
     "androidx.recyclerview.widget:RecyclerView.RecyclerListener",
     "androidx.recyclerview.widget:RecyclerView.RecycledViewPool",
     "androidx.recyclerview.widget:RecyclerView.ViewHolder",
-    "androidx.recyclerview.widget:SimpleItemAnimator"
+    "androidx.recyclerview.widget:SimpleItemAnimator",
+    "androidx.viewpager2.widget:ViewPager2*",
+    "androidx.viewpager2.widget:CompositePageTransformer*"
   ]
 }

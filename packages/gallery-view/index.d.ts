@@ -1,30 +1,26 @@
-import { ContentView } from '@nativescript/core';
-import { ELenguajesSoportados } from './enums/lenguaje.enums';
-import { ETypeFiles } from './enums/type_files.enums';
-import { EOrientacionLayout } from './enums/orientacion.enum';
+import { ContainerView } from '@nativescript/core';
+import { GalleryViewCommon } from './common';
+import { ELenguajesSoportados } from './enums/language.enum';
+import { OrientationView } from './enums/orientation.enum';
 
-export * from './events';
-
-export declare class GalleryView extends ContentView {
-  events: IMediaSelectorEvents;
-  public errorEvent: NsMediaSelectorEvents.ErrorEvent;
-  public onScrolledEvent: NsMediaSelectorEvents.OnScrolledEvent;
-  public onScrollStateChangedEvent: NsMediaSelectorEvents.OnScrollStateChangedEvent;
-  public onClickEvent: NsMediaSelectorEvents.OnClickEvent;
-  public onLongClick: NsMediaSelectorEvents.OnLongClick;
-
-  // opciones para configurar la vista
+export declare class GalleryView extends ContainerView {
+  public static onScrollEvent: EGalleryViewEvents.OnScrolledEvent;
+  public static onClickEvent: EGalleryViewEvents.OnClickEvent;
   public language: ELenguajesSoportados;
-  public typeFile: ETypeFiles;
-  public bgColorHeader: string;
-  public bgColorFooter: string;
-  public bgColorSpinner: string;
-  public bgColorSpinnerList: string;
-  public bgColorArrow: string;
-  public textColor: string;
-  public btnColor: string;
-  public maxSelect: number;
+  public showHeader: boolean;
+  public headerBgColor: string;
+  public arrowIconColor: string;
+  public selectMax: number;
+  public showFooter: boolean;
+  public footerBgColor: string;
   public edit: boolean;
-  public show: boolean;
-  public orientacion: EOrientacionLayout;
+  public preview: boolean;
+  public textColor: string;
+  public orientation: OrientationView;
+}
+
+export interface IGalleryViewEvents {
+  onScrollEvent: OnScrolledEvent;
+  onClickEvent: OnClickEvent;
+  galleryViewLoadedEvent: GalleryViewLoadedEvent;
 }

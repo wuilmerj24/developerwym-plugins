@@ -19,6 +19,9 @@ export class HomeComponent {
       name: 'screen-orientation',
     },
     {
+      name: 'signal-r',
+    },
+    {
       name: 'store-update',
     },
     {

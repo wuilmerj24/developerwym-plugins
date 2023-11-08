@@ -5,7 +5,11 @@ declare module com {
         public static class: java.lang.Class<com.yalantis.ucrop.BuildConfig>;
         public static DEBUG: boolean;
         public static LIBRARY_PACKAGE_NAME: string;
+        public static APPLICATION_ID: string;
         public static BUILD_TYPE: string;
+        public static FLAVOR: string;
+        public static VERSION_CODE: number;
+        public static VERSION_NAME: string;
         public constructor();
       }
     }
@@ -85,15 +89,9 @@ declare module com {
           public static EXTRA_ASPECT_RATIO_SELECTED_BY_DEFAULT: string;
           public static EXTRA_ASPECT_RATIO_OPTIONS: string;
           public static EXTRA_UCROP_ROOT_VIEW_BACKGROUND_COLOR: string;
-          public static EXTRA_BRIGHTNESS: string;
-          public static EXTRA_CONTRAST: string;
-          public static EXTRA_SATURATION: string;
-          public static EXTRA_SHARPNESS: string;
           public setAllowedGestures(param0: number, param1: number, param2: number): void;
-          public setSaturationEnabled(param0: boolean): void;
           public getOptionBundle(): globalAndroid.os.Bundle;
           public setImageToCropBoundsAnimDuration(param0: number): void;
-          public setSharpnessEnabled(param0: boolean): void;
           public setMaxBitmapSize(param0: number): void;
           public setToolbarColor(param0: number): void;
           public setToolbarCancelDrawable(param0: number): void;
@@ -109,7 +107,6 @@ declare module com {
           public setAspectRatioOptions(param0: number, param1: androidNative.Array<com.yalantis.ucrop.model.AspectRatio>): void;
           public setCropGridCornerColor(param0: number): void;
           public setToolbarCropDrawable(param0: number): void;
-          public setBrightnessEnabled(param0: boolean): void;
           public setCropFrameColor(param0: number): void;
           public setRootViewBackgroundColor(param0: number): void;
           public setCompressionQuality(param0: number): void;
@@ -120,7 +117,6 @@ declare module com {
           public setCompressionFormat(param0: globalAndroid.graphics.Bitmap.CompressFormat): void;
           public setCropFrameStrokeWidth(param0: number): void;
           public setToolbarWidgetColor(param0: number): void;
-          public setContrastEnabled(param0: boolean): void;
           public withAspectRatio(param0: number, param1: number): void;
           public setHideBottomControls(param0: boolean): void;
           public setShowCropGrid(param0: boolean): void;
@@ -230,19 +226,6 @@ declare module com {
 declare module com {
   export module yalantis {
     export module ucrop {
-      export class UCropHttpClientStore {
-        public static class: java.lang.Class<com.yalantis.ucrop.UCropHttpClientStore>;
-        public static INSTANCE: com.yalantis.ucrop.UCropHttpClientStore;
-        public setClient(param0: okhttp3.OkHttpClient): void;
-        public getClient(): okhttp3.OkHttpClient;
-      }
-    }
-  }
-}
-
-declare module com {
-  export module yalantis {
-    export module ucrop {
       export module callback {
         export class BitmapCropCallback {
           public static class: java.lang.Class<com.yalantis.ucrop.callback.BitmapCropCallback>;
@@ -340,18 +323,14 @@ declare module com {
       export module model {
         export class CropParameters {
           public static class: java.lang.Class<com.yalantis.ucrop.model.CropParameters>;
+          public constructor(param0: number, param1: number, param2: globalAndroid.graphics.Bitmap.CompressFormat, param3: number, param4: string, param5: string, param6: com.yalantis.ucrop.model.ExifInfo);
           public getExifInfo(): com.yalantis.ucrop.model.ExifInfo;
-          public getContrast(): number;
           public getCompressQuality(): number;
           public getImageOutputPath(): string;
           public getImageInputPath(): string;
           public getMaxResultImageSizeY(): number;
-          public getSaturation(): number;
           public getCompressFormat(): globalAndroid.graphics.Bitmap.CompressFormat;
-          public getSharpness(): number;
-          public constructor(param0: number, param1: number, param2: globalAndroid.graphics.Bitmap.CompressFormat, param3: number, param4: string, param5: string, param6: com.yalantis.ucrop.model.ExifInfo, param7: number, param8: number, param9: number, param10: number);
           public getMaxResultImageSizeX(): number;
-          public getBrightness(): number;
         }
       }
     }
@@ -403,7 +382,7 @@ declare module com {
         export class BitmapCropTask extends globalAndroid.os.AsyncTask<java.lang.Void, java.lang.Void, java.lang.Throwable> {
           public static class: java.lang.Class<com.yalantis.ucrop.task.BitmapCropTask>;
           public onPostExecute(param0: java.lang.Throwable): void;
-          public constructor(param0: globalAndroid.content.Context, param1: globalAndroid.graphics.Bitmap, param2: com.yalantis.ucrop.model.ImageState, param3: com.yalantis.ucrop.model.CropParameters, param4: com.yalantis.ucrop.callback.BitmapCropCallback);
+          public constructor(param0: globalAndroid.graphics.Bitmap, param1: com.yalantis.ucrop.model.ImageState, param2: com.yalantis.ucrop.model.CropParameters, param3: com.yalantis.ucrop.callback.BitmapCropCallback);
           public static cropCImg(param0: string, param1: string, param2: number, param3: number, param4: number, param5: number, param6: number, param7: number, param8: number, param9: number, param10: number, param11: number): boolean;
           public doInBackground(param0: androidNative.Array<java.lang.Void>): java.lang.Throwable;
         }
@@ -449,23 +428,6 @@ declare module com {
           public static exifToDegrees(param0: number): number;
           public static calculateMaxBitmapSize(param0: globalAndroid.content.Context): number;
           public static getExifOrientation(param0: globalAndroid.content.Context, param1: globalAndroid.net.Uri): number;
-        }
-      }
-    }
-  }
-}
-
-declare module com {
-  export module yalantis {
-    export module ucrop {
-      export module util {
-        export class ColorFilterGenerator {
-          public static class: java.lang.Class<com.yalantis.ucrop.util.ColorFilterGenerator>;
-          public static adjustHue(param0: globalAndroid.graphics.ColorMatrix, param1: number): void;
-          public static adjustSaturation(param0: globalAndroid.graphics.ColorMatrix, param1: number): number;
-          public constructor();
-          public static adjustBrightness(param0: globalAndroid.graphics.ColorMatrix, param1: number): number;
-          public static adjustContrast(param0: globalAndroid.graphics.ColorMatrix, param1: number): number;
         }
       }
     }
@@ -658,26 +620,6 @@ declare module com {
   export module yalantis {
     export module ucrop {
       export module view {
-        export class ControlLayout {
-          public static class: java.lang.Class<com.yalantis.ucrop.view.ControlLayout>;
-          public constructor(param0: globalAndroid.content.Context, param1: globalAndroid.util.AttributeSet);
-          public constructor(param0: globalAndroid.content.Context);
-          public onMeasure(param0: number, param1: number): void;
-          public addView(param0: globalAndroid.view.View, param1: number): void;
-          public addView(param0: globalAndroid.view.View): void;
-          public addView(param0: globalAndroid.view.View, param1: globalAndroid.view.ViewGroup.LayoutParams): void;
-          public addView(param0: globalAndroid.view.View, param1: number, param2: globalAndroid.view.ViewGroup.LayoutParams): void;
-          public constructor(param0: globalAndroid.content.Context, param1: globalAndroid.util.AttributeSet, param2: number);
-        }
-      }
-    }
-  }
-}
-
-declare module com {
-  export module yalantis {
-    export module ucrop {
-      export module view {
         export class CropImageView extends com.yalantis.ucrop.view.TransformImageView {
           public static class: java.lang.Class<com.yalantis.ucrop.view.CropImageView>;
           public static DEFAULT_MAX_BITMAP_SIZE: number;
@@ -739,19 +681,17 @@ declare module com {
       export module view {
         export class GestureCropImageView extends com.yalantis.ucrop.view.CropImageView {
           public static class: java.lang.Class<com.yalantis.ucrop.view.GestureCropImageView>;
-          public getDoubleTapScaleSteps(): number;
-          public isScaleEnabled(): boolean;
-          public constructor(param0: globalAndroid.content.Context, param1: globalAndroid.util.AttributeSet, param2: number);
-          public init(): void;
-          public setDoubleTapScaleSteps(param0: number): void;
           public constructor(param0: globalAndroid.content.Context);
           public constructor(param0: globalAndroid.content.Context, param1: globalAndroid.util.AttributeSet);
           public isRotateEnabled(): boolean;
+          public getDoubleTapScaleSteps(): number;
+          public isScaleEnabled(): boolean;
           public onTouchEvent(param0: globalAndroid.view.MotionEvent): boolean;
-          public setGestureEnabled(param0: boolean): void;
+          public constructor(param0: globalAndroid.content.Context, param1: globalAndroid.util.AttributeSet, param2: number);
+          public init(): void;
           public setScaleEnabled(param0: boolean): void;
           public setRotateEnabled(param0: boolean): void;
-          public isGestureEnabled(): boolean;
+          public setDoubleTapScaleSteps(param0: number): void;
           public getDoubleTapTargetScale(): number;
         }
         export module GestureCropImageView {
@@ -861,19 +801,14 @@ declare module com {
           public getViewBitmap(): globalAndroid.graphics.Bitmap;
           public setMaxBitmapSize(param0: number): void;
           public setTransformImageListener(param0: com.yalantis.ucrop.view.TransformImageView.TransformImageListener): void;
-          public getCurrentBrightness(): number;
           public postTranslate(param0: number, param1: number): void;
-          public postSaturation(param0: number): void;
           public constructor(param0: globalAndroid.content.Context, param1: globalAndroid.util.AttributeSet);
           public setImageMatrix(param0: globalAndroid.graphics.Matrix): void;
           public getExifInfo(): com.yalantis.ucrop.model.ExifInfo;
-          public getCurrentSharpness(): number;
           public getImageInputPath(): string;
           public getMatrixAngle(param0: globalAndroid.graphics.Matrix): number;
           public printMatrix(param0: string, param1: globalAndroid.graphics.Matrix): void;
           public postScale(param0: number, param1: number, param2: number): void;
-          public postBrightness(param0: number): void;
-          public postContrast(param0: number): void;
           public onImageLaidOut(): void;
           public setImageUri(param0: globalAndroid.net.Uri, param1: globalAndroid.net.Uri): void;
           public getCurrentScale(): number;
@@ -883,35 +818,22 @@ declare module com {
           public constructor(param0: globalAndroid.content.Context);
           public setScaleType(param0: globalAndroid.widget.ImageView.ScaleType): void;
           public setImageBitmap(param0: globalAndroid.graphics.Bitmap): void;
-          public postSharpness(param0: number): void;
-          public getCurrentSaturation(): number;
           public getMatrixValue(param0: globalAndroid.graphics.Matrix, param1: number): number;
           public onLayout(param0: boolean, param1: number, param2: number, param3: number, param4: number): void;
           public getCurrentAngle(): number;
-          public getCurrentContrast(): number;
         }
         export module TransformImageView {
-          export class SharpnessScriptTask extends globalAndroid.os.AsyncTask<java.lang.Float, java.lang.Void, java.lang.Boolean> {
-            public static class: java.lang.Class<com.yalantis.ucrop.view.TransformImageView.SharpnessScriptTask>;
-            public onPostExecute(param0: java.lang.Boolean): void;
-            public onCancelled(param0: java.lang.Boolean): void;
-            public doInBackground(param0: androidNative.Array<java.lang.Float>): java.lang.Boolean;
-          }
           export class TransformImageListener {
             public static class: java.lang.Class<com.yalantis.ucrop.view.TransformImageView.TransformImageListener>;
             /**
              * Constructs a new instance of the com.yalantis.ucrop.view.TransformImageView$TransformImageListener interface with the provided implementation. An empty constructor exists calling super() when extending the interface class.
              */
-            public constructor(implementation: { onLoadComplete(): void; onLoadFailure(param0: java.lang.Exception): void; onRotate(param0: number): void; onScale(param0: number): void; onBrightness(param0: number): void; onContrast(param0: number): void; onSaturation(param0: number): void; onSharpness(param0: number): void });
+            public constructor(implementation: { onLoadComplete(): void; onLoadFailure(param0: java.lang.Exception): void; onRotate(param0: number): void; onScale(param0: number): void });
             public constructor();
-            public onContrast(param0: number): void;
             public onLoadFailure(param0: java.lang.Exception): void;
             public onRotate(param0: number): void;
-            public onBrightness(param0: number): void;
-            public onSaturation(param0: number): void;
             public onScale(param0: number): void;
             public onLoadComplete(): void;
-            public onSharpness(param0: number): void;
           }
         }
       }
@@ -992,3 +914,5 @@ declare module com {
     }
   }
 }
+
+//Generics information:

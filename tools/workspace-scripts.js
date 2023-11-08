@@ -124,6 +124,27 @@ module.exports = {
           description: '@arepa/gallery-view: Build',
         },
       },
+      // @arepa/media-picker
+      'media-picker': {
+        build: {
+          script: 'nx run media-picker:build.all',
+          description: '@arepa/media-picker: Build',
+        },
+      },
+      // @arepa/gallery-view
+      'gallery-view': {
+        build: {
+          script: 'nx run gallery-view:build.all',
+          description: '@arepa/gallery-view: Build',
+        },
+      },
+      // @arepa/signal-r
+      'signal-r': {
+        build: {
+          script: 'nx run signal-r:build.all',
+          description: '@arepa/signal-r: Build',
+        },
+      },
       'build-all': {
         script: 'nx run-many --target=build.all --all',
         description: 'Build all packages',
@@ -169,6 +190,18 @@ module.exports = {
       'gallery-view': {
         script: 'nx run gallery-view:focus',
         description: 'Focus on @arepa/gallery-view',
+      },
+      'media-picker': {
+        script: 'nx run media-picker:focus',
+        description: 'Focus on @arepa/media-picker',
+      },
+      'gallery-view': {
+        script: 'nx run gallery-view:focus',
+        description: 'Focus on @arepa/gallery-view',
+      },
+      'signal-r': {
+        script: 'nx run signal-r:focus',
+        description: 'Focus on @arepa/signal-r',
       },
       reset: {
         script: 'nx g @arepa/plugin-tools:focus-packages',

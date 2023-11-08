@@ -1,0 +1,65 @@
+{
+  "name": "signal-r",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/signal-r",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "options": {
+        "outputPath": "dist/packages/signal-r",
+        "tsConfig": "packages/signal-r/tsconfig.json",
+        "packageJson": "packages/signal-r/package.json",
+        "main": "packages/signal-r/index.d.ts",
+        "assets": [
+          "packages/signal-r/*.md",
+          "packages/signal-r/index.d.ts",
+          "LICENSE",
+          {
+            "glob": "**/*",
+            "input": "packages/signal-r/platforms/",
+            "output": "./platforms/"
+          }
+        ],
+        "dependsOn": [
+          {
+            "target": "build.all",
+            "projects": "dependencies"
+          }
+        ]
+      }
+    },
+    "build.all": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["node tools/scripts/build-finish.ts signal-r"],
+        "parallel": false
+      },
+      "outputs": ["dist/packages/signal-r"],
+      "dependsOn": [
+        {
+          "target": "build.all",
+          "projects": "dependencies"
+        },
+        {
+          "target": "build",
+          "projects": "self"
+        }
+      ]
+    },
+    "focus": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["nx g @nativescript/plugin-tools:focus-packages signal-r"],
+        "parallel": false
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["packages/signal-r/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

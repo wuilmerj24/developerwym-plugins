@@ -26,21 +26,21 @@ export class Traductor {
         // ... otras traducciones en español ...
       },
       chine: {
-        titulo_albun: '相册 (Xiàngcè)',
+        titulo_albun: '相册',
         btn_presentar: '目前',
-        btn_cancelar: '取消 (Qǔxiāo)',
-        btn_terminar: '完成 (Wánchéng)',
-        btn_editar: '编辑 (Biānjí)',
-        msj_permiso: '此功能需要权限。 (Cǐ gōngnéng xūyào quánxiàn)',
+        btn_cancelar: '取消',
+        btn_terminar: '完成',
+        btn_editar: '编辑',
+        msj_permiso: '此功能需要权限。',
         // ... otras traducciones en chino ...
       },
       russian: {
-        titulo_albun: 'Камерный рулон (Kamernyy rulon)',
+        titulo_albun: 'Камерный рулон',
         btn_presentar: 'подносить',
-        btn_cancelar: "Отменить (Otmenit')",
-        btn_terminar: "Закончить (Zakonchit')",
-        btn_editar: "Редактировать (Redaktirovat')",
-        msj_permiso: 'Для этой функции требуются разрешения. (Dlya ètoj funktsii trebuyutsya razresheniya)',
+        btn_cancelar: 'Отменить',
+        btn_terminar: 'Закончить',
+        btn_editar: 'Редактировать',
+        msj_permiso: 'Для этой функции требуются разрешения.',
         // ... otras traducciones en ruso ...
       },
     };

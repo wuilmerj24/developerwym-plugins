@@ -1,9 +1,10 @@
-import { Color, ContentView, Property, booleanConverter, getCurrentPage } from '@nativescript/core';
-import { GalleryView as GalleryViewDefinition } from '.';
-import { GalleryViewEvents } from './events';
-import { ELenguajesSoportados } from './enums/lenguaje.enums';
-import { ETypeFiles } from './enums/type_files.enums';
-import { EOrientacionLayout } from './enums/orientacion.enum';
+import { ContainerView } from '@nativescript/core';
+import { GalleryView } from '.';
+import { ELenguajesSoportados } from './enums/language.enum';
+import { Traductor } from './class/language';
+import { OrientationView } from './enums/orientation.enum';
+import { MediaStoreData, MediaStoreDataFiles } from './interfaces/mediastore.interface';
+import { EGalleryViewEvents } from './events';
 
 export class GalleryViewUtil {
   public static debug: boolean = false;
@@ -15,46 +16,53 @@ export const CLog = (...args: any[]) => {
   }
 };
 
-export class GalleryViewCommon extends ContentView implements GalleryViewDefinition {
+export class GalleryViewCommon extends ContainerView implements GalleryView {
   public set debug(value: boolean) {
     GalleryViewUtil.debug = value;
   }
   public events: any;
 
   // EVENTS
-  public errorEvent: GalleryViewEvents.ErrorEvent;
-  public onScrolledEvent: GalleryViewEvents.OnScrolledEvent;
-  public onScrollStateChangedEvent: GalleryViewEvents.OnScrollStateChangedEvent;
-  public onClickEvent: GalleryViewEvents.OnClickEvent;
-  public onLongClick: GalleryViewEvents.OnLongClick;
-
+  public static scrollEvent = EGalleryViewEvents.OnScrolledEvent;
+  public static clickEvent = EGalleryViewEvents.OnClickEvent;
+  currentIdioma: Traductor;
   // OPCIONES VIEW
   @GetSetProperty()
   public language: ELenguajesSoportados = ELenguajesSoportados.SPANISH;
   @GetSetProperty()
-  public typeFile: ETypeFiles = ETypeFiles.IMAGES;
+  public showHeader: boolean = true;
   @GetSetProperty()
-  public bgColorHeader: string = '#f4f4f4';
+  public headerBgColor: string = 'black';
   @GetSetProperty()
-  public bgColorFooter: string = '#f4f4f4';
+  public arrowIconColor: string = 'red';
   @GetSetProperty()
-  public maxSelect: number = 9;
+  public selectMax: number = 1;
+  @GetSetProperty()
+  public showFooter: boolean = true;
+  @GetSetProperty()
+  public footerBgColor: string = 'black';
   @GetSetProperty()
   public edit: boolean = true;
   @GetSetProperty()
-  public show: boolean = true;
+  public preview: boolean = true;
   @GetSetProperty()
-  public bgColorArrow: string = 'black';
+  public textColor: string = 'green';
   @GetSetProperty()
-  public textColor: string = 'black';
-  @GetSetProperty()
-  public bgColorSpinner: string = '#FFFFFF';
-  @GetSetProperty()
-  public bgColorSpinnerList: string = '#FFFFFF';
-  @GetSetProperty()
-  public btnColor: string = 'red';
-  @GetSetProperty()
-  public orientacion: EOrientacionLayout = EOrientacionLayout.VERTICAL;
+  public orientation: OrientationView = OrientationView.H;
+
+  public sendEvent(eventName: string, data?: Array<MediaStoreDataFiles>, msg?: string) {
+    this.notify({
+      eventName,
+      object: this,
+      data,
+      message: msg,
+    });
+  }
+}
+
+export interface IGalleryViewEvents {
+  onScrollEvent: any;
+  onClickEvent: any;
 }
 
 export function GetSetProperty() {

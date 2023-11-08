@@ -2,6 +2,7 @@
 - [@arepa/gallery-view](packages/gallery-view/README.md)
 - [@arepa/launch-navigator](packages/launch-navigator/README.md)
 - [@arepa/screen-orientation](packages/screen-orientation/README.md)
+- [@arepa/signal-r](packages/signal-r/README.md)
 - [@arepa/store-update](packages/store-update/README.md)
 - [@arepa/time-range](packages/time-range/README.md)
 
