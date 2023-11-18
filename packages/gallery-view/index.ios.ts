@@ -52,6 +52,7 @@ export class GalleryView extends GalleryViewCommon {
     gridContenedor.addRow(new ItemSpec(1, GridUnitType.AUTO));
     this.gridMaster = gridContenedor;
 
+    // Contenedor
     Frame.topmost()._addView(gridContenedor);
     return gridContenedor.android;
   }
