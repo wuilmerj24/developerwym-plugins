@@ -1,7 +1,5 @@
 import { ContainerView } from '@nativescript/core';
-import { GalleryViewCommon } from './common';
-import { ELenguajesSoportados } from './enums/language.enum';
-import { OrientationView } from './enums/orientation.enum';
+import { EGalleryViewEvents } from './events';
 
 export declare class GalleryView extends ContainerView {
   public static onScrollEvent: EGalleryViewEvents.OnScrolledEvent;

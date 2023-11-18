@@ -145,6 +145,13 @@ module.exports = {
           description: '@arepa/signal-r: Build',
         },
       },
+      // @arepa/gallery-view
+      'gallery-view': {
+        build: {
+          script: 'nx run gallery-view:build.all',
+          description: '@arepa/gallery-view: Build',
+        },
+      },
       'build-all': {
         script: 'nx run-many --target=build.all --all',
         description: 'Build all packages',
@@ -202,6 +209,10 @@ module.exports = {
       'signal-r': {
         script: 'nx run signal-r:focus',
         description: 'Focus on @arepa/signal-r',
+      },
+      'gallery-view': {
+        script: 'nx run gallery-view:focus',
+        description: 'Focus on @arepa/gallery-view',
       },
       reset: {
         script: 'nx g @arepa/plugin-tools:focus-packages',

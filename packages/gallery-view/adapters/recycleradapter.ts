@@ -99,29 +99,3 @@ class ViewHolder extends androidx.recyclerview.widget.RecyclerView.ViewHolder {
     this.radiobtn = view.findViewById(this.idRadioBtn) as android.widget.RadioButton;
   }
 }
-
-@NativeClass()
-export class DividerItemDecoration extends androidx.recyclerview.widget.RecyclerView.ItemDecoration {
-  private dividerHeight: number;
-  private dividerPaint: android.graphics.Paint;
-  constructor(private context: android.content.Context, private _dividerHeight: number) {
-    super();
-    this.dividerHeight = _dividerHeight;
-    this.dividerPaint = new android.graphics.Paint();
-    this.dividerPaint.setColor(new Color('white').android);
-  }
-
-  public onDraw(param0: unknown, param1: unknown, param2?: unknown): void;
-  public onDraw(canvas: android.graphics.Canvas, parent: androidx.recyclerview.widget.RecyclerView, state: androidx.recyclerview.widget.RecyclerView.State): void {
-    const left: number = parent.getPaddingLeft();
-    const right: number = parent.getWidth() - parent.getPaddingRight();
-    const childCount: number = parent.getChildCount();
-    for (let i: number = 0; i < childCount; i++) {
-      const child: android.view.View = parent.getChildAt(i);
-      const params: androidx.recyclerview.widget.RecyclerView.LayoutParams = <androidx.recyclerview.widget.RecyclerView.LayoutParams>child.getLayoutParams();
-      const top: number = child.getBottom() + params.bottomMargin;
-      const bottom: number = top + this.dividerHeight;
-      canvas.drawRect(left, top, right, bottom, this.dividerPaint);
-    }
-  }
-}

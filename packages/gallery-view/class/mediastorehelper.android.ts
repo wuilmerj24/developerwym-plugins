@@ -3,7 +3,7 @@ import { TypeFileShow } from '../enums/typefiles.enums';
 import { MediaStoreData, MediaStoreDataFiles } from '../interfaces/mediastore.interface';
 
 @NativeClass()
-export class MediaStoreHelper {
+export class MediaStoreHelperAndroid {
   // private files: Array<MediaStoreData>=new Array();
   constructor(private context: android.content.Context) {}
 

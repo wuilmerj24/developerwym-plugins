@@ -13,6 +13,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <application android:hardwareAccelerated="true">
-        <activity android:name="com.yalantis.ucrop.UCropActivity" android:screenOrientation="portrait" />
+        <activity android:name="com.canhub.cropper.CropImageActivity" android:theme="@style/Base.Theme.AppCompat" />
     </application>
 </manifest>

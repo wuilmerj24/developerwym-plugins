@@ -1,25 +1,25 @@
-import { AndroidActivityRequestPermissionsEventData, AndroidApplication, Application, Color, Screen, ShowModalOptions, Utils, View, getCurrentPage } from '@nativescript/core';
+import { Color, Frame, GridLayout, Image, GridUnitType, ItemSpec, Screen, TextField, Label, Button, ContainerView, View, ContentView, Utils, StackLayout, GestureTypes, TapGestureEventData, ShowModalOptions, getCurrentPage, AndroidActivityRequestPermissionsEventData, AndroidApplication, Application, ViewBase, EventData } from '@nativescript/core';
 import { CLog, GalleryViewCommon, GetSetProperty } from './common';
-import { ELenguajesSoportados } from './enums/language.enum';
-import { Traductor } from './class/language';
+import { RecyclerViewCustomView } from './class/recyclerviewcustomview.andorid';
+import { ModalAlbunNames } from './class/modal.class';
 import { MediaStoreData } from './interfaces/mediastore.interface';
-import { MediaStoreHelper } from './class/mediastore.android.class';
-import { SpinnerAdapter } from './adapters/spineradapters';
+import { MediaStoreHelperAndroid } from './class/mediastorehelper.android';
+import { ELenguajesSoportados } from './enums/language.enum';
 import { OrientationView } from './enums/orientation.enum';
-import { DividerItemDecoration, RecyclerAdapterMyPluginDeveloper } from './adapters/recycleradapter';
-import { ModalViewPresentarImagen } from './class/modal.android';
-import { UCropImageAndroid } from './class/cropimage.android';
+import { Traductor } from './class/language';
+import { UCropModalAndroid } from './class/modaledit.android';
+import { ModalViewPresentarImagen } from './class/modalpresent.android';
 
 declare var developerwym;
 
 export class GalleryView extends GalleryViewCommon {
-  private rv: androidx.recyclerview.widget.RecyclerView;
-  private rl: android.widget.RelativeLayout;
-  private spinner: android.widget.Spinner;
-  private dataFiles: Array<MediaStoreData>;
-  private header: android.widget.Toolbar;
-  private footer: android.widget.Toolbar;
-  private txtField: android.widget.TextView;
+  private gridMaster: GridLayout;
+  private headerGrid: GridLayout;
+  private footerGrid: GridLayout;
+  private lblAlbunNameSelect: Label;
+  private lblCountSelect: Label;
+  private rv: RecyclerViewCustomView;
+  private dataFiles: Array<MediaStoreData> = new Array();
   @GetSetProperty()
   public language: ELenguajesSoportados;
   @GetSetProperty()
@@ -48,45 +48,81 @@ export class GalleryView extends GalleryViewCommon {
 
   createNativeView(): Object {
     this.currentIdioma = new Traductor(this.language);
-    this.rl = new android.widget.RelativeLayout(this._context);
-    this.rl.setLayoutParams(new android.widget.RelativeLayout.LayoutParams(android.widget.RelativeLayout.LayoutParams.MATCH_PARENT, android.widget.RelativeLayout.LayoutParams.MATCH_PARENT));
+    const gridContenedor: GridLayout = new GridLayout();
+    gridContenedor.backgroundColor = new Color('red');
+    gridContenedor.width = Screen.mainScreen.widthDIPs;
+    gridContenedor.height = Screen.mainScreen.heightDIPs;
+
+    gridContenedor.addRow(new ItemSpec(1, GridUnitType.AUTO));
+    gridContenedor.addRow(new ItemSpec(1, GridUnitType.STAR));
+    gridContenedor.addRow(new ItemSpec(1, GridUnitType.AUTO));
+    this.gridMaster = gridContenedor;
+
     if (this.checkPermisos()) {
-      CLog(`tiene permisos`);
-      // Solo dibuja:
       this.renderUI();
     } else {
-      const txt: android.widget.TextView = new android.widget.TextView(this._context);
-      txt.setTextSize(24);
-      txt.setGravity(android.view.Gravity.CENTER);
-      txt.setText(java.lang.String.valueOf(this.currentIdioma.obtenerTraduccion('msj_permiso')));
-      const textViewParams: android.widget.RelativeLayout.LayoutParams = new android.widget.RelativeLayout.LayoutParams(android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT, android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT);
-      textViewParams.addRule(android.widget.RelativeLayout.CENTER_IN_PARENT);
-
-      this.rl.addView(txt, textViewParams);
+      const msjPermisos: Label = new Label();
+      msjPermisos.text = this.currentIdioma.obtenerTraduccion('msj_permiso');
+      msjPermisos.fontSize = 24;
+      msjPermisos.style.fontWeight = 'bold';
+      msjPermisos.textWrap = true;
+      msjPermisos.color = new Color('white');
+      msjPermisos.rowSpan = 3;
+      msjPermisos.verticalAlignment = 'middle';
+      msjPermisos.horizontalAlignment = 'center';
+      msjPermisos.margin = '10';
+      gridContenedor.addChild(msjPermisos);
       this.solicitarPermiso()
         .then((res) => {
-          this.rl.removeView(txt);
+          gridContenedor.removeChild(msjPermisos);
           this.renderUI();
         })
-        .catch((err) => {
-          CLog('err permisos: ', err);
-        });
+        .catch((err) => {});
     }
-    return this.rl;
+    Frame.topmost()._addView(gridContenedor);
+    return gridContenedor.android;
   }
 
   initNativeView(): void {
     super.initNativeView();
   }
 
-  onLoaded(): void {
-    super.onLoaded();
-  }
+  private renderUI() {
+    const mediaStore = new MediaStoreHelperAndroid(this._context);
+    this.dataFiles = mediaStore.getImagenes();
+    if (this.dataFiles.length <= 0) {
+      const msjNoData: Label = new Label();
+      msjNoData.text = this.currentIdioma.obtenerTraduccion('msj_no_data');
+      msjNoData.fontSize = 24;
+      msjNoData.style.fontWeight = 'bold';
+      msjNoData.textWrap = true;
+      msjNoData.color = new Color('white');
+      msjNoData.rowSpan = 3;
+      msjNoData.verticalAlignment = 'middle';
+      msjNoData.horizontalAlignment = 'center';
+      msjNoData.margin = '10';
+      this.gridMaster.addChild(msjNoData);
+      return;
+    }
 
-  disposeNativeView(): void {
-    super.disposeNativeView();
-    this.rl.removeAllViews();
-    this.rl = null;
+    this.rv = this.createBody();
+    this.rv.row = 1;
+    if (this.orientation == OrientationView.H) {
+      this.height = (Screen.mainScreen.heightDIPs * 24) / 100;
+    } else if (this.orientation == OrientationView.V) {
+      this.height = Screen.mainScreen.heightDIPs;
+    }
+    this.gridMaster.addChild(this.rv);
+    this.headerGrid = this.createHeader();
+
+    if (this.showHeader) {
+      this.gridMaster.addChild(this.headerGrid);
+    }
+
+    this.footerGrid = this.createFooter();
+    if (this.showFooter) {
+      this.gridMaster.addChild(this.footerGrid);
+    }
   }
 
   private checkPermisos(): any {
@@ -146,7 +182,7 @@ export class GalleryView extends GalleryViewCommon {
 
             if (grantedPermissions.some((elemento) => elemento === 'denied')) {
               CLog('se mete en denied');
-              rs(false);
+              rj(false);
             } else if (grantedPermissions.some((elemento) => elemento === 'authorized') || grantedPermissions.some((elemento) => elemento === 'never_ask_again')) {
               CLog('se mete en authorized');
               rs(true);
@@ -160,232 +196,225 @@ export class GalleryView extends GalleryViewCommon {
     });
   }
 
-  private async renderUI() {
+  private createHeader(): GridLayout {
     const ref = new WeakRef(this);
-    const self = this;
-    const mediaStore = new MediaStoreHelper(this._context);
-    this.dataFiles = mediaStore.getImagenes();
 
-    // Creamo el header
-    if (this.showHeader) {
-      this.header = await this.headerToolbar();
-      const layoutParamsHeader: android.widget.RelativeLayout.LayoutParams = new android.widget.RelativeLayout.LayoutParams(android.widget.RelativeLayout.LayoutParams.MATCH_PARENT, android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT);
-      layoutParamsHeader.addRule(android.widget.RelativeLayout.ALIGN_PARENT_TOP);
-      this.header.setBackgroundColor(new Color(this.headerBgColor).android);
-      this.rl.addView(this.header, layoutParamsHeader);
-    }
+    const grid: GridLayout = new GridLayout();
+    grid.addColumn(new ItemSpec(1, GridUnitType.STAR));
+    grid.addColumn(new ItemSpec(1, GridUnitType.AUTO));
+    grid.addColumn(new ItemSpec(1, GridUnitType.AUTO));
+    grid.backgroundColor = new Color(this.headerBgColor);
+    grid.width = Screen.mainScreen.widthDIPs;
+    grid.height = (Screen.mainScreen.heightDIPs * 7) / 100;
+    grid.row = 0;
+    grid.boxShadow = '0px 4px 56px 8px rgba(0,0,0,0.72)';
+    grid.addEventListener(GestureTypes.tap, (args: TapGestureEventData) => {
+      this.openModalAlbunList(args);
+    });
 
-    // Creamos el footer
-    if (this.showFooter) {
-      this.footer = await this.createFooter();
-      const layoutParamsFooter: android.widget.RelativeLayout.LayoutParams = new android.widget.RelativeLayout.LayoutParams(android.widget.RelativeLayout.LayoutParams.MATCH_PARENT, android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT);
-      layoutParamsFooter.addRule(android.widget.RelativeLayout.ALIGN_PARENT_BOTTOM);
-      this.footer.setBackgroundColor(new Color(this.footerBgColor).android);
-      this.rl.addView(this.footer, layoutParamsFooter);
-    }
+    // TextField albunName
+    const txtAlbunName: Label = new Label();
+    txtAlbunName.text = `${this.dataFiles.filter((item) => item.isSelected == true)[0].albunName} (${this.dataFiles.filter((item) => item.isSelected == true)[0].files.length})`;
+    txtAlbunName.fontSize = 20;
+    txtAlbunName.style.fontWeight = 'bold';
+    txtAlbunName.style.paddingLeft = 10;
+    txtAlbunName.col = 0;
+    txtAlbunName.verticalAlignment = 'middle';
+    txtAlbunName.horizontalAlignment = 'left';
+    txtAlbunName.id = 'albunName';
+    txtAlbunName.color = new Color(this.textColor);
+    this.lblAlbunNameSelect = txtAlbunName;
+    grid.addChild(txtAlbunName);
 
-    //Creamos body
-    this.rv = await this.createBodyList();
-    const dividerItemDecoration: DividerItemDecoration = new DividerItemDecoration(this._context, 2);
-    this.rv.addItemDecoration(dividerItemDecoration);
-    this.rv.setLayoutParams(new androidx.recyclerview.widget.RecyclerView.LayoutParams(androidx.recyclerview.widget.RecyclerView.LayoutParams.WRAP_CONTENT, androidx.recyclerview.widget.RecyclerView.LayoutParams.WRAP_CONTENT));
-    const layoutParamsBody: android.widget.RelativeLayout.LayoutParams = new android.widget.RelativeLayout.LayoutParams(android.widget.RelativeLayout.LayoutParams.MATCH_PARENT, android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT);
-    layoutParamsBody.addRule(android.widget.RelativeLayout.BELOW, this.header.getId());
-    layoutParamsBody.addRule(android.widget.RelativeLayout.ABOVE, this.footer.getId());
-    if (this.orientation == OrientationView.H) {
-      this.rv.setLayoutManager(new androidx.recyclerview.widget.LinearLayoutManager(this._context, androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL, false));
-      this.height = (Screen.mainScreen.heightDIPs * 24) / 100;
-    } else if (this.orientation == OrientationView.V) {
-      this.rv.setLayoutManager(new androidx.recyclerview.widget.GridLayoutManager(this._context, 5, androidx.recyclerview.widget.RecyclerView.VERTICAL, false));
-      this.height = Screen.mainScreen.heightDIPs;
-    }
-    this.rv.addOnItemTouchListener(
-      new developerwym.plugins.ns.RecyclerTouchListener(
-        this._context,
-        this.rv,
-        new developerwym.plugins.ns.RecyclerTouchListener.ClickListener({
-          onClick: (view: android.view.View, position: number) => {
-            self.dataFiles[0].files[position].isSelected = !self.dataFiles[0].files[position].isSelected;
-            const current_select: number = self.dataFiles.filter((item) => item.isSelected == true)[0].files.filter((item) => item.isSelected == true).length;
-            if (current_select <= self.selectMax) {
-              const fl_local: android.widget.FrameLayout = view as android.widget.FrameLayout;
-              const radiobtn: android.widget.RadioButton = fl_local.getChildAt(1) as android.widget.RadioButton;
-              if (self.dataFiles[0].files[position].isSelected) {
-                radiobtn.setButtonTintList(android.content.res.ColorStateList.valueOf(new Color('green').android));
-              } else {
-                radiobtn.setButtonTintList(android.content.res.ColorStateList.valueOf(new Color('transparent').android));
-              }
-              radiobtn.setChecked(this.dataFiles[0].files[position].isSelected);
-              self.txtField.setText(`${current_select}/${self.selectMax}`);
-            } else {
-              if (self.debug) {
-                CLog(`Select count max: ${self.selectMax} | current:${current_select}`);
-              }
-              self.dataFiles[0].files[position].isSelected = false;
-            }
-            ref?.get()?.sendEvent(
-              GalleryView.clickEvent,
-              self.dataFiles.filter((item) => item.isSelected == true)[0].files.filter((item) => item.isSelected == true)
-            );
-          },
-          onLongClick: (view: android.view.View, position: number) => {
-            // ref?.get()?.sendEvent(GalleryView.clickEvent, self.dataFiles.filter(item => item.isSelected == true)[0].files.filter(item => item.isSelected == true));
-          },
-        })
-      )
-    );
+    // Label icono
+    const txtIcon: Label = new Label();
+    txtIcon.text = ' ˅ ';
+    txtIcon.color = new Color(this.arrowIconColor);
+    txtIcon.fontSize = 18;
+    txtIcon.style.fontWeight = 'bold';
+    txtIcon.style.paddingLeft = 10;
+    txtIcon.style.paddingRight = 5;
+    txtIcon.col = 1;
+    txtIcon.verticalAlignment = 'middle';
+    txtIcon.horizontalAlignment = 'center';
+    grid.addChild(txtIcon);
 
-    this.rv.addOnScrollListener(
-      new developerwym.plugins.ns.CustomRecyclerView(
-        this._context,
-        this.rv,
-        new developerwym.plugins.ns.CustomRecyclerView.ScrollEvento({
-          onScrolled: (recyclerView: androidx.recyclerview.widget.RecyclerView, dx: number, dy: number) => {
-            ref?.get()?.sendEvent(
-              GalleryView.scrollEvent,
-              self.dataFiles.filter((item) => item.isSelected == true)[0].files.filter((item) => item.isSelected == true)
-            );
-          },
-          onScrollStateChanged: (recyclerView: androidx.recyclerview.widget.RecyclerView, state: number) => {
-            //ref?.get()?.sendEvent(GalleryView.scrollEvent, self.dataFiles.filter(item => item.isSelected == true)[0].files.filter(item => item.isSelected == true));
-          },
-        })
-      )
-    );
+    // Label contador
+    const txtCont: Label = new Label();
+    txtCont.text = `0/${this.selectMax}`;
+    txtCont.fontSize = 18;
+    txtCont.style.fontWeight = 'bold';
+    txtCont.style.paddingLeft = 5;
+    txtCont.style.paddingRight = 20;
+    txtCont.col = 2;
+    txtCont.verticalAlignment = 'middle';
+    txtCont.horizontalAlignment = 'center';
+    this.lblCountSelect = txtCont;
+    grid.addChild(txtCont);
 
-    this.rl.addView(this.rv, layoutParamsBody);
+    return grid;
   }
 
-  private headerToolbar(): android.widget.Toolbar {
-    const toolbar: android.widget.Toolbar = new android.widget.Toolbar(this._context);
-    toolbar.setLayoutParams(new android.widget.Toolbar.LayoutParams(android.widget.Toolbar.LayoutParams.MATCH_PARENT, android.widget.Toolbar.LayoutParams.WRAP_CONTENT));
-    toolbar.setElevation(20);
-    toolbar.setSoundEffectsEnabled(true);
-    toolbar.setId(android.view.View.generateViewId());
+  private createFooter(): GridLayout {
+    const grid: GridLayout = new GridLayout();
+    grid.addColumn(new ItemSpec(1, GridUnitType.STAR));
+    grid.addColumn(new ItemSpec(1, GridUnitType.STAR));
+    grid.backgroundColor = new Color(this.footerBgColor);
+    grid.width = Screen.mainScreen.widthDIPs;
+    grid.height = (Screen.mainScreen.heightDIPs * 6) / 100;
+    grid.row = 2;
+    grid.boxShadow = '2px -10px 27px -11px rgba(0,0,0,1)';
 
-    this.spinner = new android.widget.Spinner(this._context);
-    const spinnerDrawable: android.graphics.drawable.Drawable = this.spinner.getBackground().getConstantState().newDrawable();
-    spinnerDrawable.setColorFilter(new Color(this.arrowIconColor).android, android.graphics.PorterDuff.Mode.SRC_ATOP);
-    const adaptador = new SpinnerAdapter(this.dataFiles, this._context, this.textColor, this.headerBgColor);
-    this.spinner.setAdapter(adaptador);
-    adaptador.notifyDataSetChanged();
-
-    this.spinner.setBackground(spinnerDrawable);
-    this.spinner.setLayoutParams(new android.widget.Spinner.LayoutParams(android.widget.Spinner.LayoutParams.MATCH_PARENT, android.widget.Spinner.LayoutParams.WRAP_CONTENT));
-    this.spinner.setNestedScrollingEnabled(true);
-    this.spinner.setDropDownVerticalOffset(140);
-    this.spinner.setGravity(android.view.Gravity.CENTER_HORIZONTAL);
-    this.spinner.setDropDownWidth(parseInt(Screen.mainScreen.widthPixels.toString()));
-    const self = this;
-    this.spinner.setOnItemSelectedListener(
-      new android.widget.AdapterView.OnItemSelectedListener({
-        onItemSelected(param0: android.widget.AdapterView<any>, param1: android.view.View, position: number, param3: number) {
-          for (let i: number = 0; i < self.dataFiles.length; i++) {
-            self.dataFiles[i].isSelected = false;
-          }
-          self.dataFiles[position].isSelected = !self.dataFiles[position].isSelected;
-          Utils.setTimeout(() => {
-            if (self.rv) {
-              const adaptador: RecyclerAdapterMyPluginDeveloper = new RecyclerAdapterMyPluginDeveloper(self.dataFiles[position].files, OrientationView.V, self.dataFiles[position].albunName);
-              self.rv.setAdapter(adaptador);
-              adaptador.notifyDataSetChanged();
+    const btnEdit: Button = new Button();
+    btnEdit.text = this.currentIdioma.obtenerTraduccion('btn_editar');
+    btnEdit.backgroundColor = new Color('transparent');
+    btnEdit.col = 0;
+    btnEdit.horizontalAlignment = 'center';
+    btnEdit.verticalAlignment = 'middle';
+    btnEdit.androidElevation = 0;
+    btnEdit.color = new Color(this.textColor);
+    btnEdit.borderWidth = 0;
+    btnEdit.addEventListener(GestureTypes.tap, (args: EventData) => {
+      try {
+        // new UCropModalAndroid(this.dataFiles.filter(item => item.isSelected == true), this._context);
+        const self = this;
+        const options: ShowModalOptions = {
+          closeCallback(args) {
+            if (args) {
             }
-          }, 100);
-        },
-        onNothingSelected(param0: android.widget.AdapterView<any>) {},
-      })
-    );
-
-    this.txtField = new android.widget.TextView(this._context);
-    this.txtField.setText(`0/${this.selectMax}`);
-    this.txtField.setLayoutParams(new android.view.ViewGroup.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-    this.txtField.setGravity(android.view.Gravity.CENTER_HORIZONTAL);
-    this.txtField.setWidth(100);
-    this.txtField.setTextSize(16);
-    this.txtField.setTypeface(null, android.graphics.Typeface.BOLD);
-    const leftParams: androidx.appcompat.widget.Toolbar.LayoutParams = new androidx.appcompat.widget.Toolbar.LayoutParams(700, androidx.appcompat.widget.Toolbar.LayoutParams.WRAP_CONTENT, 0.75);
-    const rightParams: androidx.appcompat.widget.Toolbar.LayoutParams = new androidx.appcompat.widget.Toolbar.LayoutParams(300, androidx.appcompat.widget.Toolbar.LayoutParams.WRAP_CONTENT, 0.25);
-    toolbar.addView(this.spinner, leftParams);
-    toolbar.addView(this.txtField, rightParams);
-    return toolbar;
-  }
-
-  private createFooter(): android.widget.Toolbar {
-    const self = this;
-    const toolbar: android.widget.Toolbar = new android.widget.Toolbar(this._context);
-    toolbar.setId(android.view.View.generateViewId());
-    toolbar.setLayoutParams(new android.widget.Toolbar.LayoutParams(android.widget.Toolbar.LayoutParams.MATCH_PARENT, 150));
-    toolbar.setElevation(20);
-    toolbar.setSoundEffectsEnabled(true);
-
-    const linearLayout: android.widget.LinearLayout = new android.widget.LinearLayout(this._context);
-    linearLayout.setOrientation(android.widget.LinearLayout.HORIZONTAL);
-    linearLayout.setLayoutParams(new android.widget.LinearLayout.LayoutParams(android.widget.LinearLayout.LayoutParams.MATCH_PARENT, 150));
-
-    const btnEditar: android.widget.Button = new android.widget.Button(this._context);
-    btnEditar.setText(this.currentIdioma.obtenerTraduccion('btn_editar'));
-    btnEditar.setTextColor(new Color(this.textColor).android);
-    btnEditar.setBackground(null);
-    btnEditar.setOnClickListener(
-      new android.view.View.OnClickListener({
-        onClick(param0) {
-          // new UCropImageAndroid(self.dataFiles.filter(item=>item.isSelected==true),self._context);
-        },
-      })
-    );
-
-    const btnPreview: android.widget.Button = new android.widget.Button(this._context);
-    btnPreview.setText(this.currentIdioma.obtenerTraduccion('btn_presentar'));
-    btnPreview.setBackground(null);
-    btnPreview.setTextColor(new Color(this.textColor).android);
-    btnPreview.setOnClickListener(
-      new android.view.View.OnClickListener({
-        onClick(param0) {
-          if (self.dataFiles[0].files.filter((item) => item.isSelected == true).length > 0) {
-            const options: ShowModalOptions = {
-              closeCallback(...args) {
-                if (args.length > 0) {
-                } else {
-                }
-              },
-              context: {},
-              animated: true,
-              fullscreen: true,
-              stretched: true,
-            };
-            getCurrentPage().showModal(new ModalViewPresentarImagen(self.dataFiles[0].files.filter((item) => item.isSelected == true)), options);
-          }
-        },
-      })
-    );
-
-    const buttonParams: android.widget.LinearLayout.LayoutParams = new android.widget.LinearLayout.LayoutParams(0, android.widget.LinearLayout.LayoutParams.WRAP_CONTENT);
-    buttonParams.weight = 1;
-
-    btnEditar.setLayoutParams(buttonParams);
-    btnPreview.setLayoutParams(buttonParams);
-
+          },
+          context: {},
+          animated: true,
+          fullscreen: true,
+          stretched: true,
+        };
+        // getCurrentPage().showModal(new UCropModalAndroid(this.dataFiles.filter(item => item.isSelected == true)[0].files), options);
+        CLog('NOT READY YET.');
+      } catch (error) {
+        CLog(error);
+      }
+    });
     if (this.edit) {
-      linearLayout.addView(btnEditar);
+      grid.addChild(btnEdit);
     }
 
+    const btnPreview: Button = new Button();
+    btnPreview.text = this.currentIdioma.obtenerTraduccion('btn_presentar');
+    btnPreview.backgroundColor = new Color('transparent');
+    btnPreview.col = 1;
+    btnPreview.horizontalAlignment = 'center';
+    btnPreview.verticalAlignment = 'middle';
+    btnPreview.androidElevation = 0;
+    btnPreview.borderWidth = 0;
+    btnPreview.color = new Color(this.textColor);
+    btnPreview.on('tap', (args: EventData) => {
+      if (this.dataFiles[0].files.filter((item) => item.isSelected == true).length > 0) {
+        const options: ShowModalOptions = {
+          closeCallback(...args) {
+            if (args.length > 0) {
+            } else {
+            }
+          },
+          context: {},
+          animated: true,
+          fullscreen: true,
+          stretched: true,
+        };
+        getCurrentPage().showModal(new ModalViewPresentarImagen(this.dataFiles[0].files.filter((item) => item.isSelected == true)), options);
+      }
+    });
     if (this.preview) {
-      linearLayout.addView(btnPreview);
+      grid.addChild(btnPreview);
     }
-    linearLayout.setBackgroundColor(android.graphics.Color.TRANSPARENT);
-    toolbar.addView(linearLayout);
-    return toolbar;
+
+    return grid;
   }
 
-  private createBodyList(): androidx.recyclerview.widget.RecyclerView {
-    const rv: androidx.recyclerview.widget.RecyclerView = new androidx.recyclerview.widget.RecyclerView(this._context);
-    try {
-      rv.setAddStatesFromChildren(true);
-      rv.setHasTransientState(true);
-      rv.setHasFixedSize(true);
-    } catch (error) {
-      CLog('Error recyclerView ', error);
-    }
+  private createBody(): RecyclerViewCustomView {
+    const ref = new WeakRef(this);
+    const rv: RecyclerViewCustomView = new RecyclerViewCustomView(this._context, this.selectMax, this.orientation, this.dataFiles);
+    Utils.setTimeout(() => {
+      rv.nativeView.addOnItemTouchListener(
+        new developerwym.plugins.ns.RecyclerTouchListener(
+          this._context,
+          rv.nativeView,
+          new developerwym.plugins.ns.RecyclerTouchListener.ClickListener({
+            onClick: (view: android.view.View, position: number) => {
+              this.dataFiles[0].files[position].isSelected = !this.dataFiles[0].files[position].isSelected;
+              CLog(this.dataFiles[0].files[position].file);
+              const current_select: number = this.dataFiles.filter((item) => item.isSelected == true)[0].files.filter((item) => item.isSelected == true).length;
+              if (current_select <= this.selectMax) {
+                const fl_local: android.widget.FrameLayout = view as android.widget.FrameLayout;
+                const radiobtn: android.widget.RadioButton = fl_local.getChildAt(1) as android.widget.RadioButton;
+                if (this.dataFiles[0].files[position].isSelected) {
+                  radiobtn.setButtonTintList(android.content.res.ColorStateList.valueOf(new Color('green').android));
+                } else {
+                  radiobtn.setButtonTintList(android.content.res.ColorStateList.valueOf(new Color('transparent').android));
+                }
+                radiobtn.setChecked(this.dataFiles[0].files[position].isSelected);
+                this.lblCountSelect.text = `${current_select}/${this.selectMax}`;
+              } else {
+                if (this.debug) {
+                  CLog(`Select count max: ${this.selectMax} | current:${current_select}`);
+                }
+                this.dataFiles[0].files[position].isSelected = false;
+              }
+
+              ref?.get()?.sendEvent(
+                GalleryView.clickEvent,
+                this.dataFiles.filter((item) => item.isSelected == true)[0].files.filter((item) => item.isSelected == true)
+              );
+            },
+            onLongClick: (view: android.view.View, position: number) => {
+              // CLog("onLongClick")
+            },
+          })
+        )
+      );
+
+      rv.nativeView.addOnScrollListener(
+        new developerwym.plugins.ns.CustomRecyclerView(
+          this._context,
+          rv.nativeView,
+          new developerwym.plugins.ns.CustomRecyclerView.ScrollEvento({
+            onScrolled: (recyclerView: androidx.recyclerview.widget.RecyclerView, dx: number, dy: number) => {
+              ref?.get()?.sendEvent(
+                GalleryView.scrollEvent,
+                this.dataFiles.filter((item) => item.isSelected == true)[0].files.filter((item) => item.isSelected == true)
+              );
+            },
+            onScrollStateChanged: (recyclerView: androidx.recyclerview.widget.RecyclerView, state: number) => {
+              // CLog("onScrollStateChanged")
+            },
+          })
+        )
+      );
+    }, 500);
     return rv;
+  }
+
+  // abrir modal para mostrar lista de albuns
+  private openModalAlbunList(args: TapGestureEventData) {
+    const self = this;
+    const options: ShowModalOptions = {
+      closeCallback(args) {
+        if (args) {
+          self.dataFiles.filter((item) => item.isSelected == true)[0].isSelected = !self.dataFiles.filter((item) => item.isSelected == true)[0].isSelected;
+          self.dataFiles[parseInt(args.index)].isSelected = !self.dataFiles[parseInt(args.index)].isSelected;
+          self.lblAlbunNameSelect.text = `${self.dataFiles.filter((item) => item.isSelected)[0].albunName} (${self.dataFiles.filter((item) => item.isSelected)[0].files.length})`;
+          self.rv.setDataNew();
+        }
+      },
+      context: {},
+      animated: true,
+      fullscreen: true,
+      stretched: true,
+    };
+    getCurrentPage().showModal(new ModalAlbunNames(this.dataFiles), options);
+  }
+
+  disposeNativeView(): void {
+    super.disposeNativeView();
+    Frame.topmost()._removeView(this.gridMaster);
   }
 }

@@ -5,14 +5,14 @@
   "repository": "<fill-your-repository-here>",
   "dependencies": {
     "@arepa/country-code": "file:../../packages/country-code",
+    "@arepa/gallery-view": "file:../../packages/gallery-view",
     "@arepa/launch-navigator": "file:../../packages/launch-navigator",
     "@arepa/screen-orientation": "file:../../packages/screen-orientation",
+    "@arepa/signal-r": "file:../../packages/signal-r",
     "@arepa/store-update": "file:../../packages/store-update",
     "@arepa/time-range": "file:../../packages/time-range",
     "@nativescript-community/perms": "^2.3.0",
-    "@nativescript/core": "file:../../node_modules/@nativescript/core",
-    "@arepa/gallery-view": "file:../../packages/gallery-view",
-    "@arepa/signal-r": "file:../../packages/signal-r"
+    "@nativescript/core": "file:../../node_modules/@nativescript/core"
   },
   "devDependencies": {
     "@nativescript/android": "~8.4.0",

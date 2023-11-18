@@ -1,17 +1,19 @@
+import { Color, Frame, GridLayout, GridUnitType, ItemSpec, Label, Screen } from '@nativescript/core';
+import { RecyclerViewCustomView } from './class/recyclerviewcustomview.andorid';
 import { GalleryViewCommon, GetSetProperty } from './common';
 import { ELenguajesSoportados } from './enums/language.enum';
 import { OrientationView } from './enums/orientation.enum';
 import { MediaStoreData } from './interfaces/mediastore.interface';
+import { Traductor } from './class/language';
 
 export class GalleryView extends GalleryViewCommon {
-  private cv: UICollectionView;
-  private sv: UIStackView;
-  private spinner: UIPickerView;
-  private dataFiles: Array<MediaStoreData>;
-  private header: UIToolbar;
-  private footer: UIToolbar;
-  private txtField: UILabel;
-
+  private gridMaster: GridLayout;
+  private headerGrid: GridLayout;
+  private footerGrid: GridLayout;
+  private lblAlbunNameSelect: Label;
+  private lblCountSelect: Label;
+  private rv: RecyclerViewCustomView;
+  private dataFiles: Array<MediaStoreData> = new Array();
   @GetSetProperty()
   public language: ELenguajesSoportados;
   @GetSetProperty()
@@ -39,27 +41,26 @@ export class GalleryView extends GalleryViewCommon {
   }
 
   createNativeView(): Object {
-    this.sv = UIStackView.alloc().initWithFrame(CGRectMake(0, 0, 0, 0));
-    this.sv.backgroundColor = UIColor.redColor;
+    this.currentIdioma = new Traductor(this.language);
+    const gridContenedor: GridLayout = new GridLayout();
+    gridContenedor.backgroundColor = new Color('red');
+    gridContenedor.width = Screen.mainScreen.widthDIPs;
+    gridContenedor.height = Screen.mainScreen.heightDIPs;
 
-    return this.sv;
+    gridContenedor.addRow(new ItemSpec(1, GridUnitType.AUTO));
+    gridContenedor.addRow(new ItemSpec(1, GridUnitType.STAR));
+    gridContenedor.addRow(new ItemSpec(1, GridUnitType.AUTO));
+    this.gridMaster = gridContenedor;
+
+    Frame.topmost()._addView(gridContenedor);
+    return gridContenedor.android;
   }
 
   initNativeView(): void {
     super.initNativeView();
   }
 
-  onLoaded(): void {
-    super.onLoaded();
-  }
-
   disposeNativeView(): void {
     super.disposeNativeView();
-  }
-
-  private checkPermisos(): any {}
-
-  private solicitarPermiso(): Promise<any> {
-    q;
   }
 }

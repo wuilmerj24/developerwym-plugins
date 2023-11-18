@@ -14,6 +14,7 @@ export class Traductor {
         btn_terminar: 'Finish',
         btn_editar: 'Edit',
         msj_permiso: 'Permissions are required for this functionality.',
+        msj_no_data: 'Empty',
         // ... otras traducciones en inglés ...
       },
       es: {
@@ -23,6 +24,7 @@ export class Traductor {
         btn_terminar: 'Terminar',
         btn_editar: 'Editar',
         msj_permiso: 'Se requieren permisos para esta funcionalidad.',
+        msj_no_data: 'Vacio.',
         // ... otras traducciones en español ...
       },
       chine: {
@@ -32,6 +34,7 @@ export class Traductor {
         btn_terminar: '完成',
         btn_editar: '编辑',
         msj_permiso: '此功能需要权限。',
+        msj_no_data: '空',
         // ... otras traducciones en chino ...
       },
       russian: {
@@ -41,6 +44,7 @@ export class Traductor {
         btn_terminar: 'Закончить',
         btn_editar: 'Редактировать',
         msj_permiso: 'Для этой функции требуются разрешения.',
+        msj_no_data: 'пустота.',
         // ... otras traducciones en ruso ...
       },
     };

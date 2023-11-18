@@ -7,8 +7,8 @@
     "@arepa/country-code": "file:../../dist/packages/country-code",
     "@arepa/screen-orientation": "file:../../dist/packages/screen-orientation",
     "@arepa/store-update": "file:../../dist/packages/store-update",
-    "@arepa/gallery-view": "file:../../dist/packages/gallery-view",
-    "@arepa/signal-r": "file:../../dist/packages/signal-r"
+    "@arepa/signal-r": "file:../../dist/packages/signal-r",
+    "@arepa/gallery-view": "file:../../dist/packages/gallery-view"
   },
   "devDependencies": {
     "@nativescript/android": "~8.4.0",

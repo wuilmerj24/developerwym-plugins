@@ -1,10 +1,10 @@
-import { ContainerView } from '@nativescript/core';
+import { ContainerView, Observable } from '@nativescript/core';
 import { GalleryView } from '.';
-import { ELenguajesSoportados } from './enums/language.enum';
-import { Traductor } from './class/language';
-import { OrientationView } from './enums/orientation.enum';
-import { MediaStoreData, MediaStoreDataFiles } from './interfaces/mediastore.interface';
 import { EGalleryViewEvents } from './events';
+import { OrientationView } from './enums/orientation.enum';
+import { MediaStoreDataFiles } from './interfaces/mediastore.interface';
+import { Traductor } from './class/language';
+import { ELenguajesSoportados } from './enums/language.enum';
 
 export class GalleryViewUtil {
   public static debug: boolean = false;
@@ -25,6 +25,7 @@ export class GalleryViewCommon extends ContainerView implements GalleryView {
   // EVENTS
   public static scrollEvent = EGalleryViewEvents.OnScrolledEvent;
   public static clickEvent = EGalleryViewEvents.OnClickEvent;
+
   currentIdioma: Traductor;
   // OPCIONES VIEW
   @GetSetProperty()

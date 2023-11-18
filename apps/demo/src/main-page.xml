@@ -11,8 +11,9 @@
 <Button text="country-code" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
 <Button text="screen-orientation" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
 <Button text="store-update" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
-<Button text="gallery-view" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+
 <Button text="signal-r" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+<Button text="gallery-view" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
 
 
 

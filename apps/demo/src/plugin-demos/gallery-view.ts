@@ -4,16 +4,15 @@ import {} from '@arepa/gallery-view';
 
 export function navigatingTo(args: EventData) {
   const page = <Page>args.object;
-  page.actionBarHidden = true;
   page.bindingContext = new DemoModel();
 }
 
-export function onScroll(args) {
-  // console.log("onScroll: ",args.data)
+export function Onscroll(args) {
+  console.log('scroll');
 }
 
 export function Onclick(args) {
-  // console.log("Onclick: ",args.data)
+  console.log('click');
 }
 
 export class DemoModel extends DemoSharedGalleryView {}
