@@ -3,23 +3,25 @@
 		<ActionBar title="gallery-view" icon="" class="action-bar"></ActionBar>
     </Page.actionBar>
     <StackLayout >
-       <gv:GalleryView 
-	   
-	   	debug="true"
-		language="es"
-		showHeader="true"
-		headerBgColor="red"
-		arrowIconColor="green"
-		showFooter="true"
-		footerBgColor="blue"
-		edit="true"
-		preview="true"
-		textColor="yellow"
-		selectMax="5"
-		
-		orientation="vertical"
-		scroll="Onscroll"
-		click="Onclick"
+       	<gv:GalleryView 
+			width="100%"
+			height="100%"
+			backgroundColor="green"
+			debug="true"
+			language="es"
+			showHeader="true"
+			headerBgColor="red"
+			arrowIconColor="green"
+			showFooter="true"
+			footerBgColor="blue"
+			edit="true"
+			preview="true"
+			textColor="yellow"
+			selectMax="5"
+			
+			orientation="vertical"
+			scroll="Onscroll"
+			click="Onclick"
 	   />
     </StackLayout>
 </Page>

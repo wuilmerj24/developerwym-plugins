@@ -152,6 +152,20 @@ module.exports = {
           description: '@arepa/gallery-view: Build',
         },
       },
+      // @arepa/package
+      package: {
+        build: {
+          script: 'nx run package:build.all',
+          description: '@arepa/package: Build',
+        },
+      },
+      // @arepa/test-galeria
+      'test-galeria': {
+        build: {
+          script: 'nx run test-galeria:build.all',
+          description: '@arepa/test-galeria: Build',
+        },
+      },
       'build-all': {
         script: 'nx run-many --target=build.all --all',
         description: 'Build all packages',
@@ -213,6 +227,14 @@ module.exports = {
       'gallery-view': {
         script: 'nx run gallery-view:focus',
         description: 'Focus on @arepa/gallery-view',
+      },
+      package: {
+        script: 'nx run package:focus',
+        description: 'Focus on @arepa/package',
+      },
+      'test-galeria': {
+        script: 'nx run test-galeria:focus',
+        description: 'Focus on @arepa/test-galeria',
       },
       reset: {
         script: 'nx g @arepa/plugin-tools:focus-packages',
