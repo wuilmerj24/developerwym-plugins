@@ -8,11 +8,11 @@ export function navigatingTo(args: EventData) {
 }
 
 export function Onscroll(args) {
-  console.log('scroll');
+  console.log('scroll view', args.data);
 }
 
 export function Onclick(args) {
-  console.log('click');
+  console.log('click view', args.data);
 }
 
 export class DemoModel extends DemoSharedGalleryView {}

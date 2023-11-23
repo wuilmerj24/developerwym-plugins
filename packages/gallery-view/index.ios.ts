@@ -9,7 +9,7 @@ import { getCurrentActivity } from '@nativescript/core/utils/android';
 import { MediaStoreHelperAndroid } from './class/mediastorehelper.android';
 import { TypeFileShow } from './enums/typefiles.enums';
 import { MediaStoreHelperIos } from './class/mediastorehelper.ios';
-import { CollectionViewGaleria } from './class/uicollectionview.ios';
+import { CollectionViewGaleria, CustomCollectionViewDataSourceDelegate, CustomCollectionViewDelegate } from './class/uicollectionview.ios';
 
 export class GalleryView extends GalleryViewCommon {
   private gridMaster: GridLayout;
@@ -18,6 +18,7 @@ export class GalleryView extends GalleryViewCommon {
   private lblAlbunNameSelect: Label;
   private lblCountSelect: Label;
   private rv: CollectionViewGaleria;
+  private adaptador;
   // eslint-disable-next-line @typescript-eslint/no-array-constructor
   private dataFiles: Array<MediaStoreData> = new Array();
   @GetSetProperty()
@@ -355,8 +356,22 @@ export class GalleryView extends GalleryViewCommon {
   }
 
   private createBody(): CollectionViewGaleria {
-    const cv: CollectionViewGaleria = new CollectionViewGaleria(this.dataFiles);
+    const cv: CollectionViewGaleria = new CollectionViewGaleria(this.dataFiles, this.orientation);
     cv.row = 1;
+    if (this.orientation == OrientationView.H) {
+      this.gridMaster.height = (Screen.mainScreen.heightDIPs * 20) / 100;
+    }
+    Utils.setTimeout(() => {
+      try {
+        this.adaptador = new CustomCollectionViewDataSourceDelegate(this.dataFiles.filter((item) => item.isSelected == true)[0].files, this.orientation);
+        const delegate = new CustomCollectionViewDelegate(this.dataFiles.filter((item) => item.isSelected == true)[0].files, this);
+        cv.nativeView.dataSource = this.adaptador;
+        cv.nativeView.delegate = delegate;
+        cv.nativeView.reloadData();
+      } catch (error) {
+        CLog('err ', error);
+      }
+    }, 500);
     return cv;
   }
 }

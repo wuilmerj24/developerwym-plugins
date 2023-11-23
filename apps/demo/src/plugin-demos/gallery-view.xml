@@ -19,7 +19,7 @@
 			textColor="yellow"
 			selectMax="5"
 			
-			orientation="vertical"
+			orientation="horizontal"
 			scroll="Onscroll"
 			click="Onclick"
 	   />
