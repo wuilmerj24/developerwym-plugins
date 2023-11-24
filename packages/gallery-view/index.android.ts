@@ -9,6 +9,7 @@ import { OrientationView } from './enums/orientation.enum';
 import { Traductor } from './class/language';
 import { UCropModalAndroid } from './class/modaledit.android';
 import { ModalViewPresentarImagen } from './class/modalpresent.android';
+import { start } from '@nativescript/core/profiling';
 
 declare var developerwym;
 
@@ -47,6 +48,7 @@ export class GalleryView extends GalleryViewCommon {
   }
 
   createNativeView(): Object {
+    const that = this;
     this.currentIdioma = new Traductor(this.language);
     const gridContenedor: GridLayout = new GridLayout();
     gridContenedor.backgroundColor = new Color('red');
@@ -59,7 +61,20 @@ export class GalleryView extends GalleryViewCommon {
     this.gridMaster = gridContenedor;
 
     if (this.checkPermisos()) {
-      this.renderUI();
+      const hilo: java.lang.Thread = new java.lang.Thread(
+        new java.lang.Runnable({
+          run() {
+            Application.android.foregroundActivity.runOnUiThread(
+              new java.lang.Runnable({
+                run() {
+                  that.renderUI();
+                },
+              })
+            );
+          },
+        })
+      );
+      hilo.start();
     } else {
       const msjPermisos: Label = new Label();
       msjPermisos.text = this.currentIdioma.obtenerTraduccion('msj_permiso');
@@ -77,7 +92,9 @@ export class GalleryView extends GalleryViewCommon {
           gridContenedor.removeChild(msjPermisos);
           this.renderUI();
         })
-        .catch((err) => {});
+        .catch((err) => {
+          CLog('Error ', err);
+        });
     }
     Frame.topmost()._addView(gridContenedor);
     return gridContenedor.android;
