@@ -32,7 +32,9 @@
       "@arepa/store-update": ["packages/store-update/index.d.ts"],
       "@arepa/gallery-view": ["packages/gallery-view/index.d.ts"],
       "@arepa/media-picker": ["packages/media-picker/index.d.ts"],
-      "@arepa/signal-r": ["packages/signal-r/index.d.ts"]
+      "@arepa/signal-r": ["packages/signal-r/index.d.ts"],
+      "@arepa/package": ["packages/package/index.d.ts"],
+      "@arepa/test-galeria": ["packages/test-galeria/index.d.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
