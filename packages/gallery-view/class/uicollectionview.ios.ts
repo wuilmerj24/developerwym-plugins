@@ -33,12 +33,7 @@ export class CollectionViewGaleria extends View {
 
       this._collectionView = UICollectionView.alloc().initWithFrameCollectionViewLayout(size, this.layoutUICollection);
       this._collectionView.registerClassForCellWithReuseIdentifier(UICollectionViewCell.class(), 'MyCell');
-
-      // this.dataSource = new CustomCollectionViewDataSourceDelegate(this.files.filter((item) => item.isSelected == true)[0].files,this.orientacion);
-      // const delegate = new CustomCollectionViewDelegate(this.files.filter((item) => item.isSelected == true)[0].files);
-      // this._collectionView.dataSource = this.dataSource;
-      // this._collectionView.delegate = delegate;
-      // this._collectionView.reloadData();
+      this._collectionView.userInteractionEnabled = true;
       this.nativeView = this._collectionView;
       this._collectionView.autoresizesSubviews = true;
       this._collectionView.autoresizingMask = UIViewAutoresizing.FlexibleHeight;
@@ -124,13 +119,11 @@ export class CustomCollectionViewDelegate extends NSObject implements UICollecti
   collectionViewDidSelectItemAtIndexPath(collectionView: UICollectionView, indexPath: NSIndexPath) {
     // Handle item selection
     try {
-      for (let i = 0; i < this.files.length; i++) {
-        this.files[i].isSelected = false;
-      }
-      this.files[indexPath.row].isSelected = true;
+      const index: number = indexPath.indexAtPosition(indexPath.row);
+      this.files[index].isSelected = !this.files[index].isSelected;
       const selectedItem = collectionView.cellForItemAtIndexPath(indexPath);
       const imageView = selectedItem.contentView.subviews[1] as UIImageView;
-      if (this.files[indexPath.row].isSelected == true) {
+      if (this.files[index].isSelected == true) {
         imageView.tintColor = UIColor.greenColor;
       } else {
         imageView.tintColor = UIColor.clearColor;
@@ -139,14 +132,14 @@ export class CustomCollectionViewDelegate extends NSObject implements UICollecti
         GalleryView.clickEvent,
         this.files.filter((item) => item.isSelected == true)
       );
-      // CLog('click ', indexPath);
+      CLog('click ', indexPath);
     } catch (error) {
       CLog('Error ', error);
     }
   }
 
   scrollViewDidScroll(scrollView: UIScrollView): void {
-    // CLog('scroll', scrollView.dragging || scrollView.decelerating);
+    CLog('scroll', scrollView.dragging || scrollView.decelerating);
     try {
       this.owner.sendEvent(
         GalleryView.scrollEvent,

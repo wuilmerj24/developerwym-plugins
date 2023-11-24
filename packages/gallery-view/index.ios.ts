@@ -1,15 +1,14 @@
 import { Button, Color, Device, EventData, Frame, GestureTypes, GridLayout, GridUnitType, ItemSpec, Label, Page, Screen, ShowModalOptions, TapGestureEventData, Utils, getCurrentPage } from '@nativescript/core';
-import { RecyclerViewCustomView } from './class/recyclerviewcustomview.andorid';
 import { CLog, GalleryViewCommon, GetSetProperty } from './common';
 import { ELenguajesSoportados } from './enums/language.enum';
 import { OrientationView } from './enums/orientation.enum';
 import { MediaStoreData, MediaStoreDataFiles } from './interfaces/mediastore.interface';
 import { Traductor } from './class/language';
-import { getCurrentActivity } from '@nativescript/core/utils/android';
-import { MediaStoreHelperAndroid } from './class/mediastorehelper.android';
 import { TypeFileShow } from './enums/typefiles.enums';
 import { MediaStoreHelperIos } from './class/mediastorehelper.ios';
 import { CollectionViewGaleria, CustomCollectionViewDataSourceDelegate, CustomCollectionViewDelegate } from './class/uicollectionview.ios';
+import { ModalViewPresentarImagen } from './class/modalpresent.ios';
+import { ModalAlbunNames } from './class/modal.class';
 
 export class GalleryView extends GalleryViewCommon {
   private gridMaster: GridLayout;
@@ -237,7 +236,7 @@ export class GalleryView extends GalleryViewCommon {
     grid.row = 0;
     grid.boxShadow = '0px 4px 56px 8px rgba(0,0,0,0.72)';
     grid.addEventListener(GestureTypes.tap, (args: TapGestureEventData) => {
-      // this.openModalAlbunList(args);
+      this.openModalAlbunList(args);
     });
 
     // TextField albunName
@@ -346,6 +345,7 @@ export class GalleryView extends GalleryViewCommon {
           stretched: true,
         };
         // getCurrentPage().showModal(new ModalViewPresentarImagen(this.dataFiles[0].files.filter((item) => item.isSelected == true)), options);
+        getCurrentPage().showModal(new ModalViewPresentarImagen(this.dataFiles[0].files.filter((item) => item.isSelected == true)), options);
       }
     });
     if (this.preview) {
@@ -373,5 +373,39 @@ export class GalleryView extends GalleryViewCommon {
       }
     }, 500);
     return cv;
+  }
+
+  // abrir modal para mostrar lista de albuns
+  private openModalAlbunList(args: TapGestureEventData) {
+    const self = this;
+    const options: ShowModalOptions = {
+      closeCallback(args) {
+        if (args) {
+          for (let i = 0; i < self.dataFiles.length; i++) {
+            self.dataFiles[i].isSelected = false;
+            for (let j = 0; j < self.dataFiles[i].files.length; j++) {
+              self.dataFiles[i].files[j].isSelected = false;
+            }
+          }
+          self.dataFiles[parseInt(args.index)].isSelected = !self.dataFiles[parseInt(args.index)].isSelected;
+          self.adaptador = null;
+          self.adaptador = new CustomCollectionViewDataSourceDelegate(self.dataFiles.filter((item) => item.isSelected == true)[0].files, self.orientation);
+          const delegate = new CustomCollectionViewDelegate(self.dataFiles.filter((item) => item.isSelected == true)[0].files, self);
+          self.rv.nativeView.dataSource = null;
+          self.rv.nativeView.delegate = null;
+          self.rv.nativeView.reloadData();
+          Utils.setTimeout(() => {
+            self.rv.nativeView.dataSource = self.adaptador;
+            self.rv.nativeView.delegate = delegate;
+            self.rv.nativeView.reloadData();
+          }, 1000);
+        }
+      },
+      context: {},
+      animated: true,
+      fullscreen: true,
+      stretched: true,
+    };
+    getCurrentPage().showModal(new ModalAlbunNames(this.dataFiles), options);
   }
 }
