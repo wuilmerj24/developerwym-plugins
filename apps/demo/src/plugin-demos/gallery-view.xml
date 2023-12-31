@@ -1,27 +1,24 @@
 <Page xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:gv="@arepa/gallery-view" navigatingTo="navigatingTo" class="page">
-  <Page.actionBar>
-		<ActionBar title="gallery-view" icon="" class="action-bar"></ActionBar>
+    <Page.actionBar>
+        <ActionBar title="gallery-view" icon="" class="action-bar">
+        </ActionBar>
     </Page.actionBar>
-    <StackLayout >
-       	<gv:GalleryView 
-			width="100%"
-			height="100%"
-			backgroundColor="green"
-			debug="true"
-			language="es"
-			showHeader="true"
-			headerBgColor="red"
-			arrowIconColor="green"
-			showFooter="true"
-			footerBgColor="blue"
-			edit="true"
-			preview="true"
-			textColor="yellow"
-			selectMax="5"
-			
-			orientation="horizontal"
-			scroll="Onscroll"
-			click="Onclick"
-	   />
+    <StackLayout class="p-20">
+      <gv:GalleryView 
+        debug="true" 
+        language="en" 
+        showHeader="true"
+        headerBgColor="red"
+        arrowIconColor="green"
+        selectMax="10"
+        showFooter="true"
+        footerBgColor="green"
+        edit="true"
+        preview="true"
+        fontColor="blue"
+        orientation="vertical"
+        scroll="onScroll"
+        click="onClick"
+      />
     </StackLayout>
 </Page>

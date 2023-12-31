@@ -1,13 +1,13 @@
-import { Button, Color, EventData, GridLayout, GridUnitType, ItemSpec, Label, Screen, View } from '@nativescript/core';
-import { MediaStoreDataFiles } from '../interfaces/mediastore.interface';
+import { Button, Color, EventData, GridLayout, GridUnitType, ItemSpec, Label, View, Screen, Utils, Image } from '@nativescript/core';
+import { GaleriaViewAlbumnsData } from '../class/data.imagenes.class';
 import { CLog } from '../common';
 
-let position_global: number = 1;
-let lbl: Label;
-
-export class ModalViewPresentarImagen extends GridLayout {
-  constructor(private files: Array<MediaStoreDataFiles>) {
+export class ModalPreviewImagesForAndroid extends GridLayout {
+  private posicion: number = 1;
+  private titulo: Label;
+  constructor(private files: Array<GaleriaViewAlbumnsData>) {
     super();
+    this.backgroundColor = new Color('black');
     this.configureActionBar();
     this.configureData();
   }
@@ -17,32 +17,31 @@ export class ModalViewPresentarImagen extends GridLayout {
     this.addRow(new ItemSpec(1, GridUnitType.STAR));
     this.addRow(new ItemSpec(1, GridUnitType.AUTO));
     const actionBar: GridLayout = new GridLayout();
+    actionBar.marginTop = 5;
     actionBar.addColumn(new ItemSpec(1, GridUnitType.AUTO));
     actionBar.addColumn(new ItemSpec(1, GridUnitType.STAR));
     actionBar.row = 0;
-    actionBar.backgroundColor = new Color('#F4F4F4');
-    const btnBack: Button = new Button();
+    actionBar.backgroundColor = new Color('black');
+    const btnBack: Image = new Image();
     btnBack.col = 0;
-    btnBack.text = 'X';
-    btnBack.backgroundColor = '#F4F4F4';
+    btnBack.src = 'res://baseline_close_24';
     btnBack.androidElevation = -1;
-    btnBack.boxShadow = 'transparent';
     btnBack.color = new Color('#FFFFFF');
+    btnBack.width = 32;
+    btnBack.height = 32;
     btnBack.on('tap', (args: EventData) => {
       this.closeModal();
     });
     actionBar.addChild(btnBack);
 
-    lbl = new Label();
-    lbl.text = `${position_global}/${this.files.length}`;
-    lbl.col = 1;
-    lbl.color = new Color('#FFFFFF');
-    lbl.fontSize = 16;
-    lbl.style.fontWeight = 'bold';
-    lbl.textWrap = true;
-    lbl.verticalAlignment = 'middle';
-    lbl.horizontalAlignment = 'center';
-    actionBar.addChild(lbl);
+    this.titulo = new Label();
+    this.titulo.text = `${this.posicion}/${this.files.length}`;
+    this.titulo.fontSize = 20;
+    this.titulo.style.fontWeight = 'bold';
+    this.titulo.verticalAlignment = 'middle';
+    this.titulo.horizontalAlignment = 'center';
+    this.titulo.col = 1;
+    actionBar.addChild(this.titulo);
 
     this.addChild(actionBar);
   }
@@ -53,12 +52,25 @@ export class ModalViewPresentarImagen extends GridLayout {
     viewpager2.width = Screen.mainScreen.widthDIPs;
     viewpager2.height = Screen.mainScreen.heightDIPs;
     this.addChild(viewpager2);
+    const self = this;
+    Utils.setTimeout(() => {
+      viewpager2.nativeView.registerOnPageChangeCallback(
+        new PageChangeCallbackEvent({
+          onPageScrolled(position, positionOffset, positionOffsetPixels) {},
+          onPageScrollStateChanged(position) {},
+          onPageSelected(position) {
+            self.posicion = 1 + position;
+            self.titulo.text = `${self.posicion}/${self.files.length}`;
+          },
+        })
+      );
+    }, 200);
   }
 }
 
 class ViewPager2DeveloperwymPlugin extends View {
   private viewpager2: androidx.viewpager2.widget.ViewPager2;
-  constructor(private files: Array<MediaStoreDataFiles>) {
+  constructor(private files: Array<GaleriaViewAlbumnsData>) {
     super();
   }
 
@@ -69,23 +81,28 @@ class ViewPager2DeveloperwymPlugin extends View {
     this.viewpager2.setAdapter(adaptador);
     this.viewpager2.setOrientation(androidx.viewpager2.widget.ViewPager2.ORIENTATION_HORIZONTAL);
     const that = this;
-    this.viewpager2.registerOnPageChangeCallback(
-      new PageChangeCallbackEvent({
-        onPageScrolled(position, positionOffset, positionOffsetPixels) {},
-        onPageScrollStateChanged(position) {},
-        onPageSelected(position) {
-          position_global = position;
-          lbl.text = `${position_global + 1}/${that.files.length}`;
-        },
-      })
-    );
+    // this.viewpager2.registerOnPageChangeCallback(
+    //     new PageChangeCallbackEvent({
+    //         onPageScrolled(position, positionOffset, positionOffsetPixels) { },
+    //         onPageScrollStateChanged(position) { },
+    //         onPageSelected(position) {
+    //         },
+    //     })
+    // );
+    this.nativeView = this.viewpager2;
     return this.viewpager2;
+  }
+  get nativeView(): androidx.viewpager2.widget.ViewPager2 {
+    return this.viewpager2;
+  }
+  set nativeView(value: androidx.viewpager2.widget.ViewPager2) {
+    this.setNativeView(value);
   }
 }
 
 @NativeClass()
 export class ViewPager2AdapterPluginsDeveloperwym extends androidx.recyclerview.widget.RecyclerView.Adapter<androidx.recyclerview.widget.RecyclerView.ViewHolder> {
-  constructor(private files: Array<MediaStoreDataFiles>) {
+  constructor(private files: Array<GaleriaViewAlbumnsData>) {
     super();
   }
 

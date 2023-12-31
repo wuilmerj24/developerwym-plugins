@@ -1,26 +1,22 @@
-import { Color, Frame, GridLayout, Image, GridUnitType, ItemSpec, Screen, TextField, Label, Button, ContainerView, View, ContentView, Utils, StackLayout, GestureTypes, TapGestureEventData, ShowModalOptions, getCurrentPage, AndroidActivityRequestPermissionsEventData, AndroidApplication, Application, ViewBase, EventData } from '@nativescript/core';
+import { Button, GestureTypes, GridLayout, GridUnitType, Image, ItemSpec, Label, RootLayout, ShowModalOptions, TapGestureEventData, getCurrentPage } from '@nativescript/core/ui';
 import { CLog, GalleryViewCommon, GetSetProperty } from './common';
-import { RecyclerViewCustomView } from './class/recyclerviewcustomview.andorid';
-import { ModalAlbunNames } from './class/modal.class';
-import { MediaStoreData } from './interfaces/mediastore.interface';
-import { MediaStoreHelperAndroid } from './class/mediastorehelper.android';
-import { ELenguajesSoportados } from './enums/language.enum';
+import { ELenguajesSoportados } from './enums/idiomas.enum';
 import { OrientationView } from './enums/orientation.enum';
-import { Traductor } from './class/language';
-import { UCropModalAndroid } from './class/modaledit.android';
-import { ModalViewPresentarImagen } from './class/modalpresent.android';
-import { start } from '@nativescript/core/profiling';
+import { GaleriaViewAlbumns, GaleriaViewAlbumnsData } from './class/data.imagenes.class';
+import { Application, AndroidActivityRequestPermissionsEventData, AndroidApplication, Screen, Color, EventData, CoreTypes, Utils } from '@nativescript/core';
+import { Idioma } from './class/idioma.class';
+import { MediaStoreHelperAndroid } from './class/mediastorehelper.android';
+import { ImageViewNativoAndroid } from './views/image.android';
+import { ModalAlbuns } from './views/modal.albuns';
+import { ListaView } from './views/lista.android';
+import { TipoFile } from './enums/tipofile.enum';
+import { RecyclerAdapterMyPluginDeveloper } from './adaptadores/adaptador.android';
+import { BotonForAndroid } from './views/boton.android';
+import { ModalPreviewImagesForAndroid } from './views/modal.preview.android';
 
 declare var developerwym;
 
 export class GalleryView extends GalleryViewCommon {
-  private gridMaster: GridLayout;
-  private headerGrid: GridLayout;
-  private footerGrid: GridLayout;
-  private lblAlbunNameSelect: Label;
-  private lblCountSelect: Label;
-  private rv: RecyclerViewCustomView;
-  private dataFiles: Array<MediaStoreData> = new Array();
   @GetSetProperty()
   public language: ELenguajesSoportados;
   @GetSetProperty()
@@ -40,106 +36,60 @@ export class GalleryView extends GalleryViewCommon {
   @GetSetProperty()
   public preview: boolean;
   @GetSetProperty()
-  public textColor: string;
+  public fontColor: string;
   @GetSetProperty()
   public orientation: OrientationView;
+  // VARIABLES LOCALES
+  private gridMaster: GridLayout;
+  private headerGrid: GridLayout;
+  private footerGrid: GridLayout;
+  private bodyView: ListaView;
+  private lblAlbunNameSelect: Label;
+  private lblCountSelect: Label;
+  private files: Array<GaleriaViewAlbumns> = new Array();
+  private rootLayout: RootLayout;
+
   constructor() {
     super();
   }
 
   createNativeView(): Object {
-    const that = this;
-    this.currentIdioma = new Traductor(this.language);
-    const gridContenedor: GridLayout = new GridLayout();
-    gridContenedor.backgroundColor = new Color('red');
-    gridContenedor.width = Screen.mainScreen.widthDIPs;
-    gridContenedor.height = Screen.mainScreen.heightDIPs;
-
-    gridContenedor.addRow(new ItemSpec(1, GridUnitType.AUTO));
-    gridContenedor.addRow(new ItemSpec(1, GridUnitType.STAR));
-    gridContenedor.addRow(new ItemSpec(1, GridUnitType.AUTO));
-    this.gridMaster = gridContenedor;
+    this.currentIdioma = new Idioma(this.language);
+    this.gridMaster = new GridLayout();
+    this.gridMaster.width = Screen.mainScreen.widthDIPs;
+    this.gridMaster.height = Screen.mainScreen.heightDIPs;
+    this.gridMaster.addRow(new ItemSpec(1, GridUnitType.AUTO));
+    this.gridMaster.addRow(new ItemSpec(1, GridUnitType.STAR));
+    this.gridMaster.addRow(new ItemSpec(1, GridUnitType.AUTO));
 
     if (this.checkPermisos()) {
-      const hilo: java.lang.Thread = new java.lang.Thread(
-        new java.lang.Runnable({
-          run() {
-            Application.android.foregroundActivity.runOnUiThread(
-              new java.lang.Runnable({
-                run() {
-                  that.renderUI();
-                },
-              })
-            );
-          },
-        })
-      );
-      hilo.start();
+      this.renderUI();
     } else {
       const msjPermisos: Label = new Label();
       msjPermisos.text = this.currentIdioma.obtenerTraduccion('msj_permiso');
       msjPermisos.fontSize = 24;
       msjPermisos.style.fontWeight = 'bold';
       msjPermisos.textWrap = true;
-      msjPermisos.color = new Color('white');
+      msjPermisos.color = new Color(this.fontColor);
       msjPermisos.rowSpan = 3;
       msjPermisos.verticalAlignment = 'middle';
       msjPermisos.horizontalAlignment = 'center';
       msjPermisos.margin = '10';
-      gridContenedor.addChild(msjPermisos);
+      this.gridMaster.addChild(msjPermisos);
       this.solicitarPermiso()
         .then((res) => {
-          gridContenedor.removeChild(msjPermisos);
-          this.renderUI();
+          CLog('res: ', res);
+          if (res) {
+            this.gridMaster.removeChild(msjPermisos);
+            this.renderUI();
+          }
         })
         .catch((err) => {
           CLog('Error ', err);
         });
     }
-    Frame.topmost()._addView(gridContenedor);
-    return gridContenedor.android;
-  }
-
-  initNativeView(): void {
-    super.initNativeView();
-  }
-
-  private renderUI() {
-    const mediaStore = new MediaStoreHelperAndroid(this._context);
-    this.dataFiles = mediaStore.getImagenes();
-    if (this.dataFiles.length <= 0) {
-      const msjNoData: Label = new Label();
-      msjNoData.text = this.currentIdioma.obtenerTraduccion('msj_no_data');
-      msjNoData.fontSize = 24;
-      msjNoData.style.fontWeight = 'bold';
-      msjNoData.textWrap = true;
-      msjNoData.color = new Color('white');
-      msjNoData.rowSpan = 3;
-      msjNoData.verticalAlignment = 'middle';
-      msjNoData.horizontalAlignment = 'center';
-      msjNoData.margin = '10';
-      this.gridMaster.addChild(msjNoData);
-      return;
-    }
-
-    this.rv = this.createBody();
-    this.rv.row = 1;
-    if (this.orientation == OrientationView.H) {
-      this.height = (Screen.mainScreen.heightDIPs * 24) / 100;
-    } else if (this.orientation == OrientationView.V) {
-      this.height = Screen.mainScreen.heightDIPs;
-    }
-    this.gridMaster.addChild(this.rv);
-    this.headerGrid = this.createHeader();
-
-    if (this.showHeader) {
-      this.gridMaster.addChild(this.headerGrid);
-    }
-
-    this.footerGrid = this.createFooter();
-    if (this.showFooter) {
-      this.gridMaster.addChild(this.footerGrid);
-    }
+    this.page.content = this.gridMaster;
+    return this.gridMaster.android;
   }
 
   private checkPermisos(): any {
@@ -200,7 +150,7 @@ export class GalleryView extends GalleryViewCommon {
             if (grantedPermissions.some((elemento) => elemento === 'denied')) {
               CLog('se mete en denied');
               rj(false);
-            } else if (grantedPermissions.some((elemento) => elemento === 'authorized') || grantedPermissions.some((elemento) => elemento === 'never_ask_again')) {
+            } else if (grantedPermissions.some((elemento) => elemento === 'authorized')) {
               CLog('se mete en authorized');
               rs(true);
             }
@@ -213,9 +163,43 @@ export class GalleryView extends GalleryViewCommon {
     });
   }
 
-  private createHeader(): GridLayout {
-    const ref = new WeakRef(this);
+  initNativeView(): void {
+    super.initNativeView();
+  }
 
+  private async renderUI() {
+    const mediaStore = new MediaStoreHelperAndroid(Application.android.foregroundActivity);
+    this.files = mediaStore.getImagenes();
+    await this.sleep(100);
+
+    // creamos el body
+    this.bodyView = await this.createBody();
+    this.gridMaster.addChild(this.bodyView);
+
+    // creamos la cabecera
+    if (this.showHeader) {
+      this.headerGrid = this.createHeader();
+      this.gridMaster.addChild(this.headerGrid);
+    }
+
+    // creamos la footer
+    if (this.showFooter) {
+      this.footerGrid = this.createFooter();
+      this.gridMaster.addChild(this.footerGrid);
+    }
+
+    this.rootLayout = new RootLayout();
+
+    this.rootLayout.width = Screen.mainScreen.widthDIPs;
+    this.rootLayout.height = Screen.mainScreen.heightDIPs;
+    this.rootLayout.isPassThroughParentEnabled = true;
+    this.rootLayout.isUserInteractionEnabled = true;
+    this.rootLayout.rowSpan = 3;
+    this.rootLayout.verticalAlignment = 'bottom';
+    this.gridMaster.addChild(this.rootLayout);
+  }
+
+  private createHeader(): GridLayout {
     const grid: GridLayout = new GridLayout();
     grid.addColumn(new ItemSpec(1, GridUnitType.STAR));
     grid.addColumn(new ItemSpec(1, GridUnitType.AUTO));
@@ -225,13 +209,47 @@ export class GalleryView extends GalleryViewCommon {
     grid.height = (Screen.mainScreen.heightDIPs * 7) / 100;
     grid.row = 0;
     grid.boxShadow = '0px 4px 56px 8px rgba(0,0,0,0.72)';
-    grid.addEventListener(GestureTypes.tap, (args: TapGestureEventData) => {
-      this.openModalAlbunList(args);
+    grid.on(GestureTypes.tap, (args: TapGestureEventData) => {
+      this.rootLayout
+        .open(new ModalAlbuns(this.files, this.rootLayout), {
+          shadeCover: {
+            color: '#FFF',
+            opacity: 0.7,
+            tapToClose: true,
+          },
+          animation: {
+            enterFrom: {
+              translateY: 500,
+              duration: 300,
+              curve: CoreTypes.AnimationCurve.cubicBezier(0.17, 0.89, 0.24, 1.11),
+            },
+            exitTo: {
+              translateY: 500,
+              duration: 300,
+              curve: CoreTypes.AnimationCurve.cubicBezier(0.17, 0.89, 0.24, 1.11),
+            },
+          },
+        })
+        .then((res) => {
+          CLog(res);
+          this.rootLayout.once('closedRootL', (args: any) => {
+            CLog('se ejecuto el evento ', args.data);
+            if (args.data != null || args.data != undefined) {
+              this.files[parseInt(args.data.oldIndex)].isSelected = false;
+              this.files[parseInt(args.data.index)].isSelected = !this.files[parseInt(args.data.index)].isSelected;
+              this.lblAlbunNameSelect.text = `${this.files[parseInt(args.data.index)].albunName} (${this.files[parseInt(args.data.index)].files.length})`;
+              this.bodyView.adaptador = this.files.filter((item) => item.isSelected === true)[0].files;
+            }
+          });
+        })
+        .catch((er) => {
+          CLog(er);
+        });
     });
 
     // TextField albunName
     const txtAlbunName: Label = new Label();
-    txtAlbunName.text = `${this.dataFiles.filter((item) => item.isSelected == true)[0].albunName} (${this.dataFiles.filter((item) => item.isSelected == true)[0].files.length})`;
+    txtAlbunName.text = `${this.files.filter((item) => item.isSelected == true)[0].albunName} (${this.files.filter((item) => item.isSelected == true)[0].files.length})`;
     txtAlbunName.fontSize = 20;
     txtAlbunName.style.fontWeight = 'bold';
     txtAlbunName.style.paddingLeft = 10;
@@ -239,35 +257,36 @@ export class GalleryView extends GalleryViewCommon {
     txtAlbunName.verticalAlignment = 'middle';
     txtAlbunName.horizontalAlignment = 'left';
     txtAlbunName.id = 'albunName';
-    txtAlbunName.color = new Color(this.textColor);
+    txtAlbunName.color = new Color(this.fontColor);
     this.lblAlbunNameSelect = txtAlbunName;
     grid.addChild(txtAlbunName);
 
     // Label icono
-    const txtIcon: Label = new Label();
-    txtIcon.text = ' ˅ ';
-    txtIcon.color = new Color(this.arrowIconColor);
-    txtIcon.fontSize = 18;
-    txtIcon.style.fontWeight = 'bold';
-    txtIcon.style.paddingLeft = 10;
-    txtIcon.style.paddingRight = 5;
-    txtIcon.col = 1;
-    txtIcon.verticalAlignment = 'middle';
-    txtIcon.horizontalAlignment = 'center';
-    grid.addChild(txtIcon);
+    const imgIcon: Image = new Image();
+    imgIcon.src = 'res://arrow_drop_down_24';
+    imgIcon.tintColor = new Color(this.arrowIconColor);
+    imgIcon.style.fontWeight = 'bold';
+    imgIcon.style.paddingLeft = 10;
+    imgIcon.style.paddingRight = 5;
+    imgIcon.col = 1;
+    imgIcon.verticalAlignment = 'middle';
+    imgIcon.horizontalAlignment = 'center';
+    imgIcon.width = 32;
+    imgIcon.height = 32;
+    grid.addChild(imgIcon);
 
     // Label contador
-    const txtCont: Label = new Label();
-    txtCont.text = `0/${this.selectMax}`;
-    txtCont.fontSize = 18;
-    txtCont.style.fontWeight = 'bold';
-    txtCont.style.paddingLeft = 5;
-    txtCont.style.paddingRight = 20;
-    txtCont.col = 2;
-    txtCont.verticalAlignment = 'middle';
-    txtCont.horizontalAlignment = 'center';
-    this.lblCountSelect = txtCont;
-    grid.addChild(txtCont);
+    this.lblCountSelect = new Label();
+    this.lblCountSelect.text = `0/${this.selectMax}`;
+    this.lblCountSelect.fontSize = 18;
+    this.lblCountSelect.style.fontWeight = 'bold';
+    this.lblCountSelect.style.paddingLeft = 5;
+    this.lblCountSelect.style.paddingRight = 20;
+    this.lblCountSelect.col = 2;
+    this.lblCountSelect.verticalAlignment = 'middle';
+    this.lblCountSelect.horizontalAlignment = 'center';
+    this.lblCountSelect.color = new Color(this.fontColor);
+    grid.addChild(this.lblCountSelect);
 
     return grid;
   }
@@ -278,22 +297,29 @@ export class GalleryView extends GalleryViewCommon {
     grid.addColumn(new ItemSpec(1, GridUnitType.STAR));
     grid.backgroundColor = new Color(this.footerBgColor);
     grid.width = Screen.mainScreen.widthDIPs;
-    grid.height = (Screen.mainScreen.heightDIPs * 6) / 100;
+    grid.height = (Screen.mainScreen.heightDIPs * 7) / 100;
     grid.row = 2;
-    grid.boxShadow = '2px -10px 27px -11px rgba(0,0,0,1)';
+    if (this.edit) {
+      const btnEdit: BotonForAndroid = new BotonForAndroid(this.currentIdioma.obtenerTraduccion('btn_editar'));
+      btnEdit.width = Screen.mainScreen.widthDIPs / 2;
+      btnEdit.verticalAlignment = 'middle';
+      btnEdit.horizontalAlignment = 'center';
+      btnEdit.col = 0;
+      btnEdit.backgroundColor = new Color('transparent');
+      btnEdit.androidElevation = 0;
+      btnEdit.color = new Color(this.fontColor);
+      btnEdit.on('tap', (args: EventData) => {});
+      grid.addChild(btnEdit);
+    }
 
-    const btnEdit: Button = new Button();
-    btnEdit.text = this.currentIdioma.obtenerTraduccion('btn_editar');
-    btnEdit.backgroundColor = new Color('transparent');
-    btnEdit.col = 0;
-    btnEdit.horizontalAlignment = 'center';
-    btnEdit.verticalAlignment = 'middle';
-    btnEdit.androidElevation = 0;
-    btnEdit.color = new Color(this.textColor);
-    btnEdit.borderWidth = 0;
-    btnEdit.addEventListener(GestureTypes.tap, (args: EventData) => {
-      try {
-        // new UCropModalAndroid(this.dataFiles.filter(item => item.isSelected == true), this._context);
+    if (this.preview) {
+      const btnPreview: BotonForAndroid = new BotonForAndroid(this.currentIdioma.obtenerTraduccion('btn_presentar'));
+      btnPreview.width = Screen.mainScreen.widthDIPs / 2;
+      btnPreview.verticalAlignment = 'middle';
+      btnPreview.horizontalAlignment = 'center';
+      btnPreview.col = 1;
+      btnPreview.color = new Color(this.fontColor);
+      btnPreview.on('tap', (args: EventData) => {
         const self = this;
         const options: ShowModalOptions = {
           closeCallback(args) {
@@ -305,133 +331,96 @@ export class GalleryView extends GalleryViewCommon {
           fullscreen: true,
           stretched: true,
         };
-        // getCurrentPage().showModal(new UCropModalAndroid(this.dataFiles.filter(item => item.isSelected == true)[0].files), options);
-        CLog('NOT READY YET.');
-      } catch (error) {
-        CLog(error);
-      }
-    });
-    if (this.edit) {
-      grid.addChild(btnEdit);
-    }
-
-    const btnPreview: Button = new Button();
-    btnPreview.text = this.currentIdioma.obtenerTraduccion('btn_presentar');
-    btnPreview.backgroundColor = new Color('transparent');
-    btnPreview.col = 1;
-    btnPreview.horizontalAlignment = 'center';
-    btnPreview.verticalAlignment = 'middle';
-    btnPreview.androidElevation = 0;
-    btnPreview.borderWidth = 0;
-    btnPreview.color = new Color(this.textColor);
-    btnPreview.on('tap', (args: EventData) => {
-      if (this.dataFiles[0].files.filter((item) => item.isSelected == true).length > 0) {
-        const options: ShowModalOptions = {
-          closeCallback(...args) {
-            if (args.length > 0) {
-            } else {
-            }
-          },
-          context: {},
-          animated: true,
-          fullscreen: true,
-          stretched: true,
-        };
-        getCurrentPage().showModal(new ModalViewPresentarImagen(this.dataFiles[0].files.filter((item) => item.isSelected == true)), options);
-      }
-    });
-    if (this.preview) {
+        getCurrentPage().showModal(new ModalPreviewImagesForAndroid(this.files.filter((item) => item.isSelected === true)[0].files.filter((item) => item.isSelected === true)), options);
+      });
       grid.addChild(btnPreview);
     }
-
     return grid;
   }
 
-  private createBody(): RecyclerViewCustomView {
+  private async createBody(): Promise<ListaView> {
     const ref = new WeakRef(this);
-    const rv: RecyclerViewCustomView = new RecyclerViewCustomView(this._context, this.selectMax, this.orientation, this.dataFiles);
-    Utils.setTimeout(() => {
-      rv.nativeView.addOnItemTouchListener(
-        new developerwym.plugins.ns.RecyclerTouchListener(
-          this._context,
-          rv.nativeView,
-          new developerwym.plugins.ns.RecyclerTouchListener.ClickListener({
-            onClick: (view: android.view.View, position: number) => {
-              this.dataFiles[0].files[position].isSelected = !this.dataFiles[0].files[position].isSelected;
-              CLog(this.dataFiles[0].files[position].file);
-              const current_select: number = this.dataFiles.filter((item) => item.isSelected == true)[0].files.filter((item) => item.isSelected == true).length;
-              if (current_select <= this.selectMax) {
-                const fl_local: android.widget.FrameLayout = view as android.widget.FrameLayout;
-                const radiobtn: android.widget.RadioButton = fl_local.getChildAt(1) as android.widget.RadioButton;
-                if (this.dataFiles[0].files[position].isSelected) {
-                  radiobtn.setButtonTintList(android.content.res.ColorStateList.valueOf(new Color('green').android));
-                } else {
-                  radiobtn.setButtonTintList(android.content.res.ColorStateList.valueOf(new Color('transparent').android));
-                }
-                radiobtn.setChecked(this.dataFiles[0].files[position].isSelected);
-                this.lblCountSelect.text = `${current_select}/${this.selectMax}`;
-              } else {
-                if (this.debug) {
-                  CLog(`Select count max: ${this.selectMax} | current:${current_select}`);
-                }
-                this.dataFiles[0].files[position].isSelected = false;
-              }
-
-              ref?.get()?.sendEvent(
-                GalleryView.clickEvent,
-                this.dataFiles.filter((item) => item.isSelected == true)[0].files.filter((item) => item.isSelected == true)
-              );
-            },
-            onLongClick: (view: android.view.View, position: number) => {
-              // CLog("onLongClick")
-            },
-          })
-        )
-      );
-
-      rv.nativeView.addOnScrollListener(
-        new developerwym.plugins.ns.CustomRecyclerView(
-          this._context,
-          rv.nativeView,
-          new developerwym.plugins.ns.CustomRecyclerView.ScrollEvento({
-            onScrolled: (recyclerView: androidx.recyclerview.widget.RecyclerView, dx: number, dy: number) => {
-              ref?.get()?.sendEvent(
-                GalleryView.scrollEvent,
-                this.dataFiles.filter((item) => item.isSelected == true)[0].files.filter((item) => item.isSelected == true)
-              );
-            },
-            onScrollStateChanged: (recyclerView: androidx.recyclerview.widget.RecyclerView, state: number) => {
-              // CLog("onScrollStateChanged")
-            },
-          })
-        )
-      );
-    }, 500);
-    return rv;
-  }
-
-  // abrir modal para mostrar lista de albuns
-  private openModalAlbunList(args: TapGestureEventData) {
     const self = this;
-    const options: ShowModalOptions = {
-      closeCallback(args) {
-        if (args) {
-          self.dataFiles.filter((item) => item.isSelected == true)[0].isSelected = !self.dataFiles.filter((item) => item.isSelected == true)[0].isSelected;
-          self.dataFiles[parseInt(args.index)].isSelected = !self.dataFiles[parseInt(args.index)].isSelected;
-          self.lblAlbunNameSelect.text = `${self.dataFiles.filter((item) => item.isSelected)[0].albunName} (${self.dataFiles.filter((item) => item.isSelected)[0].files.length})`;
-          self.rv.setDataNew();
+    const lista = new ListaView();
+    lista.width = Screen.mainScreen.widthDIPs;
+    lista.height = (Screen.mainScreen.heightDIPs * 86) / 100;
+    lista.row = 1;
+    lista.verticalAlignment = 'middle';
+    lista.horizontalAlignment = 'center';
+    lista.backgroundColor = new Color('blue');
+    Utils.setTimeout(() => {
+      try {
+        if (this.orientation == OrientationView.H) {
+          this.gridMaster.height = 200;
         }
-      },
-      context: {},
-      animated: true,
-      fullscreen: true,
-      stretched: true,
-    };
-    getCurrentPage().showModal(new ModalAlbunNames(this.dataFiles), options);
+        lista.orientacion = this.orientation;
+        lista.adaptador = this.files.filter((item) => item.getIsSelected === true)[0].files;
+
+        lista.nativeView.addOnItemTouchListener(
+          new developerwym.plugins.ns.RecyclerTouchListener(
+            this._context,
+            lista.nativeView,
+            new developerwym.plugins.ns.RecyclerTouchListener.ClickListener({
+              onClick: (view: android.view.View, position: number) => {
+                self.files.filter((item) => item.isSelected === true)[0].files[position].isSelected = !self.files.filter((item) => item.isSelected === true)[0].files[position].isSelected;
+                const current_select: number = self.files.filter((item) => item.isSelected == true)[0].files.filter((item) => item.isSelected == true).length;
+                if (current_select <= self.selectMax) {
+                  const flItem: android.widget.FrameLayout = view as android.widget.FrameLayout;
+                  const image: android.widget.ImageView = flItem.getChildAt(0) as android.widget.ImageView;
+                  const radio: android.widget.RadioButton = flItem.getChildAt(2) as android.widget.RadioButton;
+                  const capa: android.widget.FrameLayout = flItem.getChildAt(1) as android.widget.FrameLayout;
+                  radio.setChecked(self.files.filter((item) => item.isSelected === true)[0].files[position].isSelected);
+                  radio.setButtonTintList(android.content.res.ColorStateList.valueOf(android.graphics.Color.DKGRAY));
+
+                  if (self.files.filter((item) => item.isSelected === true)[0].files[position].isSelected) {
+                    capa.setVisibility(android.widget.FrameLayout.VISIBLE);
+                  } else {
+                    capa.setVisibility(android.widget.FrameLayout.INVISIBLE);
+                  }
+                  self.lblCountSelect.text = `${self.files.filter((item) => item.isSelected === true)[0].files.filter((item) => item.isSelected === true).length}/${self.selectMax}`;
+                  const data_back: Array<GaleriaViewAlbumns> = new Array();
+                  const albun_seleccionado: Array<GaleriaViewAlbumns> = self.files.filter((item) => item.isSelected == true);
+                  const files_seleccionados: Array<GaleriaViewAlbumnsData> = albun_seleccionado[0].files.filter((item) => item.isSelected === true);
+                  data_back.push(new GaleriaViewAlbumns(albun_seleccionado[0].id, albun_seleccionado[0].albunName, files_seleccionados, albun_seleccionado[0].icon, albun_seleccionado[0].isSelected));
+                  ref?.get()?.sendEvent(GalleryView.clickEvent, data_back);
+                } else {
+                  self.files.filter((item) => item.isSelected === true)[0].files[position].isSelected = false;
+                }
+              },
+              onLongClick: (view: android.view.View, position: number) => {
+                CLog('onLongClick ', position);
+              },
+            })
+          )
+        );
+
+        lista.nativeView.addOnScrollListener(
+          new developerwym.plugins.ns.CustomRecyclerView(
+            this._context,
+            lista.nativeView,
+            new developerwym.plugins.ns.CustomRecyclerView.ScrollEvento({
+              onScrolled: (recyclerView: androidx.recyclerview.widget.RecyclerView, dx: number, dy: number) => {
+                CLog('onScrolled');
+                const data_back: Array<GaleriaViewAlbumns> = new Array();
+                const albun_seleccionado: Array<GaleriaViewAlbumns> = self.files.filter((item) => item.isSelected == true);
+                const files_seleccionados: Array<GaleriaViewAlbumnsData> = albun_seleccionado[0].files.filter((item) => item.isSelected === true);
+                data_back.push(new GaleriaViewAlbumns(albun_seleccionado[0].id, albun_seleccionado[0].albunName, files_seleccionados, albun_seleccionado[0].icon, albun_seleccionado[0].isSelected));
+                ref?.get()?.sendEvent(GalleryView.scrollEvent, data_back);
+              },
+              onScrollStateChanged: (recyclerView: androidx.recyclerview.widget.RecyclerView, state: number) => {
+                // CLog("onScrollStateChanged")
+              },
+            })
+          )
+        );
+      } catch (error) {
+        CLog(error);
+      }
+    }, 10);
+    return lista;
   }
 
   disposeNativeView(): void {
     super.disposeNativeView();
-    Frame.topmost()._removeView(this.gridMaster);
   }
 }

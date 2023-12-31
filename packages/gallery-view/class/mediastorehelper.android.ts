@@ -1,13 +1,13 @@
 import { CLog } from '../common';
-import { TypeFileShow } from '../enums/typefiles.enums';
-import { MediaStoreData, MediaStoreDataFiles } from '../interfaces/mediastore.interface';
+import { TipoFile } from '../enums/tipofile.enum';
+import { GaleriaViewAlbumns, GaleriaViewAlbumnsData } from '../class/data.imagenes.class';
+import { Application } from '@nativescript/core';
 
 @NativeClass()
 export class MediaStoreHelperAndroid {
-  // private files: Array<MediaStoreData>=new Array();
   constructor(private context: android.content.Context) {}
 
-  public getImagenes(): Array<MediaStoreData> {
+  public getImagenes(): Array<GaleriaViewAlbumns> {
     try {
       let collection: android.net.Uri;
       let selection: string;
@@ -52,16 +52,10 @@ export class MediaStoreHelperAndroid {
           medias.push(albunName);
         }
       }
-      let files_final: Array<MediaStoreData> = new Array();
+      let files_final: Array<GaleriaViewAlbumns> = new Array();
       for (let i: number = 0; i < medias.length; i++) {
         const dataFiles: Array<any> = files.filter((item) => item.albunName == medias[i]);
-        files_final.push({
-          id: `${i + 1}`,
-          albunName: medias[i],
-          files: dataFiles,
-          icon: dataFiles[0].data,
-          isSelected: i === 0 ? true : false,
-        });
+        files_final.push(new GaleriaViewAlbumns(i + 1, medias[i], dataFiles, dataFiles[0].data, i == 0 ? true : false));
       }
       cursor.close();
       return files_final;

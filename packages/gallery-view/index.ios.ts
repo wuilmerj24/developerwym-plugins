@@ -1,25 +1,13 @@
-import { Button, Color, Device, EventData, Frame, GestureTypes, GridLayout, GridUnitType, ItemSpec, Label, Page, Screen, ShowModalOptions, TapGestureEventData, Utils, getCurrentPage } from '@nativescript/core';
+import { Color, CoreTypes, Device, GestureTypes, GridLayout, GridUnitType, ItemSpec, Label, RootLayout, Screen, TapGestureEventData, Image } from '@nativescript/core';
+import { GaleriaViewAlbumns } from './class/data.imagenes.class';
 import { CLog, GalleryViewCommon, GetSetProperty } from './common';
-import { ELenguajesSoportados } from './enums/language.enum';
+import { ELenguajesSoportados } from './enums/idiomas.enum';
 import { OrientationView } from './enums/orientation.enum';
-import { MediaStoreData, MediaStoreDataFiles } from './interfaces/mediastore.interface';
-import { Traductor } from './class/language';
-import { TypeFileShow } from './enums/typefiles.enums';
-import { MediaStoreHelperIos } from './class/mediastorehelper.ios';
-import { CollectionViewGaleria, CustomCollectionViewDataSourceDelegate, CustomCollectionViewDelegate } from './class/uicollectionview.ios';
-import { ModalViewPresentarImagen } from './class/modalpresent.ios';
-import { ModalAlbunNames } from './class/modal.class';
+import { ListaView } from './views/lista.android';
+import { Idioma } from './class/idioma.class';
+import { ModalAlbuns } from './views/modal.albuns';
 
 export class GalleryView extends GalleryViewCommon {
-  private gridMaster: GridLayout;
-  private headerGrid: GridLayout;
-  private footerGrid: GridLayout;
-  private lblAlbunNameSelect: Label;
-  private lblCountSelect: Label;
-  private rv: CollectionViewGaleria;
-  private adaptador;
-  // eslint-disable-next-line @typescript-eslint/no-array-constructor
-  private dataFiles: Array<MediaStoreData> = new Array();
   @GetSetProperty()
   public language: ELenguajesSoportados;
   @GetSetProperty()
@@ -39,28 +27,31 @@ export class GalleryView extends GalleryViewCommon {
   @GetSetProperty()
   public preview: boolean;
   @GetSetProperty()
-  public textColor: string;
+  public fontColor: string;
   @GetSetProperty()
   public orientation: OrientationView;
-  _nativeView: UIView;
+  // VARIABLES LOCALES
+  private gridMaster: GridLayout;
+  private headerGrid: GridLayout;
+  private footerGrid: GridLayout;
+  private bodyView: ListaView;
+  private lblAlbunNameSelect: Label;
+  private lblCountSelect: Label;
+  private files: Array<GaleriaViewAlbumns> = new Array();
+  private rootLayout: RootLayout;
+
   constructor() {
     super();
-    this.width = Screen.mainScreen.widthDIPs;
-    this.height = Screen.mainScreen.heightDIPs;
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
   createNativeView(): Object {
-    this.currentIdioma = new Traductor(this.language);
-    const gridContenedor: GridLayout = new GridLayout();
-    gridContenedor.backgroundColor = new Color('red');
-    gridContenedor.width = Screen.mainScreen.widthDIPs;
-    gridContenedor.height = Screen.mainScreen.heightDIPs;
-
-    gridContenedor.addRow(new ItemSpec(1, GridUnitType.AUTO));
-    gridContenedor.addRow(new ItemSpec(1, GridUnitType.STAR));
-    gridContenedor.addRow(new ItemSpec(1, GridUnitType.AUTO));
-    this.gridMaster = gridContenedor;
+    this.currentIdioma = new Idioma(this.language);
+    this.gridMaster = new GridLayout();
+    this.gridMaster.width = Screen.mainScreen.widthDIPs;
+    this.gridMaster.height = Screen.mainScreen.heightDIPs;
+    this.gridMaster.addRow(new ItemSpec(1, GridUnitType.AUTO));
+    this.gridMaster.addRow(new ItemSpec(1, GridUnitType.STAR));
+    this.gridMaster.addRow(new ItemSpec(1, GridUnitType.AUTO));
 
     if (this.checkPermisos()) {
       this.renderUI();
@@ -70,31 +61,26 @@ export class GalleryView extends GalleryViewCommon {
       msjPermisos.fontSize = 24;
       msjPermisos.style.fontWeight = 'bold';
       msjPermisos.textWrap = true;
-      msjPermisos.color = new Color('white');
+      msjPermisos.color = new Color(this.fontColor);
       msjPermisos.rowSpan = 3;
       msjPermisos.verticalAlignment = 'middle';
       msjPermisos.horizontalAlignment = 'center';
       msjPermisos.margin = '10';
-      gridContenedor.addChild(msjPermisos);
+      this.gridMaster.addChild(msjPermisos);
       this.solicitarPermiso()
         .then((res) => {
-          gridContenedor.removeChild(msjPermisos);
-          this.renderUI();
+          CLog('res: ', res);
+          if (res) {
+            this.gridMaster.removeChild(msjPermisos);
+            this.renderUI();
+          }
         })
         .catch((err) => {
-          CLog('Error solicitarPermiso', err);
+          CLog('Error ', err);
         });
     }
-    this.page.content = gridContenedor;
-    return gridContenedor.ios;
-  }
-
-  initNativeView(): void {
-    super.initNativeView();
-  }
-
-  disposeNativeView(): void {
-    super.disposeNativeView();
+    this.page.content = this.gridMaster;
+    return this.gridMaster.android;
   }
 
   private checkPermisos(): any {
@@ -165,67 +151,13 @@ export class GalleryView extends GalleryViewCommon {
     });
   }
 
-  private renderUI() {
-    const mediaStore: MediaStoreHelperIos = new MediaStoreHelperIos();
-    // eslint-disable-next-line @typescript-eslint/no-array-constructor
-    const files: Array<MediaStoreDataFiles> = new Array();
-    // eslint-disable-next-line @typescript-eslint/no-inferrable-types
-    for (let i: number = 0; i < 200; i++) {
-      files.push({
-        id: `${i + 1}`,
-        file: 'https://i.pinimg.com/736x/4d/72/77/4d727782288471a4310001b63c13e65f.jpg',
-        isSelected: false,
-        type: TypeFileShow.IMAGE,
-      });
-    }
-    // eslint-disable-next-line @typescript-eslint/no-inferrable-types
-    for (let i: number = 0; i < 20; i++) {
-      this.dataFiles.push({
-        id: `${i + 1}`,
-        icon: 'https://i.pinimg.com/736x/4d/72/77/4d727782288471a4310001b63c13e65f.jpg',
-        isSelected: i == 0 ? true : false,
-        albunName: 'test 1',
-        files: files,
-      });
-    }
-
-    const dataFiles = mediaStore.getImagenes();
-
-    if (this.dataFiles.length <= 0) {
-      const msjNoData: Label = new Label();
-      msjNoData.text = this.currentIdioma.obtenerTraduccion('msj_no_data');
-      msjNoData.fontSize = 24;
-      msjNoData.style.fontWeight = 'bold';
-      msjNoData.textWrap = true;
-      msjNoData.color = new Color('white');
-      msjNoData.rowSpan = 3;
-      msjNoData.verticalAlignment = 'middle';
-      msjNoData.horizontalAlignment = 'center';
-      msjNoData.margin = '10';
-      this.gridMaster.addChild(msjNoData);
-      return;
-    }
-
-    this.headerGrid = this.createHeader();
-    if (this.showHeader) {
-      this.gridMaster.addChild(this.headerGrid);
-    }
-    try {
-      this.rv = this.createBody();
-      this.gridMaster.addChild(this.rv);
-    } catch (error) {
-      CLog('error cv', error);
-    }
-
-    this.footerGrid = this.createFooter();
-    if (this.showFooter) {
-      this.gridMaster.addChild(this.footerGrid);
-    }
+  initNativeView(): void {
+    super.initNativeView();
   }
 
-  private createHeader(): GridLayout {
-    const ref = new WeakRef(this);
+  private async renderUI() {}
 
+  private createHeader(): GridLayout {
     const grid: GridLayout = new GridLayout();
     grid.addColumn(new ItemSpec(1, GridUnitType.STAR));
     grid.addColumn(new ItemSpec(1, GridUnitType.AUTO));
@@ -235,13 +167,47 @@ export class GalleryView extends GalleryViewCommon {
     grid.height = (Screen.mainScreen.heightDIPs * 7) / 100;
     grid.row = 0;
     grid.boxShadow = '0px 4px 56px 8px rgba(0,0,0,0.72)';
-    grid.addEventListener(GestureTypes.tap, (args: TapGestureEventData) => {
-      this.openModalAlbunList(args);
+    grid.on(GestureTypes.tap, (args: TapGestureEventData) => {
+      this.rootLayout
+        .open(new ModalAlbuns(this.files, this.rootLayout), {
+          shadeCover: {
+            color: '#FFF',
+            opacity: 0.7,
+            tapToClose: true,
+          },
+          animation: {
+            enterFrom: {
+              translateY: 500,
+              duration: 300,
+              curve: CoreTypes.AnimationCurve.cubicBezier(0.17, 0.89, 0.24, 1.11),
+            },
+            exitTo: {
+              translateY: 500,
+              duration: 300,
+              curve: CoreTypes.AnimationCurve.cubicBezier(0.17, 0.89, 0.24, 1.11),
+            },
+          },
+        })
+        .then((res) => {
+          CLog(res);
+          this.rootLayout.once('closedRootL', (args: any) => {
+            CLog('se ejecuto el evento ', args.data);
+            if (args.data != null || args.data != undefined) {
+              this.files[parseInt(args.data.oldIndex)].isSelected = false;
+              this.files[parseInt(args.data.index)].isSelected = !this.files[parseInt(args.data.index)].isSelected;
+              this.lblAlbunNameSelect.text = `${this.files[parseInt(args.data.index)].albunName} (${this.files[parseInt(args.data.index)].files.length})`;
+              this.bodyView.adaptador = this.files.filter((item) => item.isSelected === true)[0].files;
+            }
+          });
+        })
+        .catch((er) => {
+          CLog(er);
+        });
     });
 
     // TextField albunName
     const txtAlbunName: Label = new Label();
-    txtAlbunName.text = `${this.dataFiles.filter((item) => item.isSelected == true)[0].albunName} (${this.dataFiles.filter((item) => item.isSelected == true)[0].files.length})`;
+    txtAlbunName.text = `${this.files.filter((item) => item.isSelected == true)[0].albunName} (${this.files.filter((item) => item.isSelected == true)[0].files.length})`;
     txtAlbunName.fontSize = 20;
     txtAlbunName.style.fontWeight = 'bold';
     txtAlbunName.style.paddingLeft = 10;
@@ -249,163 +215,37 @@ export class GalleryView extends GalleryViewCommon {
     txtAlbunName.verticalAlignment = 'middle';
     txtAlbunName.horizontalAlignment = 'left';
     txtAlbunName.id = 'albunName';
-    txtAlbunName.color = new Color(this.textColor);
+    txtAlbunName.color = new Color(this.fontColor);
     this.lblAlbunNameSelect = txtAlbunName;
     grid.addChild(txtAlbunName);
 
     // Label icono
-    const txtIcon: Label = new Label();
-    txtIcon.text = ' ˅ ';
-    txtIcon.color = new Color(this.arrowIconColor);
-    txtIcon.fontSize = 18;
-    txtIcon.style.fontWeight = 'bold';
-    txtIcon.style.paddingLeft = 10;
-    txtIcon.style.paddingRight = 5;
-    txtIcon.col = 1;
-    txtIcon.verticalAlignment = 'middle';
-    txtIcon.horizontalAlignment = 'center';
-    grid.addChild(txtIcon);
+    const imgIcon: Image = new Image();
+    imgIcon.src = 'res://arrow_drop_down_24';
+    imgIcon.tintColor = new Color(this.arrowIconColor);
+    imgIcon.style.fontWeight = 'bold';
+    imgIcon.style.paddingLeft = 10;
+    imgIcon.style.paddingRight = 5;
+    imgIcon.col = 1;
+    imgIcon.verticalAlignment = 'middle';
+    imgIcon.horizontalAlignment = 'center';
+    imgIcon.width = 32;
+    imgIcon.height = 32;
+    grid.addChild(imgIcon);
 
     // Label contador
-    const txtCont: Label = new Label();
-    txtCont.text = `0/${this.selectMax}`;
-    txtCont.fontSize = 18;
-    txtCont.style.fontWeight = 'bold';
-    txtCont.style.paddingLeft = 5;
-    txtCont.style.paddingRight = 20;
-    txtCont.col = 2;
-    txtCont.verticalAlignment = 'middle';
-    txtCont.horizontalAlignment = 'center';
-    this.lblCountSelect = txtCont;
-    grid.addChild(txtCont);
+    this.lblCountSelect = new Label();
+    this.lblCountSelect.text = `0/${this.selectMax}`;
+    this.lblCountSelect.fontSize = 18;
+    this.lblCountSelect.style.fontWeight = 'bold';
+    this.lblCountSelect.style.paddingLeft = 5;
+    this.lblCountSelect.style.paddingRight = 20;
+    this.lblCountSelect.col = 2;
+    this.lblCountSelect.verticalAlignment = 'middle';
+    this.lblCountSelect.horizontalAlignment = 'center';
+    this.lblCountSelect.color = new Color(this.fontColor);
+    grid.addChild(this.lblCountSelect);
 
     return grid;
-  }
-
-  private createFooter(): GridLayout {
-    const grid: GridLayout = new GridLayout();
-    grid.addColumn(new ItemSpec(1, GridUnitType.STAR));
-    grid.addColumn(new ItemSpec(1, GridUnitType.STAR));
-    grid.backgroundColor = new Color(this.footerBgColor);
-    grid.width = Screen.mainScreen.widthDIPs;
-    grid.height = (Screen.mainScreen.heightDIPs * 6) / 100;
-    grid.row = 2;
-    grid.boxShadow = '2px -10px 27px -11px rgba(0,0,0,1)';
-
-    const btnEdit: Button = new Button();
-    btnEdit.text = this.currentIdioma.obtenerTraduccion('btn_editar');
-    btnEdit.backgroundColor = new Color('transparent');
-    btnEdit.col = 0;
-    btnEdit.horizontalAlignment = 'center';
-    btnEdit.verticalAlignment = 'middle';
-    btnEdit.androidElevation = 0;
-    btnEdit.color = new Color(this.textColor);
-    btnEdit.borderWidth = 0;
-    btnEdit.addEventListener(GestureTypes.tap, (args: EventData) => {
-      try {
-        // new UCropModalAndroid(this.dataFiles.filter(item => item.isSelected == true), this._context);
-        const options: ShowModalOptions = {
-          closeCallback(args) {
-            CLog('s');
-          },
-          context: {},
-          animated: true,
-          fullscreen: true,
-          stretched: true,
-        };
-        // getCurrentPage().showModal(new UCropModalAndroid(this.dataFiles.filter(item => item.isSelected == true)[0].files), options);
-        CLog('NOT READY YET.');
-      } catch (error) {
-        CLog(error);
-      }
-    });
-    if (this.edit) {
-      grid.addChild(btnEdit);
-    }
-
-    const btnPreview: Button = new Button();
-    btnPreview.text = this.currentIdioma.obtenerTraduccion('btn_presentar');
-    btnPreview.backgroundColor = new Color('transparent');
-    btnPreview.col = 1;
-    btnPreview.horizontalAlignment = 'center';
-    btnPreview.verticalAlignment = 'middle';
-    btnPreview.androidElevation = 0;
-    btnPreview.borderWidth = 0;
-    btnPreview.color = new Color(this.textColor);
-    btnPreview.on('tap', (args: EventData) => {
-      if (this.dataFiles[0].files.filter((item) => item.isSelected == true).length > 0) {
-        const options: ShowModalOptions = {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          closeCallback(args) {
-            CLog('s');
-          },
-          context: {},
-          animated: true,
-          fullscreen: true,
-          stretched: true,
-        };
-        // getCurrentPage().showModal(new ModalViewPresentarImagen(this.dataFiles[0].files.filter((item) => item.isSelected == true)), options);
-        getCurrentPage().showModal(new ModalViewPresentarImagen(this.dataFiles[0].files.filter((item) => item.isSelected == true)), options);
-      }
-    });
-    if (this.preview) {
-      grid.addChild(btnPreview);
-    }
-
-    return grid;
-  }
-
-  private createBody(): CollectionViewGaleria {
-    const cv: CollectionViewGaleria = new CollectionViewGaleria(this.dataFiles, this.orientation);
-    cv.row = 1;
-    if (this.orientation == OrientationView.H) {
-      this.gridMaster.height = (Screen.mainScreen.heightDIPs * 20) / 100;
-    }
-    Utils.setTimeout(() => {
-      try {
-        this.adaptador = new CustomCollectionViewDataSourceDelegate(this.dataFiles.filter((item) => item.isSelected == true)[0].files, this.orientation);
-        const delegate = new CustomCollectionViewDelegate(this.dataFiles.filter((item) => item.isSelected == true)[0].files, this);
-        cv.nativeView.dataSource = this.adaptador;
-        cv.nativeView.delegate = delegate;
-        cv.nativeView.reloadData();
-      } catch (error) {
-        CLog('err ', error);
-      }
-    }, 500);
-    return cv;
-  }
-
-  // abrir modal para mostrar lista de albuns
-  private openModalAlbunList(args: TapGestureEventData) {
-    const self = this;
-    const options: ShowModalOptions = {
-      closeCallback(args) {
-        if (args) {
-          for (let i = 0; i < self.dataFiles.length; i++) {
-            self.dataFiles[i].isSelected = false;
-            for (let j = 0; j < self.dataFiles[i].files.length; j++) {
-              self.dataFiles[i].files[j].isSelected = false;
-            }
-          }
-          self.dataFiles[parseInt(args.index)].isSelected = !self.dataFiles[parseInt(args.index)].isSelected;
-          self.adaptador = null;
-          self.adaptador = new CustomCollectionViewDataSourceDelegate(self.dataFiles.filter((item) => item.isSelected == true)[0].files, self.orientation);
-          const delegate = new CustomCollectionViewDelegate(self.dataFiles.filter((item) => item.isSelected == true)[0].files, self);
-          self.rv.nativeView.dataSource = null;
-          self.rv.nativeView.delegate = null;
-          self.rv.nativeView.reloadData();
-          Utils.setTimeout(() => {
-            self.rv.nativeView.dataSource = self.adaptador;
-            self.rv.nativeView.delegate = delegate;
-            self.rv.nativeView.reloadData();
-          }, 1000);
-        }
-      },
-      context: {},
-      animated: true,
-      fullscreen: true,
-      stretched: true,
-    };
-    getCurrentPage().showModal(new ModalAlbunNames(this.dataFiles), options);
   }
 }

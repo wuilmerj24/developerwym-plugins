@@ -1,8 +1,7 @@
-export class Traductor {
+export class Idioma {
   private idiomaActual: string;
   private traducciones: { [key: string]: { [key: string]: string } };
-
-  constructor(idiomaInicial: string) {
+  constructor(private idiomaInicial: string) {
     this.idiomaActual = idiomaInicial;
     console.log('idiomaActual ', this.idiomaActual);
     // Define las traducciones para diferentes idiomas

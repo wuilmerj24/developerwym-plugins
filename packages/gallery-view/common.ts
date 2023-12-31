@@ -1,10 +1,9 @@
-import { ContainerView, Observable } from '@nativescript/core';
-import { GalleryView } from '.';
+import { ContentView, Observable, Utils } from '@nativescript/core';
 import { EGalleryViewEvents } from './events';
+import { Idioma } from './class/idioma.class';
+import { ELenguajesSoportados } from './enums/idiomas.enum';
 import { OrientationView } from './enums/orientation.enum';
-import { MediaStoreDataFiles } from './interfaces/mediastore.interface';
-import { Traductor } from './class/language';
-import { ELenguajesSoportados } from './enums/language.enum';
+import { GaleriaViewAlbumns } from './class/data.imagenes.class';
 
 export class GalleryViewUtil {
   public static debug: boolean = false;
@@ -16,7 +15,7 @@ export const CLog = (...args: any[]) => {
   }
 };
 
-export class GalleryViewCommon extends ContainerView implements GalleryView {
+export class GalleryViewCommon extends ContentView {
   public set debug(value: boolean) {
     GalleryViewUtil.debug = value;
   }
@@ -26,7 +25,7 @@ export class GalleryViewCommon extends ContainerView implements GalleryView {
   public static scrollEvent = EGalleryViewEvents.OnScrolledEvent;
   public static clickEvent = EGalleryViewEvents.OnClickEvent;
 
-  currentIdioma: Traductor;
+  currentIdioma: Idioma;
   // OPCIONES VIEW
   @GetSetProperty()
   public language: ELenguajesSoportados = ELenguajesSoportados.SPANISH;
@@ -47,17 +46,21 @@ export class GalleryViewCommon extends ContainerView implements GalleryView {
   @GetSetProperty()
   public preview: boolean = true;
   @GetSetProperty()
-  public textColor: string = 'green';
+  public fontColor: string = 'green';
   @GetSetProperty()
   public orientation: OrientationView = OrientationView.H;
 
-  public sendEvent(eventName: string, data?: Array<MediaStoreDataFiles>, msg?: string) {
+  public sendEvent(eventName: string, data?: Array<GaleriaViewAlbumns>, msg?: string) {
     this.notify({
       eventName,
       object: this,
       data,
       message: msg,
     });
+  }
+
+  sleep(ms: number): Promise<void> {
+    return new Promise((resolve) => Utils.setTimeout(resolve, ms));
   }
 }
 

@@ -1,10 +1,9 @@
-import { ContainerView } from '@nativescript/core';
-import { EGalleryViewEvents } from './events';
+import { GalleryViewCommon } from './common';
+import { ELenguajesSoportados } from './enums/idiomas.enum';
 
-export declare class GalleryView extends ContainerView {
+export declare class GalleryView extends GalleryViewCommon {
   public static onScrollEvent: EGalleryViewEvents.OnScrolledEvent;
   public static onClickEvent: EGalleryViewEvents.OnClickEvent;
-  public language: ELenguajesSoportados;
   public showHeader: boolean;
   public headerBgColor: string;
   public arrowIconColor: string;
@@ -13,8 +12,8 @@ export declare class GalleryView extends ContainerView {
   public footerBgColor: string;
   public edit: boolean;
   public preview: boolean;
-  public textColor: string;
-  public orientation: OrientationView;
+  public fontColor: string;
+  public language: ELenguajesSoportados;
 }
 
 export interface IGalleryViewEvents {
