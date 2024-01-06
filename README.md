@@ -1,6 +1,7 @@
 - [@arepa/country-code](packages/country-code/README.md)
 - [@arepa/gallery-view](packages/gallery-view/README.md)
 - [@arepa/launch-navigator](packages/launch-navigator/README.md)
+- [@arepa/mapbox-navigations](packages/mapbox-navigations/README.md)
 - [@arepa/screen-orientation](packages/screen-orientation/README.md)
 - [@arepa/signal-r](packages/signal-r/README.md)
 - [@arepa/store-update](packages/store-update/README.md)

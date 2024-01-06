@@ -1,0 +1,65 @@
+{
+  "name": "mapbox-navigations",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/mapbox-navigations",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "options": {
+        "outputPath": "dist/packages/mapbox-navigations",
+        "tsConfig": "packages/mapbox-navigations/tsconfig.json",
+        "packageJson": "packages/mapbox-navigations/package.json",
+        "main": "packages/mapbox-navigations/index.d.ts",
+        "assets": [
+          "packages/mapbox-navigations/*.md",
+          "packages/mapbox-navigations/index.d.ts",
+          "LICENSE",
+          {
+            "glob": "**/*",
+            "input": "packages/mapbox-navigations/platforms/",
+            "output": "./platforms/"
+          }
+        ],
+        "dependsOn": [
+          {
+            "target": "build.all",
+            "projects": "dependencies"
+          }
+        ]
+      }
+    },
+    "build.all": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["node tools/scripts/build-finish.ts mapbox-navigations"],
+        "parallel": false
+      },
+      "outputs": ["dist/packages/mapbox-navigations"],
+      "dependsOn": [
+        {
+          "target": "build.all",
+          "projects": "dependencies"
+        },
+        {
+          "target": "build",
+          "projects": "self"
+        }
+      ]
+    },
+    "focus": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["nx g @nativescript/plugin-tools:focus-packages mapbox-navigations"],
+        "parallel": false
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["packages/mapbox-navigations/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

@@ -1,0 +1,58 @@
+
+repositories {
+  jcenter()
+  maven {
+          url 'https://api.mapbox.com/downloads/v2/releases/maven'
+          authentication {
+            basic(BasicAuthentication)
+          }
+          credentials {
+            // Do not change the username below.
+            // This should always be `mapbox` (not your username).
+            username = "mapbox"
+            // Use the secret token you stored in gradle.properties as the password
+            password = "sk.eyJ1Ijoid3VpbG1lcmoyNCIsImEiOiJjbHF5Y3h4bXcwbmwyMmtsYzdhN2x4bHNyIn0.p_Gqv-I15RwR2LG3EJy-eQ"
+          }
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+        maven {
+            url 'https://api.mapbox.com/downloads/v2/releases/maven'
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                username = "mapbox"
+                password ="sk.eyJ1Ijoid3VpbG1lcmoyNCIsImEiOiJjbHF5Y3h4bXcwbmwyMmtsYzdhN2x4bHNyIn0.p_Gqv-I15RwR2LG3EJy-eQ"
+                if (password == null || password == "") {
+                    throw new GradleException("MAPBOX_DOWNLOADS_TOKEN isn't set. Set it to the project properties or to the enviroment variables.")
+                }
+            }
+        }
+    }
+}
+
+android{
+    compileSdkVersion 33
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    // Add the block below if you're using Kotlin
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    defaultConfig {
+        minSdkVersion 21
+    }
+}
+
+dependencies {
+    implementation "com.mapbox.navigation:android:2.10.1"
+}

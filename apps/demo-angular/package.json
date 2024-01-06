@@ -8,7 +8,8 @@
     "@arepa/screen-orientation": "file:../../dist/packages/screen-orientation",
     "@arepa/store-update": "file:../../dist/packages/store-update",
     "@arepa/signal-r": "file:../../dist/packages/signal-r",
-    "@arepa/gallery-view": "file:../../dist/packages/gallery-view"
+    "@arepa/gallery-view": "file:../../dist/packages/gallery-view",
+    "@arepa/mapbox-navigations": "file:../../dist/packages/mapbox-navigations"
   },
   "devDependencies": {
     "@nativescript/android": "~8.4.0",

@@ -180,6 +180,13 @@ module.exports = {
           description: '@arepa/gallery-view: Build',
         },
       },
+      // @arepa/mapbox-navigations
+      'mapbox-navigations': {
+        build: {
+          script: 'nx run mapbox-navigations:build.all',
+          description: '@arepa/mapbox-navigations: Build',
+        },
+      },
       'build-all': {
         script: 'nx run-many --target=build.all --all',
         description: 'Build all packages',
@@ -257,6 +264,10 @@ module.exports = {
       'gallery-view': {
         script: 'nx run gallery-view:focus',
         description: 'Focus on @arepa/gallery-view',
+      },
+      'mapbox-navigations': {
+        script: 'nx run mapbox-navigations:focus',
+        description: 'Focus on @arepa/mapbox-navigations',
       },
       reset: {
         script: 'nx g @arepa/plugin-tools:focus-packages',

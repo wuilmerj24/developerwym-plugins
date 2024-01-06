@@ -12,7 +12,8 @@
     "@arepa/time-range": "file:../../packages/time-range",
     "@nativescript-community/perms": "^2.3.0",
     "@nativescript/core": "file:../../node_modules/@nativescript/core",
-    "@arepa/gallery-view": "file:../../packages/gallery-view"
+    "@arepa/gallery-view": "file:../../packages/gallery-view",
+    "@arepa/mapbox-navigations": "file:../../packages/mapbox-navigations"
   },
   "devDependencies": {
     "@nativescript/android": "~8.6.2",
