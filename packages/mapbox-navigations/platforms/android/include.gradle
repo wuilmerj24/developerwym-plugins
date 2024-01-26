@@ -38,21 +38,30 @@ allprojects {
 }
 
 android{
-    compileSdkVersion 33
+    compileSdkVersion 34
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
     // Add the block below if you're using Kotlin
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
+    
 
     defaultConfig {
         minSdkVersion 21
     }
+
+    packagingOptions {
+        pickFirst 'lib/armeabi-v7a/libc++_shared.so'
+        pickFirst 'lib/arm64-v8a/libc++_shared.so'
+        pickFirst 'lib/x86_64/libc++_shared.so'
+        pickFirst 'lib/x86/libc++_shared.so'
+        exclude "com/itextpdf/**"
+        exclude "org/bouncycastle/**"
+        exclude "license/**"
+        // resources.excludes += "assets/com/tom_roush/fontbox/resources/cmap/*"
+    }
 }
 
 dependencies {
-    implementation "com.mapbox.navigation:android:2.10.1"
+    implementation "com.mapbox.navigation:ui-dropin:2.17.10"
 }
