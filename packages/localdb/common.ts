@@ -7,7 +7,7 @@ export class LocaldbCommon extends Observable {
     super();
   }
 
-  public createDB(dbname: string, version: string): Promise<any> {
+  public createDB(dbname: string, version?: string): Promise<any> {
     setString('dbname', dbname);
     return new Promise((rs, rj) => {
       try {
