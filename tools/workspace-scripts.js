@@ -187,6 +187,13 @@ module.exports = {
           description: '@arepa/mapbox-navigations: Build',
         },
       },
+      // @arepa/localdb
+      localdb: {
+        build: {
+          script: 'nx run localdb:build.all',
+          description: '@arepa/localdb: Build',
+        },
+      },
       'build-all': {
         script: 'nx run-many --target=build.all --all',
         description: 'Build all packages',
@@ -268,6 +275,10 @@ module.exports = {
       'mapbox-navigations': {
         script: 'nx run mapbox-navigations:focus',
         description: 'Focus on @arepa/mapbox-navigations',
+      },
+      localdb: {
+        script: 'nx run localdb:focus',
+        description: 'Focus on @arepa/localdb',
       },
       reset: {
         script: 'nx g @arepa/plugin-tools:focus-packages',

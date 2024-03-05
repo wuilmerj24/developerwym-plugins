@@ -1,0 +1,23 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo" class="page">
+    <Page.actionBar>
+        <ActionBar title="localdb" icon="" class="action-bar">
+        </ActionBar>
+    </Page.actionBar>
+    <StackLayout class="p-20">
+        <ScrollView class="h-full">
+          <StackLayout>
+            <Button text="creardb" tap="creardb" class="btn btn-primary"/>
+            <Button text="eliminardb" tap="deletedb" class="btn btn-primary"/>
+            <Button text="existedb" tap="existedb" class="btn btn-primary"/>
+            <Button text="createtable" tap="createtable" class="btn btn-primary"/>
+            <Button text="getAll" tap="getAll" class="btn btn-primary"/>
+            <Button text="getId" tap="getId" class="btn btn-primary"/>
+            <Button text="insert" tap="insert" class="btn btn-primary"/>
+            <Button text="update" tap="update" class="btn btn-primary"/>
+            <Button text="delete" tap="deleteid" class="btn btn-primary"/>
+            <Button text="deleteAll" tap="deleteAll" class="btn btn-primary"/>
+
+          </StackLayout>
+        </ScrollView>
+    </StackLayout>
+</Page>

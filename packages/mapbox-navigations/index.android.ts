@@ -1,28 +1,85 @@
 import { Application, ApplicationEventData, Color, GridLayout, Screen, Utils } from '@nativescript/core';
-import { MapboxNavigationsCommon } from './common';
+import { GetSetProperty, MapboxNavigationsCommon } from './common';
 
-declare var developerwym;
 declare var kotlin: any;
+declare var developerwym: any;
 
 export class MapboxNavigations extends MapboxNavigationsCommon {
   navigationView: com.mapbox.navigation.dropin.NavigationView;
+  @GetSetProperty()
+  token: string;
+  @GetSetProperty()
+  latLngDestination: string;
+  @GetSetProperty()
+  routeReplayEnabled: boolean;
+
   createNativeView(): Object {
-    this.navigationView = new com.mapbox.navigation.dropin.NavigationView(this._context, null, 'sk.eyJ1Ijoid3VpbG1lcmoyNCIsImEiOiJjbHF5Y3h4bXcwbmwyMmtsYzdhN2x4bHNyIn0.p_Gqv-I15RwR2LG3EJy-eQ');
-    this.navigationView.getApi().routeReplayEnabled(true);
-    this.navigationView.getApi().startRoutePreview();
-    this.navigationView.getApi().startActiveGuidance();
-    this.navigationView.getApi().startArrival();
-    this.navigationView.getApi().startFreeDrive();
-    this.navigationView.getApi().startDestinationPreview(com.mapbox.geojson.Point.fromLngLat(-78.512327, -0.220164));
-    const compassButtonStyle: number = this._context.getResources().getIdentifier('outline_coronavirus_24', 'drawable', this._context.getPackageName());
-    this.navigationView.customizeViewStyles(
-      new kotlin.jvm.functions.Function1({
-        invoke(style: any) {
-          style.setRoutePreviewButtonStyle(java.lang.Integer.valueOf(compassButtonStyle));
-          return kotlin.Unit.INSTANCE;
+    const self = this;
+    this.navigationView = new com.mapbox.navigation.dropin.NavigationView(this._context, null, this.token);
+
+    if (this.routeReplayEnabled) {
+      this.navigationView.getApi().routeReplayEnabled(true);
+    }
+
+    if (this.startRoutePreview) {
+      this.navigationView.getApi().startRoutePreview();
+    }
+
+    if (this.startActiveGuidance) {
+      this.navigationView.getApi().startActiveGuidance();
+    }
+
+    if (this.startArrival) {
+      this.navigationView.getApi().startArrival();
+    }
+
+    if (this.startFreeDrive) {
+      this.navigationView.getApi().startFreeDrive();
+    }
+
+    if (this.latLngDestination != null || this.latLngDestination != undefined) {
+      const latlngs: Array<any> = this.latLngDestination.split(',');
+      this.navigationView.getApi().startDestinationPreview(com.mapbox.geojson.Point.fromLngLat(parseFloat(latlngs[0]), parseFloat(latlngs[1])));
+    }
+
+    const eventos = new developerwym.plugins.ns.IEventosNavView(
+      Application.android.foregroundActivity,
+      this.navigationView,
+      new developerwym.plugins.ns.IEventosNavView.Eventos({
+        onActiveNavigation: () => {
+          console.log('onActiveNavigation');
         },
+        onArrival: () => {},
+        onAudioGuidanceStateChanged: (muted: boolean) => {},
+        onCameraPaddingChanged: (edgeInsets: any) => {},
+        onDestinationChanged: (destination: com.mapbox.geojson.Point) => {},
+        onDestinationPreview: () => {},
+        onFollowingCameraMode: () => {},
+        onFreeDrive: () => {
+          console.log('free ');
+        },
+        onIdleCameraMode: () => {},
+        onInfoPanelCollapsed: () => {},
+        onInfoPanelDragging: () => {},
+        onInfoPanelExpanded: () => {},
+        onInfoPanelHidden: () => {},
+        onInfoPanelSettling: () => {},
+        onInfoPanelSlide: (slideOffset: number) => {},
+        onManeuverCollapsed: () => {},
+        onManeuverExpanded: () => {},
+        onMapClicked: (point: com.mapbox.geojson.Point) => {
+          console.log('click ', point.latitude());
+        },
+        onOverviewCameraMode: () => {},
+        onRouteFetchCanceled: (routeOptions, routerOrigin) => {},
+        onRouteFetchFailed: (reasons, routeOptions) => {},
+        onRouteFetchSuccessful: (routes, routeOptions) => {},
+        onRouteFetching: (requestId: number) => {},
+        onRoutePreview: () => {},
+        onSpeedInfoClicked: (speedInfo) => {},
       })
     );
+    this.navigationView.addListener(eventos);
     this.nativeView = this.navigationView;
 
     return this.navigationView;

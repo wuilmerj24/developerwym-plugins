@@ -1,0 +1,28 @@
+2024-02-28T12:58:23.804987569 0.009295s notice: Recursively removing directory /home/wuilmerj24/Proyectos/developerwym-plugins/rethinkdb_data/tmp
+2024-02-28T12:58:23.817568835 0.021873s notice: Initializing directory /home/wuilmerj24/Proyectos/developerwym-plugins/rethinkdb_data
+2024-02-28T12:58:23.817784345 0.022088s info: Creating a default database for your convenience. (This is because you ran 'rethinkdb' without 'create', 'serve', or '--join', and the directory '/home/wuilmerj24/Proyectos/developerwym-plugins/rethinkdb_data' did not already exist or is empty.)
+2024-02-28T12:58:23.817959936 0.022264s notice: Running rethinkdb 2.4.4~0bookworm (x86_64-linux-gnu) (GCC 12.2.0)...
+2024-02-28T12:58:23.818780498 0.023085s notice: Running on Linux 6.1.0-18-amd64 x86_64
+2024-02-28T12:58:23.818794988 0.023099s notice: Loading data from directory /home/wuilmerj24/Proyectos/developerwym-plugins/rethinkdb_data
+2024-02-28T12:58:23.869788686 0.074093s info: Automatically using cache size of 9342 MB
+2024-02-28T12:58:23.871266360 0.075571s notice: Listening for intracluster connections on port 29015
+2024-02-28T12:58:23.873497627 0.077802s notice: Listening for client driver connections on port 28015
+2024-02-28T12:58:23.873515007 0.077819s notice: Listening for administrative HTTP connections on port 8080
+2024-02-28T12:58:23.873516057 0.077820s notice: Listening on cluster addresses: 127.0.0.1, ::1
+2024-02-28T12:58:23.873517017 0.077821s notice: Listening on driver addresses: 127.0.0.1, ::1
+2024-02-28T12:58:23.873518237 0.077822s notice: Listening on http addresses: 127.0.0.1, ::1
+2024-02-28T12:58:23.873519137 0.077823s notice: To fully expose RethinkDB on the network, bind to all addresses by running rethinkdb with the `--bind all` command line option.
+2024-02-28T12:58:23.873519907 0.077824s notice: Server ready, "wuilmerj24_pc_lk8" 08978002-0336-4a3b-a486-0d5a662ed4a2
+2024-02-28T12:58:52.690734768 28.895039s info: Table 9e1230c8-8e3a-4960-b553-a2c993ef6ff9: Starting a new Raft election for term 1.
+2024-02-28T12:58:52.691154649 28.895459s info: Table 9e1230c8-8e3a-4960-b553-a2c993ef6ff9: Added replica on this server.
+2024-02-28T12:58:52.695723101 28.900027s info: Table 9e1230c8-8e3a-4960-b553-a2c993ef6ff9: This server is Raft leader for term 1. Latest log index is 0.
+2024-02-28T12:59:07.713866303 43.918171s notice: Removing file /home/wuilmerj24/Proyectos/developerwym-plugins/rethinkdb_data/9e1230c8-8e3a-4960-b553-a2c993ef6ff9
+2024-02-28T12:59:07.713872763 43.918177s info: Table 9e1230c8-8e3a-4960-b553-a2c993ef6ff9: Deleted the table.
+2024-02-28T12:59:18.171909016 54.376213s info: Table 3140c322-a818-49c5-8f6f-d8cbe968feb7: Starting a new Raft election for term 1.
+2024-02-28T12:59:18.172001156 54.376305s info: Table 3140c322-a818-49c5-8f6f-d8cbe968feb7: Added replica on this server.
+2024-02-28T12:59:18.176339098 54.380643s info: Table 3140c322-a818-49c5-8f6f-d8cbe968feb7: This server is Raft leader for term 1. Latest log index is 0.
+2024-02-28T13:00:42.185972454 138.390277s notice: Server got SIGINT from pid 0, uid 0; shutting down...
+2024-02-28T13:00:42.186078524 138.390383s notice: Shutting down client connections...
+2024-02-28T13:00:42.186135815 138.390440s notice: All client connections closed.
+2024-02-28T13:00:42.186137235 138.390441s notice: Shutting down storage engine... (This may take a while if you had a lot of unflushed data in the writeback cache.)
+2024-02-28T13:00:42.187228467 138.391533s notice: Storage engine shut down.

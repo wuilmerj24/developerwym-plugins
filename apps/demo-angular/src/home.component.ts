@@ -16,6 +16,9 @@ export class HomeComponent {
       name: 'launch-navigator',
     },
     {
+      name: 'localdb',
+    },
+    {
       name: 'mapbox-navigations',
     },
     {

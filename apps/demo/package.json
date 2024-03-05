@@ -7,6 +7,7 @@
     "@arepa/country-code": "file:../../packages/country-code",
     "@arepa/gallery-view": "file:../../packages/gallery-view",
     "@arepa/launch-navigator": "file:../../packages/launch-navigator",
+    "@arepa/localdb": "file:../../packages/localdb",
     "@arepa/mapbox-navigations": "file:../../packages/mapbox-navigations",
     "@arepa/screen-orientation": "file:../../packages/screen-orientation",
     "@arepa/signal-r": "file:../../packages/signal-r",
@@ -18,6 +19,6 @@
   "devDependencies": {
     "@nativescript/android": "8.6.2",
     "@nativescript/ios": "~8.6.3",
-    "@nativescript/preview-cli": "1.0.5"
+    "@nativescript/preview-cli": "1.0.12"
   }
 }

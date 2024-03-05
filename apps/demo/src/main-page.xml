@@ -15,6 +15,7 @@
 <Button text="signal-r" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
 <Button text="gallery-view" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
 <Button text="mapbox-navigations" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
+<Button text="localdb" tap="{{ viewDemo }}" class="btn btn-primary view-demo"/>
 
 
 

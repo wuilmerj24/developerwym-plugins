@@ -4,6 +4,16 @@
         </ActionBar>
     </Page.actionBar>
     <StackLayout>
-        <mv:MapboxNavigations width="100%" height="100%"/>  
+        <mv:MapboxNavigations 
+            width="100%" 
+            height="100%"
+            token="sk.eyJ1Ijoid3VpbG1lcmoyNCIsImEiOiJjbHF5Y3h4bXcwbmwyMmtsYzdhN2x4bHNyIn0.p_Gqv-I15RwR2LG3EJy-eQ"
+            latLngDestination="-78.512327, -0.220164"
+            routeReplayEnabled="true"
+            startRoutePreview="true"
+            startActiveGuidance="true"
+            startArrival="true"
+            startFreeDrive="true"
+        />  
     </StackLayout>
 </Page>
