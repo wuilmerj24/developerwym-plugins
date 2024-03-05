@@ -78,8 +78,8 @@ export function update() {
   localdb
     .update('test', '018e0f09-ee63-795e-9a0f-d0fd133e6551', [
       {
-        nombre: 'Wuilmer',
-        apellido: 'Medrano',
+        nombre: 'name',
+        apellido: 'lastname',
       },
     ])
     .then((res) => {
@@ -93,12 +93,12 @@ export function update() {
 export function insert() {
   const d_array = [
     {
-      nombre: 'Wuilmerj24',
-      apellido: 'Medrano',
+      nombre: 'name',
+      apellido: 'lastname',
     },
     {
-      nombre: 'Mariac15',
-      apellido: 'Castillo',
+      nombre: 'name',
+      apellido: 'lastname',
     },
   ];
   localdb
