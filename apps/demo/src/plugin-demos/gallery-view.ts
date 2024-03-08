@@ -5,7 +5,7 @@ import { GalleryView } from '@arepa/gallery-view';
 export function navigatingTo(args: EventData) {
   const page = <Page>args.object;
   page.bindingContext = new DemoModel();
-  page.actionBarHidden = true;
+  // page.actionBarHidden = true;
 }
 
 export function onScroll(args: any) {

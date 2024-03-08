@@ -50,7 +50,8 @@ export class GalleryViewCommon extends ContentView {
   @GetSetProperty()
   public orientation: OrientationView = OrientationView.H;
 
-  public sendEvent(eventName: string, data?: Array<GaleriaViewAlbumns>, msg?: string) {
+  public sendEvent(eventName: string, data?: Array<any>, msg?: string) {
+    CLog('sendEvent ', eventName);
     this.notify({
       eventName,
       object: this,

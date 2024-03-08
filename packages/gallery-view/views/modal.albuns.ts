@@ -1,11 +1,15 @@
-import { Color, EventData, GestureTypes, GridLayout, GridUnitType, Image, ItemSpec, Label, RootLayout, Screen, ScrollEventData, ScrollView, SearchBar, StackLayout, Utils, View, getRootLayout } from '@nativescript/core';
+import { Color, EventData, GestureTypes, GridLayout, GridUnitType, Image, ItemSpec, Label, RootLayout, Screen, ScrollEventData, ScrollView, SearchBar, StackLayout, Utils, View, getCurrentPage, getRootLayout } from '@nativescript/core';
 import { GaleriaViewAlbumns } from '../class/data.imagenes.class';
 import { CLog } from '../common';
 import { ImageViewNativoAndroid } from './image.android';
+import { ImageViewNativoIOS } from './image.ios';
 
 export class ModalAlbuns extends GridLayout {
   private imgBtn: Image;
-  constructor(private files: Array<GaleriaViewAlbumns>, private rootLayout: RootLayout) {
+  constructor(
+    private files: Array<GaleriaViewAlbumns>,
+    private rootLayout: RootLayout,
+  ) {
     super();
     this.width = Screen.mainScreen.widthDIPs;
     this.height = 350;
@@ -61,15 +65,27 @@ export class ModalAlbuns extends GridLayout {
       gridB.addColumn(new ItemSpec(1, GridUnitType.AUTO));
       gridB.height = (Screen.mainScreen.heightDIPs * 7) / 100;
 
-      const img: ImageViewNativoAndroid = new ImageViewNativoAndroid(this.files[i].icon);
-      img.width = 52;
-      img.height = 52;
-      img.col = 0;
-      img.borderRadius = 15;
-      img.margin = 5;
-      img.verticalAlignment = 'middle';
-      img.horizontalAlignment = 'center';
-      gridB.addChild(img);
+      if (getCurrentPage().android) {
+        const img: ImageViewNativoAndroid = new ImageViewNativoAndroid(this.files[i].icon);
+        img.width = 52;
+        img.height = 52;
+        img.col = 0;
+        img.borderRadius = 15;
+        img.margin = 5;
+        img.verticalAlignment = 'middle';
+        img.horizontalAlignment = 'center';
+        gridB.addChild(img);
+      } else if (getCurrentPage().ios) {
+        const img: ImageViewNativoIOS = new ImageViewNativoIOS(this.files[i].icon);
+        img.width = 52;
+        img.height = 52;
+        img.col = 0;
+        img.borderRadius = 15;
+        img.margin = 5;
+        img.verticalAlignment = 'middle';
+        img.horizontalAlignment = 'center';
+        gridB.addChild(img);
+      }
 
       const titulo: Label = new Label();
       titulo.text = this.files[i].albunName;

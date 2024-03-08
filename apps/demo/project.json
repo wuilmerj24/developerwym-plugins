@@ -24,7 +24,8 @@
     "ios": {
       "executor": "@nativescript/nx:build",
       "options": {
-        "platform": "ios"
+        "platform": "ios",
+        "tnsArgs": "--teamId V8YGG387A8"
       },
       "dependsOn": [
         {
