@@ -63,6 +63,9 @@ android{
 }
 
 dependencies {
-    implementation "com.mapbox.navigation:ui-dropin:2.17.10"
-    implementation "com.mapbox.navigation:android:2.10.1"
+    // implementation "com.mapbox.navigation:ui-dropin:2.17.10"
+    // implementation "com.mapbox.navigation:android:2.10.1"
+    implementation "com.mapbox.navigation:ui-dropin:2.19.0-beta.2"
+    implementation "com.mapbox.navigation:android:2.19.0-beta.2"
+    implementation "com.google.android.gms:play-services-location:21.0.1"
 }

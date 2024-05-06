@@ -14,7 +14,8 @@
     "@arepa/store-update": "file:../../packages/store-update",
     "@arepa/time-range": "file:../../packages/time-range",
     "@nativescript-community/perms": "^2.3.0",
-    "@nativescript/core": "file:../../node_modules/@nativescript/core"
+    "@nativescript/core": "file:../../node_modules/@nativescript/core",
+    "@arepa/date-slider": "file:../../packages/date-slider"
   },
   "devDependencies": {
     "@nativescript/android": "8.6.2",

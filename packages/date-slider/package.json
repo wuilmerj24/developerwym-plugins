@@ -1,0 +1,35 @@
+{
+  "name": "@upinn/date-slider",
+  "version": "1.0.0",
+  "description": "Add a plugin description",
+  "main": "index",
+  "typings": "index.d.ts",
+  "nativescript": {
+    "platforms": {
+      "ios": "6.0.0",
+      "android": "6.0.0"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://wuilmerj24@bitbucket.org/developerwym/upinn-ns-plugins.git"
+  },
+  "keywords": [
+    "NativeScript",
+    "JavaScript",
+    "TypeScript",
+    "iOS",
+    "Android"
+  ],
+  "author": {
+    "name": "Upinn.Tech",
+    "email": "oss@nativescript.org"
+  },
+  "bugs": {
+    "url": "https://wuilmerj24@bitbucket.org/developerwym/upinn-ns-plugins/issues"
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://wuilmerj24@bitbucket.org/developerwym/upinn-ns-plugins",
+  "readmeFilename": "README.md",
+  "bootstrapper": "@nativescript/plugin-seed"
+}

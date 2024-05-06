@@ -1,0 +1,65 @@
+{
+  "name": "date-slider",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/date-slider",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "options": {
+        "outputPath": "dist/packages/date-slider",
+        "tsConfig": "packages/date-slider/tsconfig.json",
+        "packageJson": "packages/date-slider/package.json",
+        "main": "packages/date-slider/index.d.ts",
+        "assets": [
+          "packages/date-slider/*.md",
+          "packages/date-slider/index.d.ts",
+          "LICENSE",
+          {
+            "glob": "**/*",
+            "input": "packages/date-slider/platforms/",
+            "output": "./platforms/"
+          }
+        ],
+        "dependsOn": [
+          {
+            "target": "build.all",
+            "projects": "dependencies"
+          }
+        ]
+      }
+    },
+    "build.all": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["node tools/scripts/build-finish.ts date-slider"],
+        "parallel": false
+      },
+      "outputs": ["dist/packages/date-slider"],
+      "dependsOn": [
+        {
+          "target": "build.all",
+          "projects": "dependencies"
+        },
+        {
+          "target": "build",
+          "projects": "self"
+        }
+      ]
+    },
+    "focus": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["nx g @nativescript/plugin-tools:focus-packages date-slider"],
+        "parallel": false
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["packages/date-slider/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

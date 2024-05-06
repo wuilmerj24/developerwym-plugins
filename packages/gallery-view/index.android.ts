@@ -66,10 +66,12 @@ export class GalleryView extends GalleryViewCommon {
       this.renderUI();
     } else {
       const msjPermisos: Label = new Label();
+
       msjPermisos.text = this.currentIdioma.obtenerTraduccion('msj_permiso');
       msjPermisos.fontSize = 24;
       msjPermisos.style.fontWeight = 'bold';
       msjPermisos.textWrap = true;
+
       msjPermisos.color = new Color(this.fontColor);
       msjPermisos.rowSpan = 3;
       msjPermisos.verticalAlignment = 'middle';

@@ -194,6 +194,13 @@ module.exports = {
           description: '@arepa/localdb: Build',
         },
       },
+      // @arepa/date-slider
+      'date-slider': {
+        build: {
+          script: 'nx run date-slider:build.all',
+          description: '@arepa/date-slider: Build',
+        },
+      },
       'build-all': {
         script: 'nx run-many --target=build.all --all',
         description: 'Build all packages',
@@ -279,6 +286,10 @@ module.exports = {
       localdb: {
         script: 'nx run localdb:focus',
         description: 'Focus on @arepa/localdb',
+      },
+      'date-slider': {
+        script: 'nx run date-slider:focus',
+        description: 'Focus on @arepa/date-slider',
       },
       reset: {
         script: 'nx g @arepa/plugin-tools:focus-packages',

@@ -1,4 +1,5 @@
 - [@arepa/country-code](packages/country-code/README.md)
+- [@arepa/date-slider](packages/date-slider/README.md)
 - [@arepa/gallery-view](packages/gallery-view/README.md)
 - [@arepa/launch-navigator](packages/launch-navigator/README.md)
 - [@arepa/localdb](packages/localdb/README.md)

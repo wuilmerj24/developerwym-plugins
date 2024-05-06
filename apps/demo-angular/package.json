@@ -10,7 +10,8 @@
     "@arepa/signal-r": "file:../../dist/packages/signal-r",
     "@arepa/gallery-view": "file:../../dist/packages/gallery-view",
     "@arepa/mapbox-navigations": "file:../../dist/packages/mapbox-navigations",
-    "@arepa/localdb": "file:../../dist/packages/localdb"
+    "@arepa/localdb": "file:../../dist/packages/localdb",
+    "@arepa/date-slider": "file:../../dist/packages/date-slider"
   },
   "devDependencies": {
     "@nativescript/android": "~8.4.0",

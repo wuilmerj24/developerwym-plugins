@@ -8,6 +8,7 @@ const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
   { path: 'country-code', loadChildren: () => import('./plugin-demos/country-code.module').then((m) => m.CountryCodeModule) },
+  { path: 'date-slider', loadChildren: () => import('./plugin-demos/date-slider.module').then((m) => m.DateSliderModule) },
   { path: 'gallery-view', loadChildren: () => import('./plugin-demos/gallery-view.module').then((m) => m.GalleryViewModule) },
   { path: 'launch-navigator', loadChildren: () => import('./plugin-demos/launch-navigator.module').then((m) => m.LaunchNavigatorModule) },
   { path: 'localdb', loadChildren: () => import('./plugin-demos/localdb.module').then((m) => m.LocaldbModule) },

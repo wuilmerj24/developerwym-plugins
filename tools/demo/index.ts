@@ -1,5 +1,6 @@
 export * from './utils';
 export * from './country-code';
+export * from './date-slider';
 export * from './gallery-view';
 export * from './launch-navigator';
 export * from './localdb';

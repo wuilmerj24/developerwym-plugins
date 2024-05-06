@@ -1,0 +1,25 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" xmlns:ds="@arepa/date-slider" navigatingTo="navigatingTo" class="page">
+    <Page.actionBar>
+        <ActionBar title="date-slider" icon="" class="action-bar">
+        </ActionBar>
+    </Page.actionBar>
+    <StackLayout class="p-20">
+        <ds:DateSlider 
+            year="2024" 
+            language="es" 
+            shape="square"
+            currentDateBorderColor="red"
+            bgColorActive="cyan"
+            bgColorDeactive="#ccc"
+            txtColorMonth="green"
+            txtColorMonthSize="20"
+            txtColorDayName="blue"
+            txtColorDayNameSize="20"
+            txtColorDayNum="yellow"
+            txtColorDayNumSize="20"
+            click="onClick"
+            scroll="onScroll"
+            change="onChange"
+        />
+    </StackLayout>
+</Page>
