@@ -1,3 +1,5 @@
+[This has moved to](https://github.com/wuilmerj24/nativescript-plugins)
+
 - [@arepa/country-code](packages/country-code/README.md)
 - [@arepa/gallery-view](packages/gallery-view/README.md)
 - [@arepa/launch-navigator](packages/launch-navigator/README.md)
